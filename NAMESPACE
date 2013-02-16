@@ -1,0 +1,18 @@
+
+export(BESTmcmc, 
+  plotPost, plotAll, plotPostPred,
+  attachBEST, detachBEST,
+  BESTpower, makeData,
+  hdi)
+
+
+S3method("pairs", "BEST")
+S3method("plot", "BEST")
+S3method("print", "BEST")
+S3method("print", "summary.BEST")
+S3method("summary", "BEST")
+S3method("hdi", "default")
+S3method("hdi", "matrix")
+S3method("hdi", "data.frame")
+S3method("hdi", "mcmc.list")
+S3method("hdi", "function")

@@ -1,0 +1,45 @@
+CHANGES IN BUILD 2013-02-12
+
+  * changed plot.BEST method to display one parameter at a time (default: difference in means). Added plotPostPred to plot posterior predictive distributions.
+
+  * former plot.BEST now available as plotAll.
+
+CHANGES IN BUILD 2013-01-09
+
+  * improved print.BEST method, similar to print.bugs in R2WinBUGS, with mean, sd, median, HDI, Rhat and n.eff columns.
+
+  * HDIofMCMC and HDIofICDF replaced by generic 'hdi' with vector, matrix, data frame, mcmc.list and function methods.
+
+CHANGES IN BUILD 2013-01-03
+
+  * attachBEST and detachBEST functions added.
+
+  * fixing bugs so that R CMD check gives no errors/warnings.
+
+CHANGES IN BUILD 2013-01-01
+
+  * changes to BESTpower to accommodate missing arguments and setting credMass.
+
+CHANGES IN BUILD 2012-12-30
+
+  * added BESTpower and makeData functions.
+
+CHANGES IN BUILD 2012-12-28
+
+  This was the first package build, starting from John Kruschke's BEST code
+  
+ * one function, BESTmcmc(), does 2-group or 1-group analysis (with y2=NULL for
+    the latter) and plot, pairs, summary functions can cope with either kind of output.
+ 
+ * the output from BESTmcmc has class 'BEST', which has print, plot, summary and
+    pairs methods.
+
+ * the plot function produces no summary stats; the summary function does the full 
+    range, incl ROPE and compVal stats. The scatterplot matrix is done by a separate
+    pairs function.
+
+ * BESTmcmc output is an mcmc.list rather than a matrix. This means that coda package
+    functions can be used to check convergence and effective size.
+
+ * BESTpower and makeData were not included.
+  
