@@ -82,13 +82,14 @@ function( y1, y2=NULL,
   nChains = 3 
   nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
   # Create, initialize, and adapt the model:
+  cat( "Setting up the JAGS model...\n" ) ; flush.console()
   jagsModel = jags.model( modelFile, data=dataList , inits=initsList , 
                           n.chains=nChains , n.adapt=adaptSteps )
   # Burn-in:
-  cat( "Burning in the MCMC chain...\n" )
+  cat( "Burning in the MCMC chain...\n" ) ; flush.console()
   update( jagsModel , n.iter=burnInSteps )
   # The saved MCMC chain:
-  cat( "Sampling final MCMC chain...\n" )
+  cat( "Sampling final MCMC chain...\n" ) ; flush.console()
   codaSamples = coda.samples( jagsModel , variable.names=parameters , 
                               n.iter=nIter , thin=thinSteps )
   # resulting codaSamples object has these indices: 

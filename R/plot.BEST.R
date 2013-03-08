@@ -45,7 +45,7 @@ function(x, which=c("mean", "sd", "effect", "nu"), credMass=0.95,
     compVal <- NULL
 
   # Plot posterior distribution of selected item:
-  plotPost(toPlot, col="skyblue", credMass=credMass, showCurve=showCurve,
+  plotPost(toPlot, col="skyblue", credMass=credMass, ROPE=ROPE, showCurve=showCurve,
                   xlab=xlab , cex.lab = 1.75 , showMode=whichID != "mean",
                   compVal=compVal, main=main ) 
 

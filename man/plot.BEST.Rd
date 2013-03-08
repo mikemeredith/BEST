@@ -34,7 +34,7 @@ other graphical parameters.
 }
 }
 \details{
-The posterior distribution is shown as a histogram or density curve (if \code{showCurve = TRUE}, together with the Highest Density Interval. A ROPE and comparison value are also shown if appropriate.
+The posterior distribution is shown as a histogram or density curve (if \code{showCurve = TRUE}), together with the Highest Density Interval. A ROPE and comparison value are also shown if appropriate.
 }
 \value{
 Returns NULL invisibly. Used for the side effect.

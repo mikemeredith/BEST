@@ -4,11 +4,7 @@ function( BESTobj, N1, N2=NULL, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
                      mcmcLength=10000, saveName="BESTpower.Rdata",
                      showFirstNrep=0 ) {
   # This function estimates power.
-  #TODO: check that graphics work on non-windows systems
-  #TODO: allow user to skip estimates, with NULL or NA # DONE 31 Dec
-  #TODO: allow user to specify credMass # DONE 31 Dec
-
-
+ 
   mcmcChain <- as.matrix(BESTobj)
   oneGrp <- ncol(mcmcChain) == 3
   chainLength = NROW( mcmcChain )
@@ -81,6 +77,7 @@ function( BESTobj, N1, N2=NULL, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     cat( "\n:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n" )
     cat( paste( "Power computation: Simulated Experiment" , i , "of" , 
                 nRep , ":\n\n" ) )
+    flush.console()
     # Get parameter values for this simulation:
     if(oneGrp) {
       mu1Val = paramMat[i,"mu"]
@@ -98,7 +95,8 @@ function( BESTobj, N1, N2=NULL, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     # Get posterior for simulated data:
     Bout <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1)
     if (i <= showFirstNrep ) { 
-      x11()
+      # x11()  # Changed 18-02-2013
+      dev.new()
       plotAll(Bout, y1, y2, ROPEm=ROPEm, ROPEsd=ROPEsd, ROPEeff=ROPEeff,
               compValm=compValm) 
     }
@@ -142,6 +140,7 @@ function( BESTobj, N1, N2=NULL, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     cat( "\nAfter", i, "Simulated Experiments, Posterior Probability
        of meeting each criterion is (mean and 95% CrI):\n" )
     print(round(power[wanted, ], 3))
+    flush.console()
     if(!is.null(saveName))
       save( i , power , file=saveName )
   }

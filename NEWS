@@ -1,3 +1,7 @@
+CHANGES IN BUILD 2013-02-18
+
+  * changes to (try to) accommodate Mac's foibles: (1) X11 no longer ships with Mac's OS, users can download if they want -> use dev.new() in BESTpower; (2) Jags's progress bars were zapping everything in the stdout buffer -> call flush.console() before calling jags (in BESTmcmc) - jags own messages ("Compiling model graph...etc") still get zapped, so added an initial "Setting up JAGS model..." message.
+
 CHANGES IN BUILD 2013-02-12
 
   * changed plot.BEST method to display one parameter at a time (default: difference in means). Added plotPostPred to plot posterior predictive distributions.

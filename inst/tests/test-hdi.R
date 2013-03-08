@@ -6,6 +6,8 @@
 #library(BEST)
 # test_file("test-hdi.R")
 
+context("Highest Density Interval (HDI)")
+
 test_that("hdi.default gives correct output",  {
   set.seed(123)
   tst <- rnorm(1e4)
