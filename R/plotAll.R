@@ -1,12 +1,11 @@
 plotAll <-
-function(BESTobj, y1=NULL, y2=NULL, credMass=0.95,
+function(BESTobj, credMass=0.95,
                     ROPEm=NULL, ROPEsd=NULL, ROPEeff=NULL,
                     compValm=0, compValsd=NULL, compValeff=0,
                     showCurve=FALSE, ...) {
   # This function plots the posterior distribution (and data). It does not
   #   produce a scatterplot matrix; use pairs(...) for that.
   # Description of arguments:
-  # y1 and y2 are the data vectors.
   # BESTobj is mcmc.list object of the type returned by function BESTmcmc.
   # ROPEm is a two element vector, such as c(-1,1), specifying the limit
   #   of the ROPE on the difference of means.
@@ -21,6 +20,15 @@ function(BESTobj, y1=NULL, y2=NULL, credMass=0.95,
 
   mcmcChain <- as.matrix(BESTobj)
   oneGrp <- ncol(mcmcChain) == 3
+  y1 <- attr(BESTobj, "data")$y1
+  y2 <- attr(BESTobj, "data")$y2
+
+  # Select thinned steps in chain for plotting of posterior predictive curves:
+  chainLength <- NROW( mcmcChain )
+  nCurvesToPlot <- 30
+  # stepIdxVec <- seq( 1 , chainLength , floor(chainLength/nCurvesToPlot) )
+  stepIdxVec <- seq(1, chainLength, length.out=nCurvesToPlot)
+
   if(oneGrp)  {
     mu1 <- mcmcChain[,"mu"]
     sigma1 <- mcmcChain[,"sigma"]
@@ -44,10 +52,6 @@ function(BESTobj, y1=NULL, y2=NULL, credMass=0.95,
     layout( matrix( c(4,5,7,8,3,1,2,6,9,10) , nrow=5, byrow=FALSE ) )
   }
 
-  # Select thinned steps in chain for plotting of posterior predictive curves:
-  chainLength <- NROW( mcmcChain )
-  nCurvesToPlot <- 30
-  stepIdxVec <- seq( 1 , chainLength , floor(chainLength/nCurvesToPlot) )
   if(is.null(y1) && is.null(y2)) {
     xLim <- range(mu1, mu2)
   } else {
@@ -56,13 +60,15 @@ function(BESTobj, y1=NULL, y2=NULL, credMass=0.95,
               xRange[2]+0.1*diff(xRange) )
   }
   xVec <- seq( xLim[1] , xLim[2] , length=200 )
-  maxY <- max( dt( 0 , df=max(nu[stepIdxVec]) ) /
-    min(sigma1[stepIdxVec],sigma2[stepIdxVec]) )
+  # maxY <- max( dt( 0 , df=max(nu[stepIdxVec]) ) /
+    # min(sigma1[stepIdxVec],sigma2[stepIdxVec]) )
+  maxY <- max( dt( 0 , df=max(nu) ) /
+    min(sigma1,sigma2) )
 
 
   # Plot data and smattering of posterior predictive curves:
-  plotDataPPC(y=y1, mu=mu1, sigma=sigma1, nu=nu, xVec=xVec,
-    stepIdxVec=stepIdxVec, maxY=maxY)
+  plotDataPPC(y=y1, mu=mu1[stepIdxVec], sigma=sigma1[stepIdxVec], nu=nu[stepIdxVec],
+    xVec=xVec, maxY=maxY)
   if(oneGrp) {
     title(main="Data w. Post. Pred.")
     if(!is.null(y1))
@@ -73,8 +79,8 @@ function(BESTobj, y1=NULL, y2=NULL, credMass=0.95,
       text( max(xVec) , maxY , bquote(N[1]==.(length(y1))) , adj=c(1.1,1.1) )
   }
   if(!oneGrp) {
-    plotDataPPC(y=y2, mu=mu2, sigma=sigma2, nu=nu, xVec=xVec,
-      stepIdxVec=stepIdxVec, maxY=maxY)
+    plotDataPPC(y=y2, mu=mu2[stepIdxVec], sigma=sigma2[stepIdxVec], nu=nu[stepIdxVec],
+      xVec=xVec, maxY=maxY)
     title(main="Data Group 2 w. Post. Pred.")
     if(!is.null(y2))
       text( max(xVec) , maxY , bquote(N[2]==.(length(y2))) , adj=c(1.1,1.1) )

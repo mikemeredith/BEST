@@ -68,8 +68,8 @@ BESTout
 summary(BESTout)
 plot(BESTout)
 plot(BESTout, "sd")
-plotPostPred(BESTout, y1, y2)
-plotAll(BESTout, y1, y2, credMass=0.8, ROPEm=c(-0.1,0.1), 
+plotPostPred(BESTout)
+plotAll(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), 
           ROPEeff=c(-0.2,0.2), compValm=0.5) 
 summary(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), ROPEsd=c(-0.15,0.15),
           ROPEeff=c(-0.2,0.2)) 

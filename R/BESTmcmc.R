@@ -90,14 +90,19 @@ function( y1, y2=NULL,
   update( jagsModel , n.iter=burnInSteps )
   # The saved MCMC chain:
   cat( "Sampling final MCMC chain...\n" ) ; flush.console()
-  codaSamples = coda.samples( jagsModel , variable.names=parameters , 
+  codaSamples <- coda.samples( jagsModel , variable.names=parameters , 
                               n.iter=nIter , thin=thinSteps )
   # resulting codaSamples object has these indices: 
   #   codaSamples[[ chainIdx ]][ stepIdx , paramIdx ]
   
   #------------------------------------------------------------------------------
- 
-  # mcmcChain = as.matrix( codaSamples )
+  Rhat <- gelman.diag(codaSamples)$psrf[, 1]
+  n.eff <- effectiveSize(codaSamples)
+   # mcmcChain = as.matrix( codaSamples )
   class(codaSamples) <- c("BEST", class(codaSamples))
+  attr(codaSamples, "Rhat") <- Rhat
+  attr(codaSamples, "n.eff") <- n.eff
+  attr(codaSamples, "data") <- list(y1 = y1, y2 = y2)
+  
   return( codaSamples )
 }

@@ -41,6 +41,7 @@ function(BESTobj, overwrite = NA)
     detach("BESTsims")
 
   # Now attach BESTsims
+  cat("You can now access", paste(colnames(BESTsims), collapse=", "), "by name.\n")
   attach(BESTsims)
 }
 

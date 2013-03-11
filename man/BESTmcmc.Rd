@@ -30,7 +30,12 @@ number of steps to discard as burn-in at the beginning of the chain.
 
 }
 \value{
-An object of class 'BEST' inheriting from mcmc.list.
+An object of class 'BEST' inheriting from mcmc.list with the following additional attributes:
+
+  \item{Rhat}{the 'potential scale reduction factor'}
+  \item{n.eff}{sample size adjusted for autocorrelation}
+  \item{data}{a list with elements y1 and y2 containing the original data; y2 may be NULL}
+
 The package provides print, plot and summary methods for 'BEST' objects.
 }
 \references{

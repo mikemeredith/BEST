@@ -7,17 +7,11 @@ Plots for Posterior Predictive checks.
 Plots a number (default 30) of credible t-distributions based on posterior values of the mean, standard deviation, and normality for each group, together with histograms of the data.   
 }
 \usage{
-plotPostPred(x, y1, y2 = NULL, nCurvesToPlot = 30)
+plotPostPred(BESTobj, nCurvesToPlot = 30)
 }
 \arguments{
-  \item{x}{
+  \item{BESTobj}{
 an object of class 'BEST', as produced by the function \code{\link{BESTmcmc}}.
-}
-  \item{y1}{
-the set of observations for the first (or only) group.
-}
-  \item{y2}{
-optional, the set of observations for the second group, ignored if there is only one group.
 }
   \item{nCurvesToPlot}{
 the number of posterior predictive curves to plot.

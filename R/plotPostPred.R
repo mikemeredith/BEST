@@ -1,14 +1,15 @@
 plotPostPred <-
-function(x, y1, y2=NULL, nCurvesToPlot = 30) {
+function(BESTobj, nCurvesToPlot = 30) {
   # This function plots the posterior predictive distribution and the data. 
   # Description of arguments:
-  # y1 and y2 are the data vectors.
-  # x is mcmc.list object of the type returned by function BESTmcmc.
+  # BESTobj is mcmc.list object of the type returned by function BESTmcmc.
   # TODO sanity checks.
   # TODO change x to BESTobj.
 
-  mcmcChain <- as.matrix(x)
+  mcmcChain <- as.matrix(BESTobj)
   oneGrp <- ncol(mcmcChain) == 3
+  y1 <- attr(BESTobj, "data")$y1
+  y2 <- attr(BESTobj, "data")$y2
 
   # Set up window and layout:
   oldpar <- par(mar=c(3.5,3.5,2.5,0.5), mgp=c(2.25,0.7,0), "mfrow") 
@@ -43,8 +44,7 @@ function(x, y1, y2=NULL, nCurvesToPlot = 30) {
   maxY <- max( dt(0, df=max(nu)) / min(sigma1, sigma2) )
 
   # Plot data and smattering of posterior predictive curves:
-  plotDataPPC(y=y1, mu=mu1, sigma=sigma1, nu=nu, xVec=xVec,
-    stepIdxVec=1:nCurvesToPlot, maxY=maxY)
+  plotDataPPC(y=y1, mu=mu1, sigma=sigma1, nu=nu, xVec=xVec, maxY=maxY)
   if(oneGrp) {
     title(main="Data w. Post. Pred.")
     if(!is.null(y1))
@@ -55,8 +55,7 @@ function(x, y1, y2=NULL, nCurvesToPlot = 30) {
       text( max(xVec) , maxY , bquote(N[1]==.(length(y1))) , adj=c(1.1,1.1) )
   }
   if(!oneGrp) {
-    plotDataPPC(y=y2, mu=mu2, sigma=sigma2, nu=nu, xVec=xVec,
-      stepIdxVec=1:nCurvesToPlot, maxY=maxY)
+    plotDataPPC(y=y2, mu=mu2, sigma=sigma2, nu=nu, xVec=xVec, maxY=maxY)
     title(main="Data Group 2 w. Post. Pred.")
     if(!is.null(y2))
       text( max(xVec) , maxY , bquote(N[2]==.(length(y2))) , adj=c(1.1,1.1) )

@@ -1,5 +1,5 @@
 BESTpower <-
-function( BESTobj, N1, N2=NULL, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
+function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
                      maxHDIWm, maxHDIWsd, maxHDIWeff, compValm=0, nRep=200,
                      mcmcLength=10000, saveName="BESTpower.Rdata",
                      showFirstNrep=0 ) {
@@ -9,10 +9,15 @@ function( BESTobj, N1, N2=NULL, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
   oneGrp <- ncol(mcmcChain) == 3
   chainLength = NROW( mcmcChain )
   #if(length(N1) < nRep)   # I think this would work even with length(N1) > nRep
-    N1 <- rep(N1, length.out=nRep)
+  if(missing(N1))
+    N1 <- length(attr(BESTobj, "data")$y1)
+  N1 <- rep(N1, length.out=nRep)
   #if(!oneGrp && length(N2) < nRep)
-  if(!oneGrp)
+  if(!oneGrp) {
+    if(missing(N2))
+      N2 <- length(attr(BESTobj, "data")$y2)
     N2 <- rep(N2, length.out=nRep)
+  }
 
   # Sanity checks:
   if(!(ncol(mcmcChain) == 5 && all(colnames(mcmcChain) == c("mu[1]", "mu[2]","nu","sigma[1]","sigma[2]"))) &&
@@ -95,9 +100,9 @@ function( BESTobj, N1, N2=NULL, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     # Get posterior for simulated data:
     Bout <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1)
     if (i <= showFirstNrep ) { 
-      # x11()  # Changed 18-02-2013
-      dev.new()
-      plotAll(Bout, y1, y2, ROPEm=ROPEm, ROPEsd=ROPEsd, ROPEeff=ROPEeff,
+      x11()  # Changed 09-03-2013
+      # dev.new() # Doesn't work in Rstudio ??
+      plotAll(Bout, ROPEm=ROPEm, ROPEsd=ROPEsd, ROPEeff=ROPEeff,
               compValm=compValm) 
     }
     simChain <- as.matrix(Bout)

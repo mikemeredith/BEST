@@ -7,7 +7,7 @@ Estimating statistical power
 Estimation of the probability of meeting the goals of a study given initial information or assumptions about the population parameters. For prospective power estimation, the sequence\cr \code{makeData -> BESTmcmc -> BESTpower} \cr is recommended: see \code{\link{makeData}}.
 }
 \usage{
-BESTpower(BESTobj, N1, N2=NULL, credMass=0.95,
+BESTpower(BESTobj, N1, N2, credMass=0.95,
  ROPEm, ROPEsd, ROPEeff, 
  maxHDIWm, maxHDIWsd, maxHDIWeff,
  compValm = 0, nRep = 200, mcmcLength = 10000,
@@ -57,7 +57,7 @@ length of the MCMC chains to use for each simulation.
 by default, the results are saved to a file after each iteration; \code{saveName} specifies the file name to use. Set to NULL to disable saving.
 }
   \item{showFirstNrep}{
-the number of results to display as plots at the beginning of the simulation run.
+the number of results to display as plots at the beginning of the simulation run. (Note for Mac users: this uses X11 graphics which is no longer included in Mac OS X 10.8. If you try to run it, you will be prompted to install XQuartz, which should then work.) 
 }
 }
 \details{
@@ -113,12 +113,12 @@ proData <- makeData(mu1=108, sd1=17, mu2=100, sd2=15, nPerGrp=20,
 proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=2000)  
 
 # 3. Compute the prospective power for planned sample sizes:
-# We'll  do just 5 simulations to show it works; should be >1000.
+# We'll  do just 5 simulations to show it works; should be several hundred.
 N1plan <- N2plan <- 50
-powerPro <- BESTpower(proMCMC, N1=N1plan, N2=N2plan, showFirstNrep=2,
+powerPro <- BESTpower(proMCMC, N1=N1plan, N2=N2plan,
                ROPEm=c(-1.5,1.5) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
                maxHDIWm=15.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
-               nRep=5, mcmcLength=10000, saveName=NULL)
+               nRep=5, saveName=NULL)
 powerPro
 
 }

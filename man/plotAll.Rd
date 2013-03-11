@@ -7,7 +7,7 @@ A series of plots displaying the results of 'BEST' analysis.
 Displays a series of plots showing the posterior probability distributions of the parameters of interest.
 }
 \usage{
-plotAll(BESTobj, y1=NULL, y2=NULL, credMass = 0.95,
+plotAll(BESTobj, credMass = 0.95,
   ROPEm = NULL, ROPEsd = NULL, ROPEeff = NULL,
   compValm = 0, compValsd = NULL, compValeff = 0,
   showCurve = FALSE, ...)
@@ -15,12 +15,6 @@ plotAll(BESTobj, y1=NULL, y2=NULL, credMass = 0.95,
 \arguments{
   \item{BESTobj}{
 an object of class 'BEST', as produced by the function \code{\link{BESTmcmc}}.
-}
-  \item{y1}{
-optional, the set of observations for the first (or only) group.
-}
-  \item{y2}{
-optional, the set of observations for the second group, ignored if there is only one group.
 }
   \item{credMass}{
 the probability mass to include in credible intervals.
@@ -52,7 +46,7 @@ other graphical parameters.
 }
 \details{
 The display has a series of panels displaying the posterior distributions of each of the parameters (and differences between groups) together with summary statistics; see \code{\link{plotPost}} for details.
-Also a chart showing approx. 30 plots of posterior predictive distributions, together with histograms of y1 and y2 if these are provided.
+Also a chart showing approx. 30 plots of posterior predictive distributions, together with histograms of the original data.
 }
 \value{
 Returns NULL invisibly. Used for the side effect.

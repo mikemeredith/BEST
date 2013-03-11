@@ -1,3 +1,11 @@
+CHANGES IN BUILD 2013-03-10
+
+  * Fixed bug in plotAll and plotPostPred giving "Error... 'breaks' do not span range of 'x'" for some analyses.
+
+  * Original data now included in BESTmcmc output; plotAll and plotPostPred modified to use this.
+
+  * in BESTpower, change back to X11 from dev.new().
+
 CHANGES IN BUILD 2013-02-18
 
   * changes to (try to) accommodate Mac's foibles: (1) X11 no longer ships with Mac's OS, users can download if they want -> use dev.new() in BESTpower; (2) Jags's progress bars were zapping everything in the stdout buffer -> call flush.console() before calling jags (in BESTmcmc) - jags own messages ("Compiling model graph...etc") still get zapped, so added an initial "Setting up JAGS model..." message.

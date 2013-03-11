@@ -1,0 +1,19 @@
+\begin{thebibliography}{3}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+
+\bibitem[{Kruschke(2011)}]{kruschke2011book}
+Kruschke, J.K. (2011) \emph{Doing Bayesian data analysis: a tutorial with R and
+  BUGS}. Elsevier, Amsterdam etc.
+
+\bibitem[{Kruschke(2012)}]{kruschke2012BEST}
+Kruschke, J.K. (2012) Bayesian estimation supersedes the t test. \emph{Journal
+  of Experimental Psychology: General} p. N/A.
+
+\bibitem[{Plummer(2003)}]{plummer2003}
+Plummer, M. (2003) {JAGS}: A program for analysis of {B}ayesian graphical
+  models using {G}ibbs sampling. \emph{3rd International Workshop on
+  Distributed Statistical Computing (DSC 2003)}, Vienna, Austria.
+
+\end{thebibliography}
