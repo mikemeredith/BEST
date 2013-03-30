@@ -61,14 +61,9 @@ Kruschke, J. K. 2012. Bayesian estimation supersedes the \emph{t} test. \emph{Jo
 \author{
 John Kruschke
 }
-\note{
-%%  ~~further notes~~
-}
-
-%% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
+\code{\link{BESTpower}} for examples.
 }
 \examples{
 ## See examples for BESTpower.

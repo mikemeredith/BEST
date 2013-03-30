@@ -4,7 +4,7 @@
 Printing a BEST object
 }
 \description{
-Print method for objects of class BEST, such as produced by \code{\link{BESTmcmc}}.
+Print method for objects of class \code{BEST}, such as produced by \code{\link{BESTmcmc}}.
 }
 \usage{
 \method{print}{BEST}(x, digits = 4, ...)
@@ -23,12 +23,12 @@ further arguments for the print function.
 \details{
 The print method displays summary statistics for the parameters and two MCMC diagnostic measures:
 
-Rhat is the 'potential scale reduction factor', which is 1 on convergence; if any parameter has a value > 1.05, rerun with increased burnInSteps. See \code{\link[coda]{gelman.diag}}.
+\code{Rhat} is the 'potential scale reduction factor', which is 1 on convergence; if any parameter has a value > 1.05, rerun with increased \code{burnInSteps}. See \code{\link[coda]{gelman.diag}}.
 
-n.eff is the sample size adjusted for autocorrelation; for stable estimates of credible intervals this should be > 10,000. Rerun with increased numSavedSteps or increased thinSteps. See \code{\link[coda]{effectiveSize}}.
+\code{n.eff} is the sample size adjusted for autocorrelation; for stable estimates of credible intervals this should be > 10,000. Rerun with increased \code{numSavedSteps} or increased \code{thinSteps}. See \code{\link[coda]{effectiveSize}}.
 }
 \value{
-print.BEST returns x invisibly.
+Returns \code{x} invisibly.
 }
 \author{
 Mike Meredith

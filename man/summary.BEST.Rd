@@ -1,6 +1,6 @@
 \name{summary.BEST}
 \alias{summary.BEST}
-\alias{print.summary.BEST}
+%%%\alias{print.summary.BEST}
 
 \title{
 Extract summary statistics from an object of class BEST.
@@ -13,24 +13,24 @@ Provides summary statistics for each of the parameters (mean and standard deviat
   ROPEm = NULL, ROPEsd = NULL, ROPEeff = NULL,
   compValm = 0, compValsd = NULL, compValeff = 0, ...)
 
-\method{print}{summary.BEST}(x, digits = 3, ...)
+%%%\method{print}{summary.BEST}(x, digits = 3, ...)
 
 }
 \arguments{
   \item{object}{
-an object of class 'BEST', as produced by the function \code{\link{BESTmcmc}}.
+an object of class \code{BEST}, as produced by the function \code{\link{BESTmcmc}}.
 }
   \item{credMass}{
 the probability mass to include in credible intervals.
 }
   \item{ROPEm}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). 
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). 
 }
   \item{ROPEsd}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the (difference of) standard deviations.
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the (difference of) standard deviations.
 }
   \item{ROPEeff}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the effect size.
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the effect size.
 }
   \item{compValm}{
 a value for comparison with the (difference of) means.
@@ -41,19 +41,16 @@ a value for comparison with the (difference of) standard deviations.
   \item{compValeff}{
 a value for comparison with the effect size.
 }
-  \item{x}{
-the output from a call to summary
-}
-  \item{digits}{
-the number of digits to display.
-}
+%%  \item{x}{
+%%the output from a call to summary
+%%}
+%%  \item{digits}{
+%%the number of digits to display.
+%%}
   \item{\dots}{
 additional arguments for the summary or print function.
 }
 
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
 }
 \value{
 Returns a matrix with the parameters in rows and the following columns:

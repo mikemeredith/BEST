@@ -24,7 +24,7 @@ the probability mass to include in credible intervals.
 a value for comparison with those plotted.
 }
   \item{ROPE}{
-a two element vector, such as c(-1,1), specifying the limits of the Region Of Practical Equivalence. 
+a two element vector, such as \code{c(-1, 1)}, specifying the limits of the Region Of Practical Equivalence. 
 }
   \item{HDItextPlace}{
 a value in [0,1] that controls the horizontal position of the labels at the ends of the HDI bar.
@@ -39,7 +39,7 @@ text to use as the label of the y axis.
 text to use as the label of the x axis.
 }
   \item{cex.lab}{
-the magnification to be used for x and y labels relative to the current setting of cex
+the magnification to be used for x and y labels relative to the current setting of \code{cex}
 }
   \item{cex}{
 a numerical value giving the amount by which plotting text and symbols should be magnified relative to the default
@@ -51,10 +51,10 @@ a vector of length 2 giving the limits for the x axis.
 text to use as the main title of the plot
 }
   \item{col}{
-colour for the fill of the histogram boxes or for the curve if showCurve = TRUE.
+colour for the fill of the histogram boxes or for the curve if \code{showCurve = TRUE}.
 }
   \item{border}{
-colour for the borders of the histogram boxes; ignored if showCurve = TRUE.
+colour for the borders of the histogram boxes; ignored if \code{showCurve = TRUE}.
 }
   \item{showMode}{
 logical: if TRUE, the mode is displayed instead of the mean.
@@ -81,14 +81,8 @@ If values for a ROPE are supplied, these are shown as dark red vertical dashed l
 \value{
 Returns NULL invisibly. Used for its plotting side-effect.
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
 \author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
+John Kruschke
 }
 
 \seealso{

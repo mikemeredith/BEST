@@ -12,7 +12,7 @@ Displays a plot showing the posterior probability distribution of one of the par
 }
 \arguments{
   \item{x}{
-an object of class 'BEST', as produced by the function \code{\link{BESTmcmc}}.
+an object of class \code{BEST}, as produced by the function \code{\link{BESTmcmc}}.
 }
   \item{which}{
 one of "mean", "sd", "effect" or "nu" or an abbreviation of one of these; indicates which estimate to plot. For a comparison of two groups, "mean" and "sd" display the difference in means or standard deviation.
@@ -21,7 +21,7 @@ one of "mean", "sd", "effect" or "nu" or an abbreviation of one of these; indica
 the probability mass to include in credible intervals.
 }
   \item{ROPE}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the estimate. 
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the estimate. 
 }
   \item{showCurve}{
 logical: if TRUE, the posterior density will be represented by a kernel density function instead of a histogram.
@@ -47,7 +47,7 @@ Mike Meredith, adapted from code by John Kruschke.
 }
 
 \seealso{
-\code{\link{plotAll}} for a single plot showing all the parameters. \code{\link[=summary.BEST]{summary}} for values of the corresponding summary statistics and \code{\link[=pairs.BEST]{pairs}} for a scatterplot matrix plot and correlation coefficients.
+\code{\link{plotAll}} for a single plot showing all the parameters, \code{\link[=summary.BEST]{summary}} for values of the corresponding summary statistics and \code{\link[=pairs.BEST]{pairs}} for a scatterplot matrix plot and correlation coefficients.
 }
 \examples{
 # See examples in BEST-package.

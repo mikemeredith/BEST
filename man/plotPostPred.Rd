@@ -11,7 +11,7 @@ plotPostPred(BESTobj, nCurvesToPlot = 30)
 }
 \arguments{
   \item{BESTobj}{
-an object of class 'BEST', as produced by the function \code{\link{BESTmcmc}}.
+an object of class \code{BEST}, as produced by the function \code{\link{BESTmcmc}}.
 }
   \item{nCurvesToPlot}{
 the number of posterior predictive curves to plot.

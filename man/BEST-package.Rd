@@ -12,24 +12,19 @@ An alternative to \emph{t} tests, producing posterior estimates for groups means
 \tabular{ll}{
 Package: \tab BEST\cr
 Type: \tab Package\cr
-Version: \tab 0.02\cr
-Date: \tab 2013-02-12\cr
+Version: \tab 0.0211\cr
+Date: \tab 2013-02-29\cr
 License: \tab GPL-3\cr
 }
 
-The package provides a series of functions to compare the means of two groups, or to compare the mean of one group with a standard, taking into account the standard deviation(s). It is thus similar to a \emph{t} test. However, our Bayesian approach results in probability statements about the values of interest, rather than \emph{p}-values and significance levels.
+The core function, \code{\link{BESTmcmc}}, generates posterior distributions to compare the means of two groups, or to compare the mean of one group with a standard, taking into account the standard deviation(s). It is thus similar to a \emph{t} test. However, our Bayesian approach results in probability statements about the values of interest, rather than \emph{p}-values and significance levels.
 
 In addition, the procedure accounts for departures from normality by using a \emph{t}-distribution to model the variable of interest and estimating a measure of normality.
 
-The function \code{\link{BESTmcmc}} generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003) with vague priors for all parameters, as described by Kruschke (2012). The model is shown in the diagram below.
+Functions to summarise and to visualise the output are provided.
 
-\figure{BESTmodel.jpg}
+The function \code{\link{BESTpower}} allows simulation-based estimates of power, either retrospective power directly with \code{BESTmcmc} output or prospective power analysis with \code{\link{makeData}}.
 
-Derived parameters, including the differences in means or standard deviations, and effect sizes can be obtained from the results of the \code{BESTmcmc} run.
-
-The output from \code{BESTmcmc} has class \code{BEST}, which has print, plot and summary methods. These permit the extraction and display of credible intervals and proportions of the posterior mass above or below values of interest.
-
-Class \code{BEST} inherits from \code{\link[coda]{mcmc.list}}, so all the diagnostic functions in the \code{coda} package are available.
 }
 \author{
 Original code by John K. Kruschke, johnkruschke@gmail.com
@@ -42,9 +37,7 @@ Maintainer: Mike Meredith <mmeredith@wcs.org>
 \references{
 Kruschke, J. K. 2012. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} First Posting. doi: 10.1037/a0029146
 
-Kruschke, J. K. 2011. \emph{Doing Bayesian data analysis: a tutorial with R and BUGS.} Elsevier, Amsterdam
-
-Plummer, Martyn (2003). JAGS: A Program for Analysis of Bayesian Graphical Models Using Gibbs Sampling, \emph{Proceedings of the 3rd International Workshop on Distributed Statistical Computing (DSC 2003)}, March 20-22, Vienna, Austria. ISSN 1609-395X
+Kruschke, J. K. 2011. \emph{Doing Bayesian data analysis: a tutorial with R and BUGS.} Elsevier, Amsterdam, especially Chapter 18.
 }
 
 \keyword{ package }

@@ -14,19 +14,19 @@ plotAll(BESTobj, credMass = 0.95,
 }
 \arguments{
   \item{BESTobj}{
-an object of class 'BEST', as produced by the function \code{\link{BESTmcmc}}.
+an object of class \code{BEST}, as produced by the function \code{\link{BESTmcmc}}.
 }
   \item{credMass}{
 the probability mass to include in credible intervals.
 }
   \item{ROPEm}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). 
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). 
 }
   \item{ROPEsd}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the (difference of) standard deviations.
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the (difference of) standard deviations.
 }
   \item{ROPEeff}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the effect size.
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the effect size.
 }
   \item{showCurve}{
 logical: if TRUE, the posterior density will be represented by a kernel density function instead of a histogram.
@@ -59,7 +59,7 @@ Code by John Kruschke, modified by Mike Meredith.
 }
 
 \seealso{
-\code{\link[=plot.BEST]{plot}} for plots of individual parameters. \code{\link[=summary.BEST]{summary}} for values of the corresponding summary statistics and \code{\link[=pairs.BEST]{pairs}} for a scatterplot matrix plot and correlation coefficients.
+\code{\link[=plot.BEST]{plot}} for plots of individual parameters,  \code{\link[=summary.BEST]{summary}} for values of the corresponding summary statistics and \code{\link[=pairs.BEST]{pairs}} for a scatterplot matrix plot and correlation coefficients.
 }
 \examples{
 # See examples in BEST-package.

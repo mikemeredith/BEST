@@ -1,4 +1,4 @@
-# This file has the generic 'hdi' function and a series of methods.
+# This file has the S3 generic 'hdi' function and a series of methods.
 
 # hdi.default replaces HDIofMCMC
 # hdi.function takes the place of HDIofICDF
@@ -12,17 +12,6 @@ hdi.default <- function(object, credMass=0.95, ...) {
     stop("credMass must be in 0 < credMass < 1")
   if(all(is.na(object)))
     return(c(lower = NA_real_, upper = NA_real_))
-  # sortedPts = sort(object)
-  # ciIdxInc = floor( credMass * length( sortedPts ) )
-  # nCIs = length( sortedPts ) - ciIdxInc
-  # ciWidth = rep( 0 , nCIs )
-  #TODO: change this loop to a vector operation:
-  # for ( i in 1:nCIs ) {
-      # ciWidth[ i ] = sortedPts[ i + ciIdxInc ] - sortedPts[ i ]
-  # }
-  # result <- c(lower = sortedPts[ which.min( ciWidth ) ],
-          # upper = sortedPts[ which.min( ciWidth ) + ciIdxInc ])
-
   # This is Mike's code from way back:
   x <- sort(object)  # also removes NAs
   n <- length(x)
@@ -64,6 +53,7 @@ hdi.function <- function(object, credMass=0.95, tol, ...)  {
   if(class(try(object(0.5, ...), TRUE)) == "try-error")
     stop(paste("Incorrect arguments for the inverse cumulative density function",
         substitute(object)))
+  # cf. code in Kruschke 2011 p630
    intervalWidth <- function( lowTailPr , ICDF , credMass , ... ) {
       ICDF( credMass + lowTailPr , ... ) - ICDF( lowTailPr , ... )
    }

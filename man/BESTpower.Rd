@@ -15,25 +15,25 @@ BESTpower(BESTobj, N1, N2, credMass=0.95,
 }
 \arguments{
   \item{BESTobj}{
-an object of class BEST produced by BESTmcmc.
+an object of class \code{BEST} produced by \code{BESTmcmc}.
 }
   \item{N1}{
 planned sample size for the first (or only) group of observations; may be a scalar if sample size is fixed, or a vector if sample size varies; values will be recycled if necessary.
 }
   \item{N2}{
-planned sample size for the second group of observations; ignored if BESTobj concerns only one group.
+planned sample size for the second group of observations; ignored if \code{BESTobj} concerns only one group.
 }
   \item{credMass}{
 the probability mass to include in HDIs when checking criteria.  
 }
   \item{ROPEm}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). 
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). 
 }
   \item{ROPEsd}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the (difference of) standard deviations.
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the (difference of) standard deviations.
 }
   \item{ROPEeff}{
-a two element vector, such as c(-1,1), specifying the limit of the ROPE on the effect size.
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the effect size.
 }
   \item{maxHDIWm}{
 the maximum acceptable width for the HDI for the difference in means (for 2 groups) or for the mean (for a single group).
@@ -81,21 +81,17 @@ A matrix with a row for each criterion and columns for the mean and lower and up
 Note that this matrix always has 12 rows. Rows corresponding to criteria which are not specified will have NAs.
 }
 \references{
-%% ~put references to the literature/web site here ~
+Kruschke, J. K. 2012. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} First Posting. doi: 10.1037/a0029146
+
+Kruschke, J. K. 2011. \emph{Doing Bayesian data analysis: a tutorial with R and BUGS.} Elsevier, Amsterdam, Chapter 13.
 }
 \author{
-%%  ~~who you are~~
+Original code by John Kruschke, modified by Mike Meredith.
 }
 \note{
 At least 1000 simulations are needed to get good estimates of power and these can take a long time. If the run is interrupted, the results so far can be recovered from the file specified in \code{saveName}.
 
 The chains in \code{BESTobj} must have at least nRep values. To allow for some degree of autocorrelation among values, it would be prudent to make these chains at least 10 * nRep in length.
-}
-
-\section{To Do}{
-1. It would be nice to program this to run on parallel cores.
-
-2. Check that the plots work on platforms other than Windows.
 }
 
 \seealso{
@@ -116,8 +112,8 @@ proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=2000)
 # We'll  do just 5 simulations to show it works; should be several hundred.
 N1plan <- N2plan <- 50
 powerPro <- BESTpower(proMCMC, N1=N1plan, N2=N2plan,
-               ROPEm=c(-1.5,1.5) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
-               maxHDIWm=15.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
+               ROPEm=c(-1.5,1.5), ROPEsd=c(-2,2), ROPEeff=c(-0.5,0.5), 
+               maxHDIWm=15.0, maxHDIWsd=10.0, maxHDIWeff=1.0,
                nRep=5, saveName=NULL)
 powerPro
 

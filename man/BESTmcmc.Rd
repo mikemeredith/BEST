@@ -27,29 +27,38 @@ number of steps to discard as burn-in at the beginning of the chain.
 }
 }
 \details{
+The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003) with vague priors for all parameters, as described by Kruschke (2012). The model is shown in the diagram below.
 
+\figure{BESTmodel.jpg}
+
+Derived parameters, including the differences in means or standard deviations, and effect sizes can be obtained from the results of the \code{BESTmcmc} run.
+
+The output from \code{BESTmcmc} has class \code{BEST}, which has print, plot and summary methods. These permit the extraction and display of credible intervals and proportions of the posterior mass above or below values of interest.
+
+Class \code{BEST} inherits from \code{\link[coda]{mcmc.list}}, so all the diagnostic functions in the \code{coda} package are available.
 }
 \value{
-An object of class 'BEST' inheriting from mcmc.list with the following additional attributes:
+An object of class \code{BEST} inheriting from \code{mcmc.list} with the following additional attributes:
 
   \item{Rhat}{the 'potential scale reduction factor'}
   \item{n.eff}{sample size adjusted for autocorrelation}
   \item{data}{a list with elements y1 and y2 containing the original data; y2 may be NULL}
 
-The package provides print, plot and summary methods for 'BEST' objects.
+The package provides \code{print}, \code{plot} and \code{summary} methods for \code{BEST} objects.
 }
 \references{
 Kruschke, J K. 2012. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} First Posting. doi: 10.1037/a0029146
+
+Plummer, Martyn (2003). JAGS: A Program for Analysis of Bayesian Graphical Models Using Gibbs Sampling, \emph{Proceedings of the 3rd International Workshop on Distributed Statistical Computing (DSC 2003)}, March 20-22, Vienna, Austria. ISSN 1609-395X
 }
 \author{
-Original code by John K. Kruschke, mangled by Mike Meredith
+Original code by John K. Kruschke, modified by Mike Meredith
 }
 \note{
-This differs from the original BESTmcmc function in Kruschke's code:\cr
+This differs from the original \code{BESTmcmc} function in Kruschke's code:\cr
 1. Both 1-group and 2-group comparisons are dealt with by the same function.\cr
-2. The output inherits from an mcmc.list, so functions in package coda can be used.
+2. In the present version, the output inherits from \code{mcmc.list}. This may change in future versions.
 }
-
 
 \seealso{
 \code{\link[=plot.BEST]{plot}}, \code{\link[=summary.BEST]{summary}}, \code{\link[=pairs.BEST]{pairs}} for relevant methods.
