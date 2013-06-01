@@ -81,7 +81,7 @@ A matrix with a row for each criterion and columns for the mean and lower and up
 Note that this matrix always has 12 rows. Rows corresponding to criteria which are not specified will have NAs.
 }
 \references{
-Kruschke, J. K. 2012. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} First Posting. doi: 10.1037/a0029146
+Kruschke, J. K. 2013. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} 142(2):573-603. doi: 10.1037/a0029146
 
 Kruschke, J. K. 2011. \emph{Doing Bayesian data analysis: a tutorial with R and BUGS.} Elsevier, Amsterdam, Chapter 13.
 }
@@ -104,7 +104,7 @@ The chains in \code{BESTobj} must have at least nRep values. To allow for some d
 # 1. Generate idealised data set:
 proData <- makeData(mu1=108, sd1=17, mu2=100, sd2=15, nPerGrp=20, 
                          pcntOut=10, sdOutMult=2.0, rnd.seed=NULL)
-
+\donttest{
 # 2. Generate credible parameter values from the idealised data:
 proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=2000)  
 
@@ -116,5 +116,5 @@ powerPro <- BESTpower(proMCMC, N1=N1plan, N2=N2plan,
                maxHDIWm=15.0, maxHDIWsd=10.0, maxHDIWeff=1.0,
                nRep=5, saveName=NULL)
 powerPro
-
+} ## End donttest
 }

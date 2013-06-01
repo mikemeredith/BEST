@@ -12,7 +12,7 @@
 \usepackage{graphicx, Rd}
 \usepackage{float}
 \usepackage{Sweave}
-\usepackage{hyperref}                 % hypertext links
+\usepackage[pdfstartview=]{hyperref}                 % hypertext links
 
 \begin{document}
 
@@ -33,7 +33,7 @@ The decision rule can accept the null value (unlike traditional \emph{t} tests) 
 
 The package also provides methods to estimate statistical power for various research goals.
 
-The code used for the computations is the same as that used in \citet{Kruschke2012BEST}.
+The code used for the computations is the same as that used in \citet{Kruschke2013BEST}.
 
 
 \section{The Model}
@@ -50,9 +50,9 @@ To accommodate outliers we describe the data with a distribution that has fatter
 
 The data (\emph{y}) are assumed to be independent and identically distributed (i.i.d.) draws from a \emph{t} distribution with different mean ($\mu$) and standard deviation ($\sigma$) for each population, and with a common normality parameter ($\nu$), as indicated in the lower portion of Figure~\ref{fig:model}.
 
-The priors used are minimally informative: normal priors with large standard deviation for ($\mu$), broad uniform priors for ($\sigma$), and a shifted-exponential prior for ($\nu$), as shown in the upper part of Figure~\ref{fig:model}. Full details of the priors are given in \citet{Kruschke2012BEST}.
+The priors used are minimally informative: normal priors with large standard deviation for ($\mu$), broad uniform priors for ($\sigma$), and a shifted-exponential prior for ($\nu$), as shown in the upper part of Figure~\ref{fig:model}. Full details of the priors are given in \citet{Kruschke2013BEST}.
 
-For a general discussion see \citet{Kruschke2011book}.
+For a general discussion see chapters 11 and 12 of \citet{Kruschke2011book}.
 
 \section{Preparing to run BEST}
 \label{sec:prepare}
@@ -81,7 +81,7 @@ Loaded modules: basemod,bugs
 \subsection{Some example data}
 \label{subsec:data2g}
 
-We will use the hypothetical data from \citet{Kruschke2012BEST}: ``Consider data from two groups of people who take an IQ test. Group 1 ($N_1 = 47$) consumes a ``smart drug'' while Group 2 ($N_2 = 42$) is a control group that consumes a placebo.''
+We will use the hypothetical data from \citet{Kruschke2013BEST}: ``Consider data from two groups of people who take an IQ test. Group 1 ($N_1 = 47$) consumes a ``smart drug'' while Group 2 ($N_2 = 42$) is a control group that consumes a placebo.''
 
 <<data2grps>>=
 y1 = c(101,100,102,104,102,97,105,105,98,101,100,123,105,103,100,95,102,106,
@@ -333,7 +333,7 @@ And we can access the draws from the posterior distributions after attaching the
 attachBEST(BESTout1g)
 length(nu)
 variance <- sigma^2
-plotPost(variance)
+plotPost(variance, xlim=c(0, 3))
 detachBEST()
 @
 \begin{figure}
@@ -394,7 +394,7 @@ Retrospective power analysis for the single-sample case is implemented in the sa
 \subsection{Prospective power analysis}
 \label{subsec:proPower}
 
-This is implemented as a three-step process. For a discussion of the advantages of this procedure, see \citet{Kruschke2012BEST}.
+This is implemented as a three-step process. For a discussion of the advantages of this procedure, see \citet{Kruschke2013BEST}.
 
 \subsubsection{Generate an idealized data set}
 \label{subsec:proPower1}
@@ -486,7 +486,7 @@ Power analysis for the single-sample case is analogous: provide values for argum
 \section{What next?}
 \label{sec:whatNext}
 
-If you want to know the details of how the functions in the \code{BEST} package work, you can download the \R{} source code from GitHub %\url{...}
+If you want to know the details of how the functions in the \code{BEST} package work, you can download the \R{} source code from GitHub \url{https://github.com/mikemeredith/BEST}
 or find almost the same code at \url{http://www.indiana.edu/~kruschke/BEST/} together with links to articles, videos, and the blog.
 
 Bayesian analysis with computations performed by JAGS is a powerful approach to analysis. For a practical introduction see \citet{Kruschke2011book}.

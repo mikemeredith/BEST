@@ -1,6 +1,5 @@
 \name{summary.BEST}
 \alias{summary.BEST}
-%%%\alias{print.summary.BEST}
 
 \title{
 Extract summary statistics from an object of class BEST.
@@ -12,8 +11,6 @@ Provides summary statistics for each of the parameters (mean and standard deviat
 \method{summary}{BEST}(object, credMass = 0.95,
   ROPEm = NULL, ROPEsd = NULL, ROPEeff = NULL,
   compValm = 0, compValsd = NULL, compValeff = 0, ...)
-
-%%%\method{print}{summary.BEST}(x, digits = 3, ...)
 
 }
 \arguments{
@@ -41,12 +38,6 @@ a value for comparison with the (difference of) standard deviations.
   \item{compValeff}{
 a value for comparison with the effect size.
 }
-%%  \item{x}{
-%%the output from a call to summary
-%%}
-%%  \item{digits}{
-%%the number of digits to display.
-%%}
   \item{\dots}{
 additional arguments for the summary or print function.
 }
@@ -74,7 +65,7 @@ For a single group, the rows will be:
 Many of the elements of the matrix will be NA. The print method for the summary attempts to print this nicely.
 }
 \references{
-Kruschke, J K. 2012. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General}  First Posting. doi: 10.1037/a0029146
+Kruschke, J K. 2013. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} 142(2):573-603. doi: 10.1037/a0029146
 
 Macmillan, N. A., & Creelman, C. D. (1991). \emph{Detection Theory: A User's Guide}. New York, Cambridge University Press
 }

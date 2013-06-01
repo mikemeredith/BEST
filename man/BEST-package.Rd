@@ -12,8 +12,8 @@ An alternative to \emph{t} tests, producing posterior estimates for groups means
 \tabular{ll}{
 Package: \tab BEST\cr
 Type: \tab Package\cr
-Version: \tab 0.0211\cr
-Date: \tab 2013-02-29\cr
+Version: \tab 0.1.0\cr
+Date: \tab 2013-06-01\cr
 License: \tab GPL-3\cr
 }
 
@@ -27,15 +27,13 @@ The function \code{\link{BESTpower}} allows simulation-based estimates of power,
 
 }
 \author{
-Original code by John K. Kruschke, johnkruschke@gmail.com
+Original code by John K. Kruschke, \url{http://www.indiana.edu/~kruschke/BEST/}
 
-\url{http://www.indiana.edu/~kruschke/BEST/}
-
-Maintainer: Mike Meredith <mmeredith@wcs.org>
+Maintainer: Mike Meredith <mmeredith at wcs.org>
 }
 
 \references{
-Kruschke, J. K. 2012. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} First Posting. doi: 10.1037/a0029146
+Kruschke, J. K. 2013. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} 142(2):573-603. doi: 10.1037/a0029146
 
 Kruschke, J. K. 2011. \emph{Doing Bayesian data analysis: a tutorial with R and BUGS.} Elsevier, Amsterdam, especially Chapter 18.
 }
@@ -44,6 +42,8 @@ Kruschke, J. K. 2011. \emph{Doing Bayesian data analysis: a tutorial with R and 
 \keyword{ htest }
 
 \examples{
+
+\donttest{
 ## Comparison of two groups:
 ## =========================
 y1 <- c(5.77, 5.33, 4.59, 4.33, 3.66, 4.48)
@@ -99,4 +99,5 @@ attachBEST(BESTout1)
 head(mu)
 mean(sigma)
 detachBEST()
+} % end of donttest
 }
