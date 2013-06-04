@@ -11,7 +11,7 @@ BESTpower(BESTobj, N1, N2, credMass=0.95,
  ROPEm, ROPEsd, ROPEeff, 
  maxHDIWm, maxHDIWsd, maxHDIWeff,
  compValm = 0, nRep = 200, mcmcLength = 10000,
- saveName = "BESTpower.Rdata", showFirstNrep = 0)
+ saveName = NULL, showFirstNrep = 0)
 }
 \arguments{
   \item{BESTobj}{
@@ -54,7 +54,7 @@ number of simulations to carry out.
 length of the MCMC chains to use for each simulation.
 }
   \item{saveName}{
-by default, the results are saved to a file after each iteration; \code{saveName} specifies the file name to use. Set to NULL to disable saving.
+if required, the results may saved to a file after each iteration and \code{saveName} specifies the file name (or path relative to the current working directory) to use. The \code{power} object can be loaded with \code{\link{load}}. Set to NULL (the default) to disable saving.
 }
   \item{showFirstNrep}{
 the number of results to display as plots at the beginning of the simulation run. (Note for Mac users: this uses X11 graphics which is no longer included in Mac OS X 10.8. If you try to run it, you will be prompted to install XQuartz, which should then work.) 
@@ -113,8 +113,7 @@ proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=2000)
 N1plan <- N2plan <- 50
 powerPro <- BESTpower(proMCMC, N1=N1plan, N2=N2plan,
                ROPEm=c(-1.5,1.5), ROPEsd=c(-2,2), ROPEeff=c(-0.5,0.5), 
-               maxHDIWm=15.0, maxHDIWsd=10.0, maxHDIWeff=1.0,
-               nRep=5, saveName=NULL)
+               maxHDIWm=15.0, maxHDIWsd=10.0, maxHDIWeff=1.0, nRep=5)
 powerPro
 } ## End donttest
 }

@@ -16,30 +16,37 @@ function(BESTobj, credMass=0.95,
   # showCurve if TRUE the posterior should be displayed as a fitted density curve
   #   instead of a histogram (default).
 
-  # TODO sanity checks.
+  # Sanity checks:
+  if(!inherits(BESTobj, "data.frame"))
+    stop("BESTobj is not a valid BEST object")
+  if(ncol(BESTobj) == 3 && all(colnames(BESTobj) == c("mu","nu","sigma"))) {
+    oneGrp <- TRUE
+  } else if (ncol(BESTobj) == 5 && all(colnames(BESTobj) == c("mu1", "mu2","nu","sigma1","sigma2"))) {
+    oneGrp <- FALSE
+  } else {
+    stop("BESTobj is not a valid BEST object")
+  }
 
-  mcmcChain <- as.matrix(BESTobj)
-  oneGrp <- ncol(mcmcChain) == 3
   y1 <- attr(BESTobj, "data")$y1
   y2 <- attr(BESTobj, "data")$y2
 
   # Select thinned steps in chain for plotting of posterior predictive curves:
-  chainLength <- NROW( mcmcChain )
+  chainLength <- NROW( BESTobj )
   nCurvesToPlot <- 30
   # stepIdxVec <- seq( 1 , chainLength , floor(chainLength/nCurvesToPlot) )
   stepIdxVec <- seq(1, chainLength, length.out=nCurvesToPlot)
 
   if(oneGrp)  {
-    mu1 <- mcmcChain[,"mu"]
-    sigma1 <- mcmcChain[,"sigma"]
+    mu1 <- BESTobj$mu
+    sigma1 <- BESTobj$sigma
     y2 <- mu2 <- sigma2 <- NULL
   } else {
-    mu1 <- mcmcChain[,"mu[1]"]
-    mu2 <- mcmcChain[,"mu[2]"]
-    sigma1 <- mcmcChain[,"sigma[1]"]
-    sigma2 <- mcmcChain[,"sigma[2]"]
+    mu1 <- BESTobj$mu1
+    mu2 <- BESTobj$mu2
+    sigma1 <- BESTobj$sigma1
+    sigma2 <- BESTobj$sigma2
   }
-  nu <- mcmcChain[,"nu"]
+  nu <- BESTobj$nu
 
   #source("plotPost.R")
   # Set up window and layout:

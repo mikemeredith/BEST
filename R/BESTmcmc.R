@@ -3,7 +3,8 @@ function( y1, y2=NULL,
     numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000) { 
   # This function generates an MCMC sample from the posterior distribution.
   # y1, y2 the data vectors; y2=NULL if only one group.
-  # Returns an mcmc.list object, not a matrix, with class 'BEST'.
+  # Returns a data frame, not a matrix, with class 'BEST',
+  #   with attributes Rhat, n.eff, and a list with the original data.
   
   require(rjags)
 
@@ -96,13 +97,15 @@ function( y1, y2=NULL,
   #   codaSamples[[ chainIdx ]][ stepIdx , paramIdx ]
   
   #------------------------------------------------------------------------------
-  Rhat <- gelman.diag(codaSamples)$psrf[, 1]
-  n.eff <- effectiveSize(codaSamples)
-   # mcmcChain = as.matrix( codaSamples )
-  class(codaSamples) <- c("BEST", class(codaSamples))
-  attr(codaSamples, "Rhat") <- Rhat
-  attr(codaSamples, "n.eff") <- n.eff
-  attr(codaSamples, "data") <- list(y1 = y1, y2 = y2)
+  mcmcChain = as.matrix( codaSamples )
+  if(dim(mcmcChain)[2] == 5 && 
+        all(colnames(mcmcChain) == c("mu[1]", "mu[2]", "nu", "sigma[1]", "sigma[2]")))
+    colnames(mcmcChain) <- c("mu1", "mu2", "nu", "sigma1", "sigma2")
+  mcmcDF <- as.data.frame(mcmcChain)
+  class(mcmcDF) <- c("BEST", class(mcmcDF))
+  attr(mcmcDF, "Rhat") <- gelman.diag(codaSamples)$psrf[, 1]
+  attr(mcmcDF, "n.eff") <- effectiveSize(codaSamples)
+  attr(mcmcDF, "data") <- list(y1 = y1, y2 = y2)
   
-  return( codaSamples )
+  return( mcmcDF )
 }

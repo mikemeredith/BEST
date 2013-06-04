@@ -25,9 +25,10 @@ function( mu1 , sd1 , mu2=NULL , sd2=NULL , nPerGrp ,
   }
   #
   # Set up window and layout:
-  opar <- par("mfrow") ; on.exit(par(opar))
+  opar <- par(mfrow=c(1,1)) ; on.exit(par(opar))
   if(!oneGrp)  
-    layout(matrix(1:2,nrow=2))  
+    par(mfrow=2:1)  
+    # layout(matrix(1:2,nrow=2))  
   histInfo = hist( y1 , main="Simulated Data" , col="pink2" , border="white" , 
                    xlim=range(c(y1,y2)) , breaks=30 , prob=TRUE )
   text( max(c(y1,y2)) , max(histInfo$density) , 

@@ -13,7 +13,7 @@ An alternative to \emph{t} tests, producing posterior estimates for groups means
 Package: \tab BEST\cr
 Type: \tab Package\cr
 Version: \tab 0.1.0\cr
-Date: \tab 2013-06-01\cr
+Date: \tab 2013-06-04\cr
 License: \tab GPL-3\cr
 }
 
@@ -52,10 +52,6 @@ y2 <- c(3.88, 3.55, 3.29, 2.59, 2.33, 3.59)
 # Run an analysis, takes up to 1 min.
 BESTout <- BESTmcmc(y1, y2)
 
-# coda diagnostics
-gelman.diag(BESTout)
-effectiveSize(BESTout)
-
 # Look at the result:
 BESTout
 summary(BESTout)
@@ -68,20 +64,18 @@ summary(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), ROPEsd=c(-0.15,0.15),
           ROPEeff=c(-0.2,0.2)) 
 pairs(BESTout)
 
-attachBEST(BESTout)
-head(mu1)
-muDiff <- mu1 - mu2
+head(BESTout$mu1)
+muDiff <- BESTout$mu1 - BESTout$mu2
 mean(muDiff > 1.5)
-mean(sigma1 - sigma2)
-hist(nu)
+mean(BESTout$sigma1 - BESTout$sigma2)
+hist(BESTout$nu)
 
 # Retrospective power analysis
 # ----------------------------
 # This takes time, so we do 2 simulations here; a real analysis needs several hundred
 
 powerRet <- BESTpower(BESTout, N1=length(y1), N2=length(y2), 
-            ROPEm=c(-0.1,0.1), maxHDIWm=2.0, 
-            nRep=2, mcmcLength=10000, saveName = NULL) 
+            ROPEm=c(-0.1,0.1), maxHDIWm=2.0, nRep=2) 
 powerRet
 # We only set criteria for the mean, so results for sd and effect size are all NA.
 
@@ -95,9 +89,7 @@ BESTout1
 summary(BESTout1)
 plot(BESTout1)
 
-attachBEST(BESTout1)
-head(mu)
-mean(sigma)
-detachBEST()
+head(BESTout1$mu)
+mean(BESTout1$sigma)
 } % end of donttest
 }

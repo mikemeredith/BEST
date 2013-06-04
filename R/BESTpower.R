@@ -1,14 +1,25 @@
 BESTpower <-
 function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
                      maxHDIWm, maxHDIWsd, maxHDIWeff, compValm=0, nRep=200,
-                     mcmcLength=10000, saveName="BESTpower.Rdata",
+                     mcmcLength=10000, saveName=NULL,
                      showFirstNrep=0 ) {
   # This function estimates power.
  
-  mcmcChain <- as.matrix(BESTobj)
-  oneGrp <- ncol(mcmcChain) == 3
-  chainLength = NROW( mcmcChain )
-  #if(length(N1) < nRep)   # I think this would work even with length(N1) > nRep
+  # Sanity checks:
+  if(!inherits(BESTobj, "data.frame"))
+    stop("BESTobj is not a valid BEST object")
+  if(ncol(BESTobj) == 3 && all(colnames(BESTobj) == c("mu","nu","sigma"))) {
+    oneGrp <- TRUE
+  } else if (ncol(BESTobj) == 5 && all(colnames(BESTobj) == c("mu1", "mu2","nu","sigma1","sigma2"))) {
+    oneGrp <- FALSE
+  } else {
+    stop("BESTobj is not a valid BEST object")
+  }
+  chainLength = NROW( BESTobj )
+  if(chainLength < nRep)
+    stop(paste("BESTobj does not have enough values; needs", nRep))
+  if(credMass <= 0 || credMass >= 1)
+    stop("credMass must lie between 0 and 1.")
   if(missing(N1))
     N1 <- length(attr(BESTobj, "data")$y1)
   N1 <- rep(N1, length.out=nRep)
@@ -19,14 +30,6 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     N2 <- rep(N2, length.out=nRep)
   }
 
-  # Sanity checks:
-  if(!(ncol(mcmcChain) == 5 && all(colnames(mcmcChain) == c("mu[1]", "mu[2]","nu","sigma[1]","sigma[2]"))) &&
-     !(ncol(mcmcChain) == 3 && all(colnames(mcmcChain) == c("mu","nu","sigma"))) )
-        stop("BESTobj is not a valid BEST object")
-  if(chainLength < nRep)
-    stop(paste("BESTobj does not have enough values; needs", nRep))
-  if(credMass <= 0 || credMass >= 1)
-    stop("credMass must lie between 0 and 1.")
 
   # Deal with missing or invalid arguments for criteria:
   wanted <- rep(TRUE, 12)
@@ -59,7 +62,7 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
 
   # Select thinned steps in chain for posterior predictions:
   stepIdxVec = seq( 1 , chainLength , floor(chainLength/nRep) )[1:nRep]
-  paramMat <- mcmcChain[stepIdxVec, ]
+  paramDF <- BESTobj[stepIdxVec, ]
   
   goalTally <- numeric(12) 
   power <- matrix(NA, 12, 3)
@@ -85,40 +88,40 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     flush.console()
     # Get parameter values for this simulation:
     if(oneGrp) {
-      mu1Val = paramMat[i,"mu"]
-      sigma1Val = paramMat[i,"sigma"]
+      mu1Val = paramDF[i,"mu"]
+      sigma1Val = paramDF[i,"sigma"]
     } else {
-      mu1Val = paramMat[i,"mu[1]"]
-      mu2Val = paramMat[i,"mu[2]"]
-      sigma1Val = paramMat[i,"sigma[1]"]
-      sigma2Val = paramMat[i,"sigma[2]"]
+      mu1Val = paramDF[i,"mu1"]
+      mu2Val = paramDF[i,"mu2"]
+      sigma1Val = paramDF[i,"sigma1"]
+      sigma2Val = paramDF[i,"sigma2"]
     }
-    nuVal = paramMat[i,"nu"]
+    nuVal = paramDF[i,"nu"]
     # Generate simulated data:
     y1 <- rt(N1[i], df=nuVal) * sigma1Val + mu1Val    
     y2 <- if(oneGrp) NULL else rt(N2[i], df=nuVal) * sigma2Val + mu2Val    
     # Get posterior for simulated data:
-    Bout <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1)
+    simChain <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1)
     if (i <= showFirstNrep ) { 
       x11()  # Changed 09-03-2013
       # dev.new() # Doesn't work in Rstudio ??
-      plotAll(Bout, ROPEm=ROPEm, ROPEsd=ROPEsd, ROPEeff=ROPEeff,
+      plotAll(simChain, ROPEm=ROPEm, ROPEsd=ROPEsd, ROPEeff=ROPEeff,
               compValm=compValm) 
     }
-    simChain <- as.matrix(Bout)
+    #simChain <- as.matrix(Bout)
     # Get the HDIs for each parameter:
     if(oneGrp) {
-      HDIm <- hdi(simChain[, "mu"], credMass=credMass) 
-      HDIsd <- hdi(simChain[, "sigma"], credMass=credMass) 
+      HDIm <- hdi(simChain$mu, credMass=credMass) 
+      HDIsd <- hdi(simChain$sigma, credMass=credMass) 
       mu0 <- if(is.null(compValm)) 0 else compValm
-      HDIeff <- hdi((simChain[,"mu"] - mu0) / simChain[,"sigma"],
+      HDIeff <- hdi((simChain$mu - mu0) / simChain$sigma,
                     credMass=credMass)
     } else {
-      HDIm <- hdi(simChain[,"mu[1]"] - simChain[,"mu[2]"], credMass=credMass) 
-      HDIsd = hdi(simChain[,"sigma[1]"] - simChain[,"sigma[2]"],
+      HDIm <- hdi(simChain$mu1 - simChain$mu2, credMass=credMass) 
+      HDIsd = hdi(simChain$sigma1 - simChain$sigma2,
         credMass=credMass) 
-      HDIeff = hdi(( simChain[,"mu[1]"] - simChain[,"mu[2]"] ) /
-        sqrt( ( simChain[,"sigma[1]"]^2 + simChain[,"sigma[2]"]^2 ) / 2 ),
+      HDIeff = hdi(( simChain$mu1 - simChain$mu2 ) /
+        sqrt( ( simChain$sigma1^2 + simChain$sigma2^2 ) / 2 ),
         credMass=credMass) 
     }
     # Assess which goals were achieved and tally them:

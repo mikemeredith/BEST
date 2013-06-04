@@ -7,16 +7,19 @@ function(object, credMass=0.95,
                     ROPEm=NULL, ROPEsd=NULL, ROPEeff=NULL,
                     compValm=0, compValsd=NULL, compValeff=0, ...) {
   # Produces summary stats for a BEST object.
-  # Should do the same set of stats at plotAll and use the same syntax
+  # Should do the same set of stats as plotAll and use the same syntax
   #   as far as possible.
 
-  mcmcChain <- as.matrix(object)
   # Sanity checks:
-  if(ncol(mcmcChain) == 3)  {
+  if(!inherits(object, "data.frame"))
+    stop("object is not a valid BEST object")
+
+  #mcmcChain <- as.matrix(object)
+  if(ncol(object) == 3)  {
     oneGrp <- TRUE
     nparam <- 5
   } else {
-    if(ncol(mcmcChain) != 5)
+    if(ncol(object) != 5)
       stop("object is not a valid BEST object.")
     oneGrp <- FALSE
     nparam <- 9
@@ -38,27 +41,27 @@ function(object, credMass=0.95,
 
   if(oneGrp)  {
     # Deal with 1-group case:
-    summaryInfo["mu", ] <- sumPost(mcmcChain[,"mu"],
+    summaryInfo["mu", ] <- sumPost(object$mu,
                   credMass=credMass, compVal=compValm, ROPE=ROPEm)
-    summaryInfo["sigma", ] = sumPost(mcmcChain[,"sigma"],
+    summaryInfo["sigma", ] = sumPost(object$sigma,
                   credMass=credMass, compVal=compValsd, ROPE=ROPEsd)
     mu0 <- if(is.null(compValm)) 0 else compValm
-    effectSize <- (mcmcChain[,"mu"] - mu0) / mcmcChain[,"sigma"]
+    effectSize <- (object$mu - mu0) / object$sigma
     summaryInfo["effSz", ] = sumPost(effectSize, 
                   credMass=credMass, compVal=compValeff, ROPE=ROPEeff)
   } else {
-    summaryInfo["mu1", ] <- sumPost(mcmcChain[,"mu[1]"], credMass=credMass)
-    summaryInfo["mu2", ] <- sumPost(mcmcChain[,"mu[2]"], credMass=credMass)
-    summaryInfo["muDiff", ] <- sumPost(mcmcChain[,"mu[1]"] - mcmcChain[,"mu[2]"], 
+    summaryInfo["mu1", ] <- sumPost(object$mu1, credMass=credMass)
+    summaryInfo["mu2", ] <- sumPost(object$mu2, credMass=credMass)
+    summaryInfo["muDiff", ] <- sumPost(object$mu1 - object$mu2, 
                   credMass=credMass, compVal=compValm, ROPE=ROPEm)
-    summaryInfo["sigma1", ] <- sumPost(mcmcChain[,"sigma[1]"], credMass=credMass)
-    summaryInfo["sigma2", ] <- sumPost(mcmcChain[,"sigma[2]"], credMass=credMass)
+    summaryInfo["sigma1", ] <- sumPost(object$sigma1, credMass=credMass)
+    summaryInfo["sigma2", ] <- sumPost(object$sigma2, credMass=credMass)
     if(is.null(compValsd))  compValsd <- 0
-    summaryInfo["sigmaDiff", ] <- sumPost(mcmcChain[,"sigma[1]"] 
-                                      - mcmcChain[,"sigma[2]"], 
+    summaryInfo["sigmaDiff", ] <- sumPost(object$sigma1 
+                                      - object$sigma2, 
                   credMass=credMass, compVal=compValsd, ROPE=ROPEsd)
-    effSzChain = ((mcmcChain[,"mu[1]"] - mcmcChain[,"mu[2]"]) 
-            / sqrt((mcmcChain[,"sigma[1]"]^2 + mcmcChain[,"sigma[2]"]^2) / 2)) 
+    effSzChain = ((object$mu1 - object$mu2) 
+            / sqrt((object$sigma1^2 + object$sigma2^2) / 2)) 
     summaryInfo["effSz", ] = sumPost(effSzChain,
                   credMass=credMass, compVal=compValeff, ROPE=ROPEeff)
     # This does not use sample-size weighted version of effect size:
@@ -68,8 +71,8 @@ function(object, credMass=0.95,
     #                               / (N1+N2-2))
   }
   # Deal with nu:
-  summaryInfo["nu", ] = sumPost(mcmcChain[,"nu"], credMass=credMass)
-  summaryInfo["log10nu", ] = sumPost(log10(mcmcChain[,"nu"]), credMass=credMass)
+  summaryInfo["nu", ] = sumPost(object$nu, credMass=credMass)
+  summaryInfo["log10nu", ] = sumPost(log10(object$nu), credMass=credMass)
 
   class(summaryInfo) <- c("summary.BEST", class(summaryInfo))
   return(summaryInfo)

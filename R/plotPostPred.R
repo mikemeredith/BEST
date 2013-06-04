@@ -3,11 +3,20 @@ function(BESTobj, nCurvesToPlot = 30) {
   # This function plots the posterior predictive distribution and the data. 
   # Description of arguments:
   # BESTobj is mcmc.list object of the type returned by function BESTmcmc.
-  # TODO sanity checks.
-  # TODO change x to BESTobj.
 
-  mcmcChain <- as.matrix(BESTobj)
-  oneGrp <- ncol(mcmcChain) == 3
+  # Sanity checks:
+  if(!inherits(BESTobj, "data.frame"))
+    stop("BESTobj is not a valid BEST object")
+  if(ncol(BESTobj) == 3 && all(colnames(BESTobj) == c("mu","nu","sigma"))) {
+    oneGrp <- TRUE
+  } else if (ncol(BESTobj) == 5 && all(colnames(BESTobj) == c("mu1", "mu2","nu","sigma1","sigma2"))) {
+    oneGrp <- FALSE
+  } else {
+    stop("BESTobj is not a valid BEST object")
+  }
+
+
+  # mcmcChain <- as.matrix(BESTobj)
   y1 <- attr(BESTobj, "data")$y1
   y2 <- attr(BESTobj, "data")$y2
 
@@ -18,20 +27,20 @@ function(BESTobj, nCurvesToPlot = 30) {
     par(mfrow=2:1)
  
   # Select thinned steps in chain for plotting of posterior predictive curves:
-  stepIdxVec <- seq(1, NROW( mcmcChain ), length= nCurvesToPlot)
-  toPlot <- mcmcChain[stepIdxVec, ]
+  stepIdxVec <- seq(1, NROW( BESTobj ), length= nCurvesToPlot)
+  toPlot <- BESTobj[stepIdxVec, ]
 
   if(oneGrp)  {
-    mu1 <- toPlot[,"mu"]
-    sigma1 <- toPlot[,"sigma"]
+    mu1 <- toPlot$mu
+    sigma1 <- toPlot$sigma
     y2 <- mu2 <- sigma2 <- NULL
   } else {
-    mu1 <- toPlot[,"mu[1]"]
-    mu2 <- toPlot[,"mu[2]"]
-    sigma1 <- toPlot[,"sigma[1]"]
-    sigma2 <- toPlot[,"sigma[2]"]
+    mu1 <- toPlot$mu1
+    mu2 <- toPlot$mu2
+    sigma1 <- toPlot$sigma1
+    sigma2 <- toPlot$sigma2
   }
-  nu <- toPlot[,"nu"]
+  nu <- toPlot$nu
 
   if(is.null(y1) && is.null(y2)) {
     xLim <- range(mu1, mu2)

@@ -13,12 +13,12 @@ context("summary.BEST")
 # NB this is actually a matrix, not an mcmc.list object.
 set.seed(123)
 len <- 1e5
-fake <- cbind('mu[1]' = rnorm(len, 4.7, 0.47),
-              'mu[2]' = rnorm(len, 3.2, 0.39),
-              'nu' = exp(rnorm(len, 3.1, 0.9)),
-              'sigma[1]' = exp(rnorm(len, -0.08, 0.42)),
-              'sigma[2]' = exp(rnorm(len, -0.28, 0.42)))
-class(fake) <- c("BEST", "matrix")
+fake <- data.frame(mu1 = rnorm(len, 4.7, 0.47),
+              mu2 = rnorm(len, 3.2, 0.39),
+              nu = exp(rnorm(len, 3.1, 0.9)),
+              sigma1 = exp(rnorm(len, -0.08, 0.42)),
+              sigma2 = exp(rnorm(len, -0.28, 0.42)))
+class(fake) <- c("BEST", "data.frame")
 
 test_that("summary.BEST with 2 groups and default values gives correct output",  {
   tst <- summary(fake)
@@ -102,10 +102,10 @@ test_that("summary.BEST with 2 groups and non-default values gives correct outpu
 # Fake BEST object (1 group)
 set.seed(123)
 len <- 1e5
-fake <- cbind('mu' = rnorm(len, 1.5, 0.25),
+fake <- data.frame('mu' = rnorm(len, 1.5, 0.25),
               'nu' = exp(rnorm(len, 3, 1)),
               'sigma' = exp(rnorm(len, -0.75, 0.42)))
-class(fake) <- c("BEST", "matrix")
+class(fake) <- c("BEST", "data.frame")
 
 test_that("summary.BEST with 1 group and default values gives correct output",  {
   tst <- summary(fake)

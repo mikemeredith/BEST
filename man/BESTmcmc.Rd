@@ -27,7 +27,7 @@ number of steps to discard as burn-in at the beginning of the chain.
 }
 }
 \details{
-The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003) with vague priors for all parameters, as described by Kruschke (2012). The model is shown in the diagram below.
+The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003) with vague priors for all parameters, as described by Kruschke (2013). The model is shown in the diagram below.
 
 \figure{BESTmodel.jpg}
 
@@ -35,10 +35,17 @@ Derived parameters, including the differences in means or standard deviations, a
 
 The output from \code{BESTmcmc} has class \code{BEST}, which has print, plot and summary methods. These permit the extraction and display of credible intervals and proportions of the posterior mass above or below values of interest.
 
-Class \code{BEST} inherits from \code{\link[coda]{mcmc.list}}, so all the diagnostic functions in the \code{coda} package are available.
 }
 \value{
-An object of class \code{BEST} inheriting from \code{mcmc.list} with the following additional attributes:
+An object of class \code{BEST} inheriting from \code{data.frame}. If two samples are compared, the output has the following columns:
+
+  \item{mu1, mu2}{simulated observations of means for each population}
+  \item{sigma1, sigma2}{simulated observations of standard deviations for each population}
+  \item{nu}{simulated observations of normality}
+
+while for a single sample, the columns are \code{mu, sigma, nu}.
+
+The output has the following attributes:
 
   \item{Rhat}{the 'potential scale reduction factor'}
   \item{n.eff}{sample size adjusted for autocorrelation}
@@ -57,7 +64,7 @@ Original code by John K. Kruschke, modified by Mike Meredith
 \note{
 This differs from the original \code{BESTmcmc} function in Kruschke's code:\cr
 1. Both 1-group and 2-group comparisons are dealt with by the same function.\cr
-2. In the present version, the output inherits from \code{mcmc.list}. This may change in future versions.
+2. In the present version, the output inherits from \code{data.frame} rather then being a matrix. This may change in future versions.
 }
 
 \seealso{

@@ -13,18 +13,27 @@ function(x, which=c("mean", "sd", "effect", "nu"), credMass=0.95,
   #   instead of a histogram (default).
 
   # TODO additional sanity checks.
+  # Sanity checks:
+  if(!inherits(x, "data.frame"))
+    stop("x is not a valid BEST object")
+  if(ncol(x) == 3 && all(colnames(x) == c("mu","nu","sigma"))) {
+    oneGrp <- TRUE
+  } else if (ncol(x) == 5 && all(colnames(x) == c("mu1", "mu2","nu","sigma1","sigma2"))) {
+    oneGrp <- FALSE
+  } else {
+    stop("x is not a valid BEST object")
+  }
 
-  xmat <- as.matrix(x)
-  oneGrp <- ncol(xmat) == 3
+  #xmat <- as.matrix(x)
   whichID <- match.arg(which)
 
   toPlot <- switch(whichID,
-    mean = if(oneGrp) xmat[,"mu"] else xmat[,"mu[1]"] - xmat[,"mu[2]"],
-    sd = if(oneGrp) xmat[,"sigma"] else xmat[,"sigma[1]"] - xmat[,"sigma[2]"],
-    effect = if(oneGrp) (xmat[,"mu"] - compVal) / xmat[,"sigma"] else
-       (xmat[,"mu[1]"] - xmat[,"mu[2]"]) /
-          sqrt( ( xmat[,"sigma[1]"]^2 + xmat[,"sigma[2]"]^2 ) / 2 ),
-    nu = log10(xmat[,"nu"]) )
+    mean = if(oneGrp) x$mu else x$mu1 - x$mu2,
+    sd = if(oneGrp) x$sigma else x$sigma1 - x$sigma2,
+    effect = if(oneGrp) (x$mu - compVal) / x$sigma else
+       (x$mu1 - x$mu2) /
+          sqrt( ( x$sigma1^2 + x$sigma2^2 ) / 2 ),
+    nu = log10(x$nu) )
 
   main <- switch(whichID,
     mean = if(oneGrp) "Mean" else "Difference of Means",

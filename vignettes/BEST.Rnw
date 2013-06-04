@@ -81,18 +81,12 @@ Loaded modules: basemod,bugs
 \subsection{Some example data}
 \label{subsec:data2g}
 
-We will use the hypothetical data from \citet{Kruschke2013BEST}: ``Consider data from two groups of people who take an IQ test. Group 1 ($N_1 = 47$) consumes a ``smart drug'' while Group 2 ($N_2 = 42$) is a control group that consumes a placebo.''
+We will use hypothetical data for reaction times for two groups ($N_1 = N_2 = 6$), Group 1  consumes a drug which may increase reaction times while Group 2 is a control group that consumes a placebo.
 
 <<data2grps>>=
-y1 = c(101,100,102,104,102,97,105,105,98,101,100,123,105,103,100,95,102,106,
-       109,102,82,102,100,102,102,101,102,102,103,103,97,97,103,101,97,104,
-       96,103,124,101,101,100,101,101,104,100,101)
-y2 = c(99,101,100,101,102,100,97,101,104,101,102,102,100,105,88,101,100,
-       104,100,100,100,101,102,103,97,101,101,100,101,99,101,100,100,
-       101,100,99,101,100,102,99,100,99)
+y1 <- c(5.77, 5.33, 4.59, 4.33, 3.66, 4.48)
+y2 <- c(3.88, 3.55, 3.29, 2.59, 2.33, 3.59)
 @
-
-
 
 \subsection{Running the model}
 \label{subsec:run2g}
@@ -110,7 +104,7 @@ Setting up the JAGS model...
 Compiling model graph
    Resolving undeclared variables
    Allocating nodes
-   Graph Size: 197
+   Graph Size: 43
 Initializing model
   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
 Burning in the MCMC chain...
@@ -126,7 +120,7 @@ Sampling final MCMC chain...
 \label{subsec:infer2g}
 
 The default plot (Figure~\ref{fig:means2g}) is a histogram of the posterior distribution of the difference in means. 
-<<meanDiff2grps, fig=TRUE, width=6, height=6, include=FALSE>>=
+<<meanDiff2grps, fig=TRUE, width=6, height=4, include=FALSE>>=
 plot(BESTout)
 @
 
@@ -138,10 +132,8 @@ plot(BESTout)
 \end{figure}
 
 <<meanDiffGTzero, results=hide, echo=FALSE>>=
-attachBEST(BESTout)
-meanDiff <- (mu1 - mu2)
+meanDiff <- (BESTout$mu1 - BESTout$mu2)
 meanDiffGTzero <- mean(meanDiff > 0)
-detachBEST()
 @
 Also shown is the mean of the posterior probability, which is an appropriate point estimate of the true difference in means, the 95\% Highest Density Interval (HDI), and the posterior probability that the difference is greater than zero. The 95\% HDI does not include zero, and the probability that the true value is greater than zero is shown as \Sexpr{round(meanDiffGTzero*100, 1)}\%. Compare this with the output from a \emph{t} test:
 
@@ -152,12 +144,12 @@ t.test(y1, y2)
 Because we are dealing with a Bayesian posterior probability distribution, we can extract much more information:
 
 \begin{itemize}
-  \item We can estimate the probability that the true difference in means is above (or below) an arbitrary \emph{comparison value}. For example, the drug is claimed to increase IQ scores by at least 1.5 units.
-  \item The probability that the difference in yields is precisely zero is zero. More interesting is the probability that the difference may be too small to matter. We can define a \emph{region of practical equivalence} (ROPE) around zero, and obtain the probability that the true value lies therein. For the IQ example, a difference of $\pm$~0.1 may be too small to matter.
+  \item We can estimate the probability that the true difference in means is above (or below) an arbitrary \emph{comparison value}. For example, an increase reaction time of 1 unit may indicate that users of the drug should not drive or operate equipment.
+  \item The probability that the difference in yields is precisely zero is zero. More interesting is the probability that the difference may be too small to matter. We can define a \emph{region of practical equivalence} (ROPE) around zero, and obtain the probability that the true value lies therein. For the reaction time example, a difference of $\pm$~0.1 may be too small to matter.
 \end{itemize}
 
-<<meanDiff2grpsMore, fig=TRUE, include=FALSE>>=
-plot(BESTout, compVal=1.5, ROPE=c(-0.1,0.1))
+<<meanDiff2grpsMore, fig=TRUE,  width=6, height=4, include=FALSE>>=
+plot(BESTout, compVal=1, ROPE=c(-0.1,0.1))
 @
 \begin{figure}
   \centering
@@ -166,22 +158,20 @@ plot(BESTout, compVal=1.5, ROPE=c(-0.1,0.1))
   \label{fig:means2gMore}
 \end{figure}
 
-The annotations in (Figure~\ref{fig:means2gMore}) show that the probability that the increased IQ is >~1.5 is not plausible. In this case it's clear that the effect is large, but if most of the probability mass (say, 95\%) lay within the ROPE, we would accept the null value for practical purposes.
+The annotations in (Figure~\ref{fig:means2gMore}) show a high probability that the reaction time increase is >~1. In this case it's clear that the effect is large, but if most of the probability mass (say, 95\%) lay within the ROPE, we would accept the null value for practical purposes.
 
 \bigskip
-BEST deals appropriately with differences in standard deviations between the samples and departures from normality due to outliers. We can check the difference in standard deviations or the normality parameter with \texttt{plot} (Figure~\ref{fig:sd2g+nu2g}).
+BEST deals appropriately with differences in standard deviations between the samples and departures from normality due to outliers. We can check the difference in standard deviations or the normality parameter with \texttt{plot} (Figure~\ref{fig:sd2g}).
 
-<<sd2grps, fig=TRUE, width=6, height=3, include=FALSE>>=
-par(mfrow=1:2)
+<<sd2grps, fig=TRUE,  width=6, height=4, include=FALSE>>= %Split into separate plots?
 plot(BESTout, which="sd")
-plot(BESTout, which="nu")
 @
 
 \begin{figure}
   \centering
   \includegraphics{BEST-sd2grps}
-  \caption{\it Posterior plots for difference in standard deviation and for the normality parameter.}
-  \label{fig:sd2g+nu2g}
+  \caption{\it Posterior plots for difference in standard deviation.}
+  \label{fig:sd2g}
 \end{figure}
 
 The \texttt{summary} method gives us more information on the parameters of interest, including derived parameters:
@@ -209,7 +199,7 @@ class(BESTout)
 print(BESTout)
 @ 
 
-This shows the mean, standard deviation and median of the posterior distributions of the parameters in the model, together with a 95\% Highest Density Interval: see the help page for the \texttt{hdi} function for details.
+The print function displays the mean, standard deviation and median of the posterior distributions of the parameters in the model, together with a 95\% Highest Density Interval: see the help page for the \texttt{hdi} function for details.
 Two convergence diagnostic measures are also displayed:
 
 \begin{itemize}
@@ -217,7 +207,7 @@ Two convergence diagnostic measures are also displayed:
   \item \texttt{n.eff} is the effective sample size, which is less than the number of simulations because of autocorrelation between successive values in the sample. Values of \texttt{n.eff} around 10,000 are needed for stable estimates of 95\% credible intervals.\footnote{See \url{http://doingbayesiandataanalysis.blogspot.com/2011/07/how-long-should-mcmc-chain-be-to-get.html} for some simulation results.} If any of the values is too small, you can increase the \texttt{numSavedSteps} or \texttt{thinSteps} arguments.
 \end{itemize}
 
-See the help pages for the \texttt{coda} package for more information. With the current version of the \texttt{BEST} package, any of the diagnostic tests in \texttt{coda} can be used with \texttt{BESTmcmc} output; this may change in future versions.
+See the help pages for the \texttt{coda} package for more information on these measures.
 
 \bigskip
 As a further check, we can compare \emph{posterior predictive distributions} with the original data:
@@ -232,7 +222,7 @@ plotPostPred(BESTout)
   \label{fig:ppd2g}
 \end{figure}
 
-Each panel of Figure~\ref{fig:ppd2g} corresponds to one of the samples, and shows curves produced by selecting 30 random steps in the MCMC chain and plotting the \emph{t} distibution with parameters ($\mu$), ($\sigma$) and ($\nu$) for that step. Also shown is a histogram of the actual data. We can visually assess whether the model is a reasonably good fit to the sample data.
+Each panel of Figure~\ref{fig:ppd2g} corresponds to one of the samples, and shows curves produced by selecting 30 random steps in the MCMC chain and plotting the \emph{t} distribution with the values of $\mu$, $\sigma$ and $\nu$ for that step. Also shown is a histogram of the actual data. We can visually assess whether the model is a reasonably good fit to the sample data (though this is easier for large samples then when $n=6$ as here).
 
 The function \texttt{plotAll} puts histograms of all the posterior distributions and the posterior predictive plots onto a single page (Figure~\ref{fig:plotAll2g}).
 
@@ -251,21 +241,20 @@ plotAll(BESTout)
 \subsection{Working with individual parameters}
 \label{subsec:attach2g}
 
-Objects of class \texttt{BEST} contain long vectors of simulated draws from the posterior distribution of each of the parameters in the model. To access these values, we attach the \texttt{BEST} object to the search path with \texttt{attachBEST}:
+Objects of class \texttt{BEST} contain long vectors of simulated draws from the posterior distribution of each of the parameters in the model. Since \texttt{BEST} objects are also data frames, we can use the \$ operator to extract the columns we want:
 <<attach2grps>>=
-attachBEST(BESTout)
-length(nu)
-meanDiff <- (mu1 - mu2)
+names(BESTout)
+meanDiff <- (BESTout$mu1 - BESTout$mu2)
 meanDiffGTzero <- mean(meanDiff > 0)
 meanDiffGTzero
 @
 For example, you may wish to look at the ratio of the variances rather than the difference in the standard deviations. You can calculate a vector of draws from the posterior distribution, calculate summary statistics, and plot the distribution with \texttt{plotPost} (Figure~\ref{fig:vars2g}):
 <<vars2grps, fig=TRUE, width=4, height=4, include=FALSE>>=
-varRatio <- sigma1^2 / sigma2^2
+varRatio <- BESTout$sigma1^2 / BESTout$sigma2^2
 median(varRatio)
 hdi(varRatio)
 mean(varRatio > 1)
-plotPost(varRatio)
+plotPost(varRatio, xlim=c(0, 30))
 @
 \begin{figure}
   \centering
@@ -304,7 +293,7 @@ Sampling final MCMC chain...
 \end{verbatim}
 
 This time we have a single mean and standard deviation. The default plot (Figure~\ref{fig:mean1g}) shows the posterior distribution of the mean. 
-<<mean1grp, fig=TRUE, width=6, height=6, include=FALSE>>=
+<<mean1grp, fig=TRUE,  width=6, height=4, include=FALSE>>=
 BESTout1g
 plot(BESTout1g)
 @
@@ -330,11 +319,10 @@ plotAll(BESTout1g)
 And we can access the draws from the posterior distributions after attaching them to the search path:
 
 <<attach1grp, fig=TRUE, width=4, height=4, include=FALSE>>=
-attachBEST(BESTout1g)
-length(nu)
-variance <- sigma^2
+names(BESTout1g)
+length(BESTout1g$nu)
+variance <- BESTout1g$sigma^2
 plotPost(variance, xlim=c(0, 3))
-detachBEST()
 @
 \begin{figure}
   \centering
@@ -344,150 +332,13 @@ detachBEST()
 \end{figure}
 
 
-\section{Power analysis}
-\label{sec:power}
-
-Power analysis seeks to answer the question: ``What is the probability that I will meet my research goals with my intended study design?'' Research goals here may be:
-\begin{itemize}
-  \item precision: the width of the HDI is less than a predetermined criterion;
-  \item accept the null: the HDI falls entirely within the ROPE;
-  \item reject the null: the HDI falls entirely outside the ROPE, either above or below it.
-\end{itemize}
-
-Of course, success depends on the real state of the populations studied, and assumptions about means, standard deviations, and normality are unavoidable. For a \emph{retrospective} power analysis, we assume that the estimates derived from a past study are correct; for a \emph{prospective} power analysis, we provide a fresh set of assumed values.
-
-The approach used in BEST recognises uncertainty about the parameter values, and generates simulated samples based on plausible sets of values. The simulated samples are analysed using \texttt{BESTmcmc} and a tally kept of the number of simulations in which the research criteria were satisfied. The tally is used to calculate the posterior probability of meeting the criterion, and the mean and 95\% HDI of the posterior are returned.
-
-\subsection{Retrospective power analysis}
-\label{subsec:retroPower}
-
-Retrospective power analysis makes use of the output from a previous study. We will continue the example from Section~\ref{sec:grps2}. For the difference in means, we want the 95\% HDI width to be less than 2 tonnes/ha and set the ROPE at $\pm$~0.1. By default, sample sizes match those of the original study. Running 200 simulations (the default) takes about 30 mins.
-
-<<retroPower, results=hide, eval=FALSE>>= % Takes 3hr 40min
-powerRet1 <- BESTpower(BESTout, ROPEm = c(-0.1,0.1), maxHDIWm = 2.0, 
-             saveName = NULL) 
-@
-\begin{verbatim}
-:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-Power computation: Simulated Experiment 1 of 200 :
-
-Setting up the JAGS model...
-Compiling model graph
-   Resolving undeclared variables
-   Allocating nodes
-   Graph Size: 197
-...
-After 200 Simulated Experiments, Posterior Probability
-       of meeting each criterion is (mean and 95% CrI):
-                      mean CrIlo CrIhi
-  mean:   HDI > ROPE 0.446 0.377 0.514
-  mean:   HDI < ROPE 0.005 0.000 0.015
-  mean:  HDI in ROPE 0.005 0.000 0.015
-  mean: HDI width ok 0.589 0.521 0.656
-\end{verbatim}
-
-We did not set criteria for standard deviation or effect size, so only the results for the mean are displayed. It is possible to plot the results for the first few simulations (cf. Figure~\ref{fig:plotAll2g}) by setting the argument \texttt{showFirstNrep} to a positive integer (\emph{Note for Mac users}: this uses X11 which is no longer included in Mac OS X 10.8. The first time you try to run it, you will be prompted to install XQuartz; it should work thereafter.) 
-
-Retrospective power analysis for the single-sample case is implemented in the same way, but the criteria now apply to the mean or standard deviation of the sample rather than the difference between samples.
-
-
-\subsection{Prospective power analysis}
-\label{subsec:proPower}
-
-This is implemented as a three-step process. For a discussion of the advantages of this procedure, see \citet{Kruschke2013BEST}.
-
-\subsubsection{Generate an idealized data set}
-\label{subsec:proPower1}
-
-The first step is to specify the means and standard deviations of two normally distributed groups, and the sample size for each group. We also specify the percentage of the simulated data that should be outliers, and the (larger) standard deviation for the outliers.
-
-With these inputs, the function \texttt{makeData} generates (and plots) an ideal data set matching our specification:
-
-<<proPower1, fig=TRUE, include=FALSE>>=
-proData <- makeData(mu1=108, sd1=17, mu2=100, sd2=15, nPerGrp=20, 
-                    pcntOut=10, sdOutMult=2.0)
-@
-\begin{figure}
-  \centering
-  \includegraphics[width=0.6\textwidth]{BEST-proPower1}
-  \caption{\it Distribution of the idealised samples for each group (histograms), together with the true distributions of the outliers (red curve) and non-outliers (blue curve). The solid black curve is the combined distribution.}
-  \label{fig:proPower1}
-\end{figure}
-
-\subsubsection{Generate plausible parameter values}
-\label{subsec:proPower2}
-
-Next we generate sets of parameter values which are plausible in view of our ideal data set. This is accomplished by \texttt{BESTmcmc}. We plan to do 200 simulations; since values tend to be highly correlated, we generate 2000 and will select 200 from these. Figure~\ref{fig:proPower2} summarized the distributions of the parameters we will use.
-
-<<proPower2, fig=TRUE, width=6, height=10, include=FALSE, results=hide>>=
-proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=2000)  
-plotAll(proMCMC)
-@
-\begin{verbatim}
-Setting up the JAGS model...
-Compiling model graph
-   Resolving undeclared variables
-   Allocating nodes
-   Graph Size: 99
-
-Initializing model
-  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
-Burning in the MCMC chain...
-  |**************************************************| 100%
-Sampling final MCMC chain...
-  |**************************************************| 100%
-\end{verbatim}
-\begin{figure}
-  \centering
-  \includegraphics[width=0.9\textwidth]{BEST-proPower2}
-  \caption{\it Summary plot of the parameter values to use for the power analysis.}
-  \label{fig:proPower2}
-\end{figure}
-
-\subsubsection{Simulate and analyse the data sets}
-\label{subsec:proPower3}
-
-Finally, we simulate samples based on plausible parameter values and tally the number of times when our research criteria are met, much as we did with the retrospective power analysis.
-
-\texttt{BESTpower} allows for the number of observations to vary across simulations. Suppose the number of volunteer subjects varies but averages around 100; we divide the number we have into two approximately equal groups. With 300 replicates, this takes over 3 hrs.
-
-<<proPower3, eval = FALSE>>=
-nReplicates <- 200
-Nsubj <- rpois(nReplicates, 100)
-N1plan <- round(Nsubj / 2)
-N2plan <- Nsubj - N1plan
-powerPro <- BESTpower(proMCMC, N1=N1plan, N2=N2plan,
-               ROPEm=c(-1.5,1.5), ROPEsd=c(-2,2), ROPEeff=c(-0.5,0.5), 
-               maxHDIWm=15.0, maxHDIWsd=10.0, maxHDIWeff=1.0,
-               nRep=nReplicates) 
-@
-\begin{verbatim}
-...
-After 200 Simulated Experiments, Posterior Probability
-       of meeting each criterion is (mean and 95% CrI):
-                      mean CrIlo CrIhi
-  mean:   HDI > ROPE 0.406 0.339 0.474
-  mean:   HDI < ROPE 0.010 0.000 0.023
-  mean:  HDI in ROPE 0.005 0.000 0.015
-  mean: HDI width ok 0.495 0.426 0.564
-    sd:   HDI > ROPE 0.233 0.175 0.291
-    sd:   HDI < ROPE 0.030 0.009 0.053
-    sd:  HDI in ROPE 0.005 0.000 0.015
-    sd: HDI width ok 0.223 0.167 0.281
-effect:   HDI > ROPE 0.089 0.052 0.129
-effect:   HDI < ROPE 0.005 0.000 0.015
-effect:  HDI in ROPE 0.074 0.040 0.111
-effect: HDI width ok 0.975 0.954 0.994
-\end{verbatim}
-
-
-Power analysis for the single-sample case is analogous: provide values for arguments \texttt{mu1} and \texttt{sd1} in \texttt{makeData}, and put \texttt{mu1=NULL} and \texttt{sd1=NULL}.
-
 \section{What next?}
 \label{sec:whatNext}
 
-If you want to know the details of how the functions in the \code{BEST} package work, you can download the \R{} source code from GitHub \url{https://github.com/mikemeredith/BEST}
-or find almost the same code at \url{http://www.indiana.edu/~kruschke/BEST/} together with links to articles, videos, and the blog.
+The package includes functions to estimate the power of experimental designs: see the help pages for \code{BESTpower} and \code{makeData} for details on implementation and \citet{Kruschke2013BEST} for background.
+
+
+If you want to know how the functions in the \code{BEST} package work, you can download the \R{} source code from CRAN or from GitHub \url{https://github.com/mikemeredith/BEST} or find almost the same code at \url{http://www.indiana.edu/~kruschke/BEST/} together with links to articles, videos, and the blog.
 
 Bayesian analysis with computations performed by JAGS is a powerful approach to analysis. For a practical introduction see \citet{Kruschke2011book}.
 
