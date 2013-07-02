@@ -1,16 +1,21 @@
 CHANGES IN BUILD 2013-06-04 (v.0.1.0)
 
-  * BEST object now inherits from data frame with simplified names, eg, "mu1" instead of "mu[1]"; users can now access individual vectors of simulations with "$" operator. Corresponding modifications to relevant functions.
+  * BEST object now inherits from data frame with simplified names,
+	eg, "mu1" instead of "mu[1]"; users can now access individual vectors
+	of simulations with "$" operator. Corresponding modifications to
+	relevant functions.
 
   * attachBEST() and detachBEST() removed.
 
-  * Vignette modified to reduce checking time: small samples (n = 6) used, section on power removed.
+  * Vignette modified to reduce checking time: small samples (n = 6) used,
+	section on power removed.
 
 CHANGES IN BUILD 2013-06-01
 
   * Removed stuff which takes a long time for the R CMD check procedures:
     1. use of \donttest in examples for BEST-package and BESTpower.
-    2. BuildVignettes: no in DESCRIPTION (this does stop the R code checking, which is slow).
+    2. BuildVignettes: no in DESCRIPTION (this doesn't stop the R code checking,
+		which is slow).
     3. Sweave sources removed and vignette in inst/docs.
 
 CHANGES IN BUILD 2013-03-29
@@ -24,8 +29,8 @@ CHANGES IN BUILD 2013-03-10
   * Fixed bug in plotAll and plotPostPred giving "Error... 'breaks' do
     not span range of 'x'" for some analyses.
 
-  * Original data now included in BESTmcmc output; plotAll and plotPostPred modified
- to use this.
+  * Original data now included in BESTmcmc output; plotAll and plotPostPred
+	modified to use this.
 
   * in BESTpower, change back to X11 from dev.new().
 

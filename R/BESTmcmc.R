@@ -1,8 +1,10 @@
 BESTmcmc <-
 function( y1, y2=NULL,
-    numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000) { 
+    numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000,
+    verbose=TRUE) { 
   # This function generates an MCMC sample from the posterior distribution.
   # y1, y2 the data vectors; y2=NULL if only one group.
+  # verbose=FALSE suppresses output to the R Console.
   # Returns a data frame, not a matrix, with class 'BEST',
   #   with attributes Rhat, n.eff, and a list with the original data.
   
@@ -83,19 +85,35 @@ function( y1, y2=NULL,
   nChains = 3 
   nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
   # Create, initialize, and adapt the model:
-  cat( "Setting up the JAGS model...\n" ) ; flush.console()
-  jagsModel = jags.model( modelFile, data=dataList , inits=initsList , 
-                          n.chains=nChains , n.adapt=adaptSteps )
+  if(verbose) {
+    cat( "Setting up the JAGS model...\n" )
+    flush.console()
+    jagsModel <- jags.model(modelFile, data=dataList, inits=initsList, 
+                            n.chains=nChains , n.adapt=adaptSteps,
+                            quiet=!verbose)
+  } else {
+    # This is a workaround as quiet=TRUE does not suppress the progress bar:
+    capture.output(
+      jagsModel <- jags.model(modelFile, data=dataList, inits=initsList, 
+                              n.chains=nChains, n.adapt=adaptSteps,
+                              quiet=!verbose),
+      file = "NULL")
+  }
   # Burn-in:
-  cat( "Burning in the MCMC chain...\n" ) ; flush.console()
-  update( jagsModel , n.iter=burnInSteps )
+  if(verbose) {
+    cat( "Burning in the MCMC chain...\n" )
+    flush.console()
+  }
+  update( jagsModel , n.iter=burnInSteps,
+          progress.bar=ifelse(verbose, "text", "none"))
   # The saved MCMC chain:
-  cat( "Sampling final MCMC chain...\n" ) ; flush.console()
+  if(verbose) {
+    cat( "Sampling final MCMC chain...\n" )
+    flush.console()
+  }
   codaSamples <- coda.samples( jagsModel , variable.names=parameters , 
-                              n.iter=nIter , thin=thinSteps )
-  # resulting codaSamples object has these indices: 
-  #   codaSamples[[ chainIdx ]][ stepIdx , paramIdx ]
-  
+                        n.iter=nIter , thin=thinSteps,
+                        progress.bar=ifelse(verbose, "text", "none"))
   #------------------------------------------------------------------------------
   mcmcChain = as.matrix( codaSamples )
   if(dim(mcmcChain)[2] == 5 && 

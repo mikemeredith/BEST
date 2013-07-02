@@ -2,7 +2,7 @@ BESTpower <-
 function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
                      maxHDIWm, maxHDIWsd, maxHDIWeff, compValm=0, nRep=200,
                      mcmcLength=10000, saveName=NULL,
-                     showFirstNrep=0 ) {
+                     showFirstNrep=0, verbose=2 ) {
   # This function estimates power.
  
   # Sanity checks:
@@ -80,12 +80,18 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     "effect:   HDI < ROPE",
     "effect:  HDI in ROPE",
     "effect: HDI width ok")
-
+    
+  if(verbose == 1)  {
+    pb <- txtProgressBar(style = 3)
+    on.exit(close(pb))
+  }
   for (i in 1:nRep) {
-    cat( "\n:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n" )
-    cat( paste( "Power computation: Simulated Experiment" , i , "of" , 
-                nRep , ":\n\n" ) )
-    flush.console()
+    if(verbose > 1) {
+      cat( "\n:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::\n" )
+      cat( paste( "Power computation: Simulated Experiment" , i , "of" , 
+                  nRep , ":\n\n" ) )
+      flush.console()
+    }
     # Get parameter values for this simulation:
     if(oneGrp) {
       mu1Val = paramDF[i,"mu"]
@@ -101,7 +107,8 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     y1 <- rt(N1[i], df=nuVal) * sigma1Val + mu1Val    
     y2 <- if(oneGrp) NULL else rt(N2[i], df=nuVal) * sigma2Val + mu2Val    
     # Get posterior for simulated data:
-    simChain <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1)
+    simChain <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1,
+                          verbose=verbose > 1)
     if (i <= showFirstNrep ) { 
       x11()  # Changed 09-03-2013
       # dev.new() # Doesn't work in Rstudio ??
@@ -145,10 +152,15 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     for ( j in which(wanted)) {
       power[j, 2:3] = hdi( qbeta , shape1=s1[j] , shape2=s2[j] )
     }
-    cat( "\nAfter", i, "Simulated Experiments, Posterior Probability
-       of meeting each criterion is (mean and 95% CrI):\n" )
-    print(round(power[wanted, ], 3))
-    flush.console()
+    if(verbose > 1) {
+      cat( "\nAfter", i, "Simulated Experiments, Posterior Probability
+         of meeting each criterion is (mean and 95% CrI):\n" )
+      print(round(power[wanted, ], 3))
+      flush.console()
+    }
+    if(verbose == 1)
+      setTxtProgressBar(pb, i/nRep)
+      
     if(!is.null(saveName))
       save( i , power , file=saveName )
   }

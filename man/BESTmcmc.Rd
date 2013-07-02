@@ -7,7 +7,8 @@ Generate MCMC samples for posterior distributions
 This function is the core of the BEST package. It calls JAGS and passes a description of the model and the data, then retrieves and returns the MCMC samples for the parameters.
 }
 \usage{
-BESTmcmc(y1, y2 = NULL, numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000)
+BESTmcmc(y1, y2 = NULL, numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
+	verbose=TRUE)
 }
 \arguments{
   \item{y1}{
@@ -24,6 +25,9 @@ thinning rate. If set to n > 1, one value in n steps of the MCMC chain is return
 }
   \item{burnInSteps}{
 number of steps to discard as burn-in at the beginning of the chain.
+}
+  \item{verbose}{
+if FALSE, output to the R Console is suppressed.
 }
 }
 \details{

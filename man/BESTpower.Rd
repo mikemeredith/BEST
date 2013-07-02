@@ -11,7 +11,7 @@ BESTpower(BESTobj, N1, N2, credMass=0.95,
  ROPEm, ROPEsd, ROPEeff, 
  maxHDIWm, maxHDIWsd, maxHDIWeff,
  compValm = 0, nRep = 200, mcmcLength = 10000,
- saveName = NULL, showFirstNrep = 0)
+ saveName = NULL, showFirstNrep = 0, verbose = 2)
 }
 \arguments{
   \item{BESTobj}{
@@ -58,6 +58,9 @@ if required, the results may saved to a file after each iteration and \code{save
 }
   \item{showFirstNrep}{
 the number of results to display as plots at the beginning of the simulation run. (Note for Mac users: this uses X11 graphics which is no longer included in Mac OS X 10.8. If you try to run it, you will be prompted to install XQuartz, which should then work.) 
+}
+  \item{verbose}{
+controls output to the R Console: 0 suppresses all output; 1 gives just a progress bar; 2 gives maximum detail.
 }
 }
 \details{

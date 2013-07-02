@@ -1,0 +1,8 @@
+CHANGES IN v.0.1.1
+
+  * BESTmcmc has 'verbose' argument; setting verbose = FALSE (or 0) suppresses
+	output to the Console (wish of Ben Marwick).
+
+  * BESTpower also has 'verbose' argument; here verbose = 0 (or FALSE) 
+	suppresses all output, verbose = 1 (or TRUE) provides just a progress bar;
+	verbose = 2 (the default) displays full details. 
