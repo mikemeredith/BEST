@@ -2,7 +2,7 @@ BESTpower <-
 function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
                      maxHDIWm, maxHDIWsd, maxHDIWeff, compValm=0, nRep=200,
                      mcmcLength=10000, saveName=NULL,
-                     showFirstNrep=0, verbose=2 ) {
+                     showFirstNrep=0, verbose=2, rnd.seed=NULL) {
   # This function estimates power.
  
   # Sanity checks:
@@ -29,7 +29,6 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
       N2 <- length(attr(BESTobj, "data")$y2)
     N2 <- rep(N2, length.out=nRep)
   }
-
 
   # Deal with missing or invalid arguments for criteria:
   wanted <- rep(TRUE, 12)
@@ -59,6 +58,14 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
   }
   if(!any(wanted))
     stop("No valid criteria set.")
+
+  # Deal with random number seeds
+  if(!is.null(rnd.seed)) {
+    set.seed(rnd.seed[1], "Mersenne-Twister")
+    if(length(rnd.seed) != nRep)
+      rnd.seed <- sample.int(1e6, nRep)
+    on.exit(set.seed(NULL, "default"))
+  }
 
   # Select thinned steps in chain for posterior predictions:
   stepIdxVec = seq( 1 , chainLength , floor(chainLength/nRep) )[1:nRep]
@@ -108,7 +115,7 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     y2 <- if(oneGrp) NULL else rt(N2[i], df=nuVal) * sigma2Val + mu2Val    
     # Get posterior for simulated data:
     simChain <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1,
-                          verbose=verbose > 1)
+                          verbose=verbose > 1, rnd.seed=rnd.seed[i])
     if (i <= showFirstNrep ) { 
       x11()  # Changed 09-03-2013
       # dev.new() # Doesn't work in Rstudio ??

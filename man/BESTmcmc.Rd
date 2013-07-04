@@ -8,7 +8,7 @@ This function is the core of the BEST package. It calls JAGS and passes a descri
 }
 \usage{
 BESTmcmc(y1, y2 = NULL, numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
-	verbose=TRUE)
+	verbose=TRUE, rnd.seed=NULL)
 }
 \arguments{
   \item{y1}{
@@ -28,6 +28,9 @@ number of steps to discard as burn-in at the beginning of the chain.
 }
   \item{verbose}{
 if FALSE, output to the R Console is suppressed.
+}
+  \item{rnd.seed}{
+a positive integer (or NULL): the seed for the random number generator, used to obtain reproducible samples if required.
 }
 }
 \details{

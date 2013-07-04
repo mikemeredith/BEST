@@ -11,7 +11,7 @@ BESTpower(BESTobj, N1, N2, credMass=0.95,
  ROPEm, ROPEsd, ROPEeff, 
  maxHDIWm, maxHDIWsd, maxHDIWeff,
  compValm = 0, nRep = 200, mcmcLength = 10000,
- saveName = NULL, showFirstNrep = 0, verbose = 2)
+ saveName = NULL, showFirstNrep = 0, verbose = 2, rnd.seed=NULL)
 }
 \arguments{
   \item{BESTobj}{
@@ -61,6 +61,9 @@ the number of results to display as plots at the beginning of the simulation run
 }
   \item{verbose}{
 controls output to the R Console: 0 suppresses all output; 1 gives just a progress bar; 2 gives maximum detail.
+}
+  \item{rnd.seed}{
+a positive integer (or NULL): the seed for the random number generator, used to obtain reproducible samples if required.
 }
 }
 \details{

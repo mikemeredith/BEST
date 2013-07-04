@@ -1,3 +1,15 @@
+CHANGES IN v.0.1.2
+
+  * BESTmcmc and BESTpower gain 'rnd.seed' arguments for reproducable output;
+	testthat test files for BESTmcmc and BESTpower added.
+	
+  * makeData gains a showPlot argument.
+
+  * Fixed bug in BESTmcmc: with verbose=FALSE it was writing unwanted output
+	to a file in the working directory; now it goes to temp.dir().
+	
+  * Fixed bug in plot.BEST: the ... argument was not being passed to plotPost.
+	
 CHANGES IN v.0.1.1
 
   * BESTmcmc has 'verbose' argument; setting verbose = FALSE (or 0) suppresses

@@ -7,8 +7,8 @@ Population parameter specification for a power analysis
 The function allows the analyst to prepare an idealized data set which exactly matches selected point values, and incorporates uncertainty in these values in terms of sample size.
 }
 \usage{
-makeData(mu1, sd1, mu2 = NULL, sd2 = NULL,
-  nPerGrp, pcntOut = 0, sdOutMult = 2, rnd.seed = NULL)
+makeData(mu1, sd1, mu2 = NULL, sd2 = NULL, nPerGrp,
+	pcntOut = 0, sdOutMult = 2, rnd.seed = NULL, showPlot = TRUE)
 }
 \arguments{
   \item{mu1}{
@@ -35,11 +35,14 @@ the standard deviation of the outliers as a multiple of the standard deviation o
   \item{rnd.seed}{
 a seed for the random number generator, used to obtain reproducible samples if required.
 }
+  \item{showPlot}{
+if TRUE, displays the results as a plot (see Details).
+}
 }
 \details{
 The arguments to this function provide a framework to specify the hypothesised values of the parameters of the populations under study, while the sample size is chosen to reflect the confidence in the values specified.
 
-The function produces idealized samples, ie. samples which exactly match the specified means and standard deviations, and displays the results as a plot.
+The function produces idealized samples, ie. samples which exactly match the specified means and standard deviations. If showPlot = TRUE, the results are displayed as a plot:
 
 \figure{makeData.jpg}
 
