@@ -1,10 +1,10 @@
 Package: BEST
 Type: Package
 Title: Bayesian Estimation Supersedes the t-Test
-Version: 0.1.2
+Version: 0.1.3
 Depends: rjags
 BuildVignettes: no
-Date: 2013-07-04
+Date: 2013-08-08
 Author: John K. Kruschke and Mike Meredith
 Maintainer: Mike Meredith <mmeredith@wcs.org>
 Description: An alternative to t-tests, producing posterior estimates

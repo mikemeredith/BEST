@@ -117,10 +117,11 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     simChain <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1,
                           verbose=verbose > 1, rnd.seed=rnd.seed[i])
     if (i <= showFirstNrep ) { 
-      x11()  # Changed 09-03-2013
-      # dev.new() # Doesn't work in Rstudio ??
+      # x11()   # Deprecated as "platform specific" in R 3.1
+      dev.new() # Doesn't work properly in Rstudio: gives warning and plots to old device.
       plotAll(simChain, ROPEm=ROPEm, ROPEsd=ROPEsd, ROPEeff=ROPEeff,
               compValm=compValm) 
+      mtext(paste("Simulation", i), outer=TRUE, line=-1, font=4)
     }
     #simChain <- as.matrix(Bout)
     # Get the HDIs for each parameter:
