@@ -12,8 +12,8 @@ An alternative to \emph{t} tests, producing posterior estimates for groups means
 \tabular{ll}{
 Package: \tab BEST\cr
 Type: \tab Package\cr
-Version: \tab 0.1.3\cr
-Date: \tab 2013-08-08\cr
+Version: \tab 0.1.4\cr
+Date: \tab 2013-08-11\cr
 License: \tab GPL-3\cr
 }
 

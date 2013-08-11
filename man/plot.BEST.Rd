@@ -21,7 +21,7 @@ one of "mean", "sd", "effect" or "nu" or an abbreviation of one of these; indica
 the probability mass to include in credible intervals.
 }
   \item{ROPE}{
-a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the estimate. 
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the estimate; see Details.
 }
   \item{showCurve}{
 logical: if TRUE, the posterior density will be represented by a kernel density function instead of a histogram.
@@ -35,6 +35,8 @@ other graphical parameters.
 }
 \details{
 The posterior distribution is shown as a histogram or density curve (if \code{showCurve = TRUE}), together with the Highest Density Interval. A ROPE and comparison value are also shown if appropriate.
+
+The probability that the difference in means (or effect size, etc.) is precisely zero is zero. More interesting is the probability that the difference may be too small to matter. We can define a region of practical equivalence (ROPE) around zero, and obtain the posterior probability that the true value lies therein.
 }
 \value{
 Returns NULL invisibly. Used for the side effect.

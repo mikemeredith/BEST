@@ -21,7 +21,7 @@ an object of class \code{BEST}, as produced by the function \code{\link{BESTmcmc
 the probability mass to include in credible intervals.
 }
   \item{ROPEm}{
-a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). 
+a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). See \code{\link{plot.BEST}} for an explanation of ROPE.
 }
   \item{ROPEsd}{
 a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the (difference of) standard deviations.

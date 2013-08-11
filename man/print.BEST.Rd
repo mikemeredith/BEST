@@ -40,3 +40,4 @@ Mike Meredith
 \examples{
 ## See examples in BEST-package help.
 }
+\keyword{print}

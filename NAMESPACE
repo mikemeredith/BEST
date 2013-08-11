@@ -1,6 +1,6 @@
 
 export(BESTmcmc, 
-  plotPost, plotAll, plotPostPred,
+  plotPost, plotAll, plotPostPred, plotAreaInROPE,
   BESTpower, makeData,
   hdi)
 

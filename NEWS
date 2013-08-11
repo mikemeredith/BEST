@@ -1,3 +1,9 @@
+CHANGES in v.0.1.4
+
+  * Added function plotAreaInROPE.
+
+  * Added explanation of ROPE to plot.BEST help page.
+
 CHANGES in v.0.1.3
 
   * In BESTpower, call to x11() (which is platform specific) changed to dev.new();

@@ -145,7 +145,7 @@ Because we are dealing with a Bayesian posterior probability distribution, we ca
 
 \begin{itemize}
   \item We can estimate the probability that the true difference in means is above (or below) an arbitrary \emph{comparison value}. For example, an increase reaction time of 1 unit may indicate that users of the drug should not drive or operate equipment.
-  \item The probability that the difference in yields is precisely zero is zero. More interesting is the probability that the difference may be too small to matter. We can define a \emph{region of practical equivalence} (ROPE) around zero, and obtain the probability that the true value lies therein. For the reaction time example, a difference of $\pm$~0.1 may be too small to matter.
+  \item The probability that the difference in reaction times is precisely zero is zero. More interesting is the probability that the difference may be too small to matter. We can define a \emph{region of practical equivalence} (ROPE) around zero, and obtain the probability that the true value lies therein. For the reaction time example, a difference of $\pm$~0.1 may be too small to matter.
 \end{itemize}
 
 <<meanDiff2grpsMore, fig=TRUE,  width=6, height=4, include=FALSE>>=
@@ -316,7 +316,7 @@ plotAll(BESTout1g)
   \label{fig:plotAll1g}
 \end{figure}
 
-And we can access the draws from the posterior distributions after attaching them to the search path:
+And we can access the draws from the posterior distributions with the \$ operator:
 
 <<attach1grp, fig=TRUE, width=4, height=4, include=FALSE>>=
 names(BESTout1g)
