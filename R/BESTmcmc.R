@@ -9,10 +9,8 @@ function( y1, y2=NULL,
   #   number generator for each.
   # Returns a data frame, not a matrix, with class 'BEST',
   #   with attributes Rhat, n.eff, and a list with the original data.
-  
-  require(rjags)
-
   #------------------------------------------------------------------------------
+
   modelFile <- file.path(tempdir(), "BESTmodel.txt")
   # THE MODEL.
   if(is.null(y2)) {
