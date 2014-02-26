@@ -4,6 +4,7 @@
 \alias{hdi.function}
 \alias{hdi.matrix}
 \alias{hdi.data.frame}
+\alias{hdi.density}
 \alias{hdi.mcmc.list}
 
 \title{
@@ -23,6 +24,8 @@ hdi(object, credMass = 0.95, ...)
 
 \method{hdi}{data.frame}(object, credMass = 0.95, ...)
 
+\method{hdi}{density}(object, credMass = 0.95, combine=TRUE, ...)
+
 \method{hdi}{mcmc.list}(object, credMass = 0.95, ...)
 
 }
@@ -36,6 +39,9 @@ a scalar [0, 1] specifying the mass within the credible interval.
   \item{tol}{
 the desired accuracy; see \code{\link{optimize}}; default is 1e-8.
 }
+  \item{combine}{
+if TRUE, only the outer limits of a discontinuous HDI are returned; see Value.
+}
   \item{\dots}{
 named parameters to be passed to other methods; see Examples.
 }
@@ -47,7 +53,7 @@ The HDI is the interval which contains the required mass such that all points wi
 
 In contrast, a symmetric density interval defined by (eg.) the 10\% and 90\% quantiles may include values with lower probability than those excluded.
 
-For a unimodal distribution, the HDI is the narrowest interval containing the specified mass, and the \code{hdi} function actually returns the narrowest interval. This does not always work properly for multimodel densities, where the HDI may be discontinuous (the horizontal black line in the  Figure below). The single interval returned by \code{hdi} (the blue line) may incorrectly include values between the modes with low probability density.
+For a unimodal distribution, the HDI is the narrowest interval containing the specified mass, and the \code{hdi} function actually returns the narrowest interval. This does not always work properly for multimodel densities, where the HDI may be discontinuous (the horizontal black line in the  Figure below). The single interval returned by \code{hdi} (the blue line) may incorrectly include values between the modes with low probability density. The \code{density} method with \code{combine = FALSE} gives separate limits for discontinuous HDIs.
 
 \figure{HDIbimodal.jpg}
 
@@ -64,6 +70,8 @@ The function method requires the name for the inverse cumulative density functio
 }
 \value{
 a vector of length 2 or a 2-row matrix with the lower and upper limits of the HDI, with an attribute "credMass".
+
+The \code{density} method with \code{combine = FALSE} produces a matrix with a row for each component of a discontinuous HDI and columns for begin and end. It has an additional attribute "height" giving the probability density at the limits of the HDI.
 }
 \references{
 Kruschke, J. K. 2011. \emph{Doing Bayesian data analysis: a tutorial with R and BUGS.} Elsevier, Amsterdam, section 3.3.5.
@@ -90,6 +98,22 @@ hdi(qgamma, 0.8, shape=2.5, rate=2)
 # and the symmetrical 80% CrI:
 qgamma(c(0.1, 0.9), 2.5, 2)
 
+# A severely bimodal distribution:
+tst2 <- c(rnorm(1e5), rnorm(5e4, 7))
+hist(tst2, freq=FALSE)
+(hdiMC <- hdi(tst2))
+segments(hdiMC[1], 0, hdiMC[2], 0, lwd=3, col='red')
+# This is a valid 95% CrI, but not a Highest Density Interval
+
+dens2 <- density(tst2)
+lines(dens2, lwd=2, col='blue')
+(hdiD1 <- hdi(dens2))  # default combine = TRUE; note the warning
+(ht <- attr(hdiD1, "height"))
+segments(hdiD1[1], ht, hdiD1[2], ht, lty=3, col='blue')
+# This is not a valid 95% CrI
+(hdiD2 <- hdi(dens2, combine=FALSE))
+segments(hdiD2[, 1], ht, hdiD2[, 2], ht, lwd=3, col='blue')
+# This is the correct 95% HDI.
 }
 \keyword{methods}
 \keyword{htest}

@@ -1,3 +1,18 @@
+CHANGES in v.0.2.1
+
+  * tweaks to NAMESPACE to meet R 3.1 requirements.
+
+  * hdi gains a density method, which can handle discontinuous HDIs. This is
+  used for the posterior density plots when showCurve = TRUE.
+  
+  * Enhancements to plots:
+    o credMass = NULL suppresses plotting of the credible interval. 
+    o plotPost, the plot.BEST method, and plotAreaInROPE now make full
+    use of the ... argument for additional graphical parameters. 
+    o default xlim for posterior density plots is now based on 99% HDI (not range). 
+    o plotPost and plot.BEST return an object of class 'histogram' invisibly. 
+    o plotPost deals properly with a vector of integers.
+  
 CHANGES in v.0.2.0
 
   * Added function plotAreaInROPE.

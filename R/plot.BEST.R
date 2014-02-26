@@ -24,7 +24,11 @@ function(x, which=c("mean", "sd", "effect", "nu"), credMass=0.95,
     stop("x is not a valid BEST object")
   }
 
-  #xmat <- as.matrix(x)
+  # Deal with ... argument
+  dots <- list(...)
+  if(length(dots) == 1 && class(dots[[1]]) == "list")
+    dots <- dots[[1]]
+
   whichID <- match.arg(which)
 
   toPlot <- switch(whichID,
@@ -35,28 +39,29 @@ function(x, which=c("mean", "sd", "effect", "nu"), credMass=0.95,
           sqrt( ( x$sigma1^2 + x$sigma2^2 ) / 2 ),
     nu = log10(x$nu) )
 
-  main <- switch(whichID,
-    mean = if(oneGrp) "Mean" else "Difference of Means",
-    sd = if(oneGrp) "Standard Deviation" else "Difference of Std. Dev.s",
-    effect = "Effect Size",
-    nu = "Normality")
+  if(is.null(dots$main))
+    dots$main <- switch(whichID,
+      mean = if(oneGrp) "Mean" else "Difference of Means",
+      sd = if(oneGrp) "Standard Deviation" else "Difference of Std. Dev.s",
+      effect = "Effect Size",
+      nu = "Normality")
 
-  xlab <- switch(whichID,
-    mean = if(oneGrp) bquote(mu) else bquote(mu[1] - mu[2]),
-    sd = if(oneGrp) bquote(sigma) else bquote(sigma[1] - sigma[2]),
-    effect = if(oneGrp) bquote( (mu-.(compVal)) / sigma ) else
-      bquote( (mu[1]-mu[2]) / sqrt((sigma[1]^2 +sigma[2]^2 )/2 ) ),
-    nu = bquote("log10("*nu*")"))
+  if(is.null(dots$xlab))
+    dots$xlab <- switch(whichID,
+      mean = if(oneGrp) bquote(mu) else bquote(mu[1] - mu[2]),
+      sd = if(oneGrp) bquote(sigma) else bquote(sigma[1] - sigma[2]),
+      effect = if(oneGrp) bquote( (mu-.(compVal)) / sigma ) else
+        bquote( (mu[1]-mu[2]) / sqrt((sigma[1]^2 +sigma[2]^2 )/2 ) ),
+      nu = bquote("log10("*nu*")"))
 
   if(whichID=="nu" && !is.null(compVal) && compVal == 0)
     compVal <- NULL
   if(whichID=="sd" && oneGrp && !is.null(compVal) && compVal == 0)
     compVal <- NULL
-
   # Plot posterior distribution of selected item:
-  plotPost(toPlot, col="skyblue", credMass=credMass, ROPE=ROPE, showCurve=showCurve,
-                  xlab=xlab , cex.lab = 1.75 , showMode=whichID != "mean",
-                  compVal=compVal, main=main, ...) 
+  histinfo <- plotPost(toPlot, credMass=credMass, ROPE=ROPE, showCurve=showCurve,
+                  showMode=whichID != "mean",
+                  compVal=compVal, graphPars=dots) 
 
-  return(invisible(NULL))
+  return(invisible(histinfo))
 }

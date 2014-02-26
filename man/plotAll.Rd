@@ -17,7 +17,7 @@ plotAll(BESTobj, credMass = 0.95,
 an object of class \code{BEST}, as produced by the function \code{\link{BESTmcmc}}.
 }
   \item{credMass}{
-the probability mass to include in credible intervals.
+the probability mass to include in credible intervals, or NULL to suppress plotting of the credible interval.
 }
   \item{ROPEm}{
 a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the difference of means (for 2 groups) or the mean (for 1 group). 
@@ -41,7 +41,7 @@ a value for comparison with the (difference of) standard deviations.
 a value for comparison with the effect size.
 }
   \item{...}{
-other graphical parameters.
+other graphical parameters (currently ignored).
 }
 }
 \details{

@@ -18,7 +18,7 @@ an object of class \code{BEST}, as produced by the function \code{\link{BESTmcmc
 one of "mean", "sd", "effect" or "nu" or an abbreviation of one of these; indicates which estimate to plot. For a comparison of two groups, "mean" and "sd" display the difference in means or standard deviation.
 }
    \item{credMass}{
-the probability mass to include in credible intervals.
+the probability mass to include in credible intervals, or NULL to suppress plotting of the credible interval.
 }
   \item{ROPE}{
 a two element vector, such as \code{c(-1, 1)}, specifying the limit of the ROPE on the estimate; see Details.
@@ -39,7 +39,7 @@ The posterior distribution is shown as a histogram or density curve (if \code{sh
 The probability that the difference in means (or effect size, etc.) is precisely zero is zero. More interesting is the probability that the difference may be too small to matter. We can define a region of practical equivalence (ROPE) around zero, and obtain the posterior probability that the true value lies therein.
 }
 \value{
-Returns NULL invisibly. Used for the side effect.
+Returns an object of class \code{histogram} invisibly. Used mainly for the side effect.
 }
 \references{
 Kruschke, J. K. 2013. Bayesian estimation supersedes the \emph{t} test. \emph{Journal of Experimental Psychology: General} 142(2):573-603. doi: 10.1037/a0029146

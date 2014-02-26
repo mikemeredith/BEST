@@ -1,6 +1,6 @@
 plotAreaInROPE <- 
 function(paramSampleVec, credMass = 0.95, compVal = 0, maxROPEradius,
-  plot = TRUE,...) {
+  n = 201, plot = TRUE,...) {
   # Plots the probability mass included in the ROPE as a function of
   #   the half-width of the ROPE.
 
@@ -12,18 +12,24 @@ function(paramSampleVec, credMass = 0.95, compVal = 0, maxROPEradius,
   if(!isTRUE(is.finite(compVal)))
     stop("A finite value for compVal is needed.")
 
-  ropeRadVec = seq( 0 , maxROPEradius , length=201 ) # arbitrary comb
-  areaInRope = rep( NA , length(ropeRadVec) )
-  for ( rIdx in 1:length(ropeRadVec) ) {
+  ropeRadVec = seq( 0 , maxROPEradius , length=n ) # arbitrary comb
+  areaInRope = rep( NA , n )
+  for ( rIdx in 1:n ) {
     areaInRope[rIdx] <- mean( paramSampleVec > (compVal-ropeRadVec[rIdx])
                             & paramSampleVec < (compVal+ropeRadVec[rIdx]) )
   }
 
   if(plot) {
-    plot( ropeRadVec , areaInRope ,
-          xlab=bquote("Radius of ROPE around "*.(compVal)) ,
-          ylab="Posterior in ROPE" ,
-          type="l" , lwd=4 , col="darkred" , cex.lab=1.5 , ... )
+    # Deal with ... argument:
+    dots <- list(...)
+    if(length(dots) == 1 && class(dots[[1]]) == "list")
+      dots <- dots[[1]]
+    defaultArgs <- list(xlab=bquote("Radius of ROPE around "*.(compVal)),
+      ylab="Posterior in ROPE", type="l", lwd=4, col="darkred", cex.lab=1.5) 
+    useArgs <- modifyList(defaultArgs, dots)
+    useArgs$x <- ropeRadVec
+    useArgs$y <- areaInRope
+    do.call("plot", useArgs, quote=TRUE)
     HDIlim = hdi( paramSampleVec , credMass=credMass )
     farHDIlim = HDIlim[which.max(abs(HDIlim-compVal))]
     ropeRadHDI = abs(compVal-farHDIlim)

@@ -48,7 +48,6 @@ function(BESTobj, credMass=0.95,
   }
   nu <- BESTobj$nu
 
-  #source("plotPost.R")
   # Set up window and layout:
   # windows(width=6.0,height=8.0) # Better to use default plot window.
   oldpar <- par(mar=c(3.5,3.5,2.5,0.5), mgp=c(2.25,0.7,0), "mfrow") 
@@ -67,8 +66,6 @@ function(BESTobj, credMass=0.95,
               xRange[2]+0.1*diff(xRange) )
   }
   xVec <- seq( xLim[1] , xLim[2] , length=200 )
-  # maxY <- max( dt( 0 , df=max(nu[stepIdxVec]) ) /
-    # min(sigma1[stepIdxVec],sigma2[stepIdxVec]) )
   maxY <- max( dt( 0 , df=max(nu) ) /
     min(sigma1,sigma2) )
 

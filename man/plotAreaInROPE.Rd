@@ -10,7 +10,7 @@ Calculates and (optionally) plots the posterior probability mass included in the
 
 \usage{
 plotAreaInROPE(paramSampleVec, credMass = 0.95, compVal = 0, maxROPEradius,
-  plot = TRUE, ...)
+  n = 201, plot = TRUE, ...)
 }
 
 \arguments{
@@ -25,6 +25,9 @@ a value for comparison with those plotted.
 }
   \item{maxROPEradius}{
 The maximum value of the ROPE radius (ie. half-width) to include in the plot.
+}
+  \item{n}{
+The number of equally spaced points at which the area in the ROPE is to be estimated.
 }
   \item{plot}{
 If FALSE, the plot will be suppressed but the values will be returned.

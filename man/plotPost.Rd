@@ -8,17 +8,14 @@ Plot the posterior probability distribution for a single parameter from a vector
 }
 \usage{
 plotPost(paramSampleVec, credMass = 0.95, compVal = NULL, ROPE = NULL,
-  HDItextPlace = 0.7, yaxt = "n", ylab = "", xlab = "Parameter", main = "", 
-  cex.lab = 1.5, cex = 1.4, xlim = range(compVal, paramSampleVec),
-  col = "skyblue", border = "white", showMode = FALSE, showCurve = FALSE,
-  breaks = NULL, ...)
+  HDItextPlace = 0.7, showMode = FALSE, showCurve = FALSE, ...)
 }
 \arguments{
   \item{paramSampleVec}{
 A vector of samples drawn from the target distribution.
 }
   \item{credMass}{
-the probability mass to include in credible intervals.
+the probability mass to include in credible intervals, or NULL to suppress plotting of credible intervals.
 }
   \item{compVal}{
 a value for comparison with those plotted.
@@ -29,44 +26,14 @@ a two element vector, such as \code{c(-1, 1)}, specifying the limits of the Regi
   \item{HDItextPlace}{
 a value in [0,1] that controls the horizontal position of the labels at the ends of the HDI bar.
 }
-  \item{yaxt}{
-a character which specifies the y axis type; the default, "n", suppresses plotting.
-}
-  \item{ylab}{
-text to use as the label of the y axis.
-}
-  \item{xlab}{
-text to use as the label of the x axis.
-}
-  \item{cex.lab}{
-the magnification to be used for x and y labels relative to the current setting of \code{cex}
-}
-  \item{cex}{
-a numerical value giving the amount by which plotting text and symbols should be magnified relative to the default
-}
-  \item{xlim}{
-a vector of length 2 giving the limits for the x axis.
-}
-  \item{main}{
-text to use as the main title of the plot
-}
-  \item{col}{
-colour for the fill of the histogram boxes or for the curve if \code{showCurve = TRUE}.
-}
-  \item{border}{
-colour for the borders of the histogram boxes; ignored if \code{showCurve = TRUE}.
-}
   \item{showMode}{
 logical: if TRUE, the mode is displayed instead of the mean.
 }
   \item{showCurve}{
 logical: if TRUE, the posterior density will be represented by a kernel density function instead of a histogram.
 }
-  \item{breaks}{
-controls the histogram break points or the number of bars; see \code{\link{hist}}.
-}
   \item{\dots}{
-other graphical parameters
+graphical parameters and the \code{breaks} parameter for the histogram.
 }
 }
 \details{
@@ -79,10 +46,10 @@ The data are plotted either as a histogram (above) or, if \code{showCurve = TRUE
 If values for a ROPE are supplied, these are shown as dark red vertical dashed lines, together with the percentage of probability mass within the ROPE. If a comparison value (\code{compVal}) is supplied, this is shown as a vertical green dotted line, together with the probability mass below and above this value.
 }
 \value{
-Returns NULL invisibly. Used for its plotting side-effect.
+Returns an object of class \code{histogram} invisibly. Used for its plotting side-effect.
 }
 \author{
-John Kruschke
+John Kruschke, modified by Mike Meredith
 }
 
 \seealso{
@@ -96,4 +63,14 @@ plotPost(tst, col='wheat', border='magenta')
 plotPost(tst, credMass=0.8, ROPE=c(-1,1), xlab="Response variable")
 plotPost(tst, showMode=TRUE, showCurve=TRUE, compVal=5.5)
 
+# For integers:
+tst <- rpois(1e5, 12)
+plotPost(tst)
+
+# A severely bimodal distribution:
+tst2 <- c(rnorm(1e5), rnorm(5e4, 7))
+plotPost(tst2)                  # A valid 95% CrI, but not HDI
+plotPost(tst2, showCurve=TRUE)  # Correct 95% HDI
+
 }
+\keyword{hplot}

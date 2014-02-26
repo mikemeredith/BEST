@@ -53,6 +53,8 @@ plot(BESTout, "sd")
 plotPostPred(BESTout)
 plotAll(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), 
           ROPEeff=c(-0.2,0.2), compValm=0.5) 
+plotAll(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), 
+          ROPEeff=c(-0.2,0.2), compValm=0.5, showCurve=TRUE) 
 summary(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), ROPEsd=c(-0.15,0.15),
           ROPEeff=c(-0.2,0.2)) 
 pairs(BESTout)

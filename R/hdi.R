@@ -65,5 +65,28 @@ hdi.function <- function(object, credMass=0.95, tol, ...)  {
 }
 
 
+hdi.density <- function(object, credMass=0.95, combine=TRUE, ...) {
+  if(is.na(credMass) || length(credMass) != 1 || credMass <= 0 || credMass >= 1)
+    stop("credMass must be in 0 < credMass < 1")
+  sorted = sort( object$y , decreasing=TRUE )
+  heightIdx = min( which( cumsum( sorted) >= sum(object$y) * credMass ) )
+  height = sorted[heightIdx]
+  indices = which( object$y >= height )
+  HDImass = sum( object$y[indices] ) / sum(object$y)
+  gaps <- which(diff(indices) > 1)
+  if(length(gaps) > 0 && combine)
+    warning("The HDI is discontinuous.")
+  begs <- indices[c(1, gaps + 1)]
+  ends <- indices[c(gaps, length(indices))]
+  result <- cbind(begin = object$x[begs], end = object$x[ends])
+  if(combine)  {
+    result <- range(result)
+    names(result) <- c("lower", "upper")
+  }
+  attr(result, "credMass") <- credMass
+  attr(result, "height") <- height
+  return(result)
+}
+
 
 
