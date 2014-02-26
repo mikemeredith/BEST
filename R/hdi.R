@@ -1,7 +1,5 @@
 # This file has the S3 generic 'hdi' function and a series of methods.
 
-# hdi.default replaces HDIofMCMC
-# hdi.function takes the place of HDIofICDF
 
 hdi <- function(object, credMass=0.95, ...) UseMethod("hdi")
 
@@ -44,7 +42,7 @@ hdi.mcmc.list <- function(object, credMass=0.95, ...)
 
 # hdi.rjags <- function(object, credMass=0.95, ...) 
   # hdi.matrix(object$BUGSoutput$sims.matrix, credMass=credMass, ...)
-
+  
 hdi.function <- function(object, credMass=0.95, tol, ...)  {
   if(is.na(credMass) || length(credMass) != 1 || credMass <= 0 || credMass >= 1)
     stop("credMass must be in 0 < credMass < 1")

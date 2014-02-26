@@ -6,7 +6,7 @@ function(BESTobj, credMass=0.95,
   # This function plots the posterior distribution (and data). It does not
   #   produce a scatterplot matrix; use pairs(...) for that.
   # Description of arguments:
-  # BESTobj is mcmc.list object of the type returned by function BESTmcmc.
+  # BESTobj is BEST object of the type returned by function BESTmcmc.
   # ROPEm is a two element vector, such as c(-1,1), specifying the limit
   #   of the ROPE on the difference of means.
   # ROPEsd is a two element vector, such as c(-1,1), specifying the limit

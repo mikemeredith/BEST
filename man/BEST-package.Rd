@@ -9,13 +9,6 @@ Bayesian Estimation Supersedes the t Test
 An alternative to \emph{t} tests, producing posterior estimates for groups means and standard deviations and their differences and effect sizes. Bayesian estimation provides a much richer picture of the data, and can be summarised as point estimates and credible intervals.
 }
 \details{
-\tabular{ll}{
-Package: \tab BEST\cr
-Type: \tab Package\cr
-Version: \tab 0.2.0\cr
-Date: \tab 2013-08-22\cr
-License: \tab GPL-3\cr
-}
 
 The core function, \code{\link{BESTmcmc}}, generates posterior distributions to compare the means of two groups, or to compare the mean of one group with a standard, taking into account the standard deviation(s). It is thus similar to a \emph{t} test. However, our Bayesian approach results in probability statements about the values of interest, rather than \emph{p}-values and significance levels.
 
