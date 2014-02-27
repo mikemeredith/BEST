@@ -24,7 +24,7 @@ hdi(object, credMass = 0.95, ...)
 
 \method{hdi}{data.frame}(object, credMass = 0.95, ...)
 
-\method{hdi}{density}(object, credMass = 0.95, combine=TRUE, ...)
+\method{hdi}{density}(object, credMass = 0.95, allowSplit=FALSE, ...)
 
 \method{hdi}{mcmc.list}(object, credMass = 0.95, ...)
 
@@ -39,8 +39,8 @@ a scalar [0, 1] specifying the mass within the credible interval.
   \item{tol}{
 the desired accuracy; see \code{\link{optimize}}; default is 1e-8.
 }
-  \item{combine}{
-if TRUE, only the outer limits of a discontinuous HDI are returned; see Value.
+  \item{allowSplit}{
+if TRUE and the HDI is discontinuous, the beginning and end of each segment are returned; see Value.
 }
   \item{\dots}{
 named parameters to be passed to other methods; see Examples.
@@ -71,7 +71,7 @@ The function method requires the name for the inverse cumulative density functio
 \value{
 a vector of length 2 or a 2-row matrix with the lower and upper limits of the HDI, with an attribute "credMass".
 
-The \code{density} method with \code{combine = FALSE} produces a matrix with a row for each component of a discontinuous HDI and columns for begin and end. It has an additional attribute "height" giving the probability density at the limits of the HDI.
+The \code{density} method with \code{allowSplit = TRUE} produces a matrix with a row for each component of a discontinuous HDI and columns for begin and end. It has an additional attribute "height" giving the probability density at the limits of the HDI.
 }
 \references{
 Kruschke, J. K. 2011. \emph{Doing Bayesian data analysis: a tutorial with R and BUGS.} Elsevier, Amsterdam, section 3.3.5.
@@ -107,11 +107,11 @@ segments(hdiMC[1], 0, hdiMC[2], 0, lwd=3, col='red')
 
 dens2 <- density(tst2)
 lines(dens2, lwd=2, col='blue')
-(hdiD1 <- hdi(dens2))  # default combine = TRUE; note the warning
-(ht <- attr(hdiD1, "height"))
-segments(hdiD1[1], ht, hdiD1[2], ht, lty=3, col='blue')
-# This is not a valid 95% CrI
-(hdiD2 <- hdi(dens2, combine=FALSE))
+(hdiD1 <- hdi(dens2))  # default allowSplit = FALSE; note the warning
+segments(hdiD1[1], 0.01, hdiD1[2], 0.01, lty=3, col='blue')
+# This is a valid 95% CrI, but not an HDI
+(hdiD2 <- hdi(dens2, allowSplit=TRUE))
+(ht <- attr(hdiD2, "height"))
 segments(hdiD2[, 1], ht, hdiD2[, 2], ht, lwd=3, col='blue')
 # This is the correct 95% HDI.
 }
