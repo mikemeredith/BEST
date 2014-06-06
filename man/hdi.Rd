@@ -53,16 +53,16 @@ The HDI is the interval which contains the required mass such that all points wi
 
 In contrast, a symmetric density interval defined by (eg.) the 10\% and 90\% quantiles may include values with lower probability than those excluded.
 
-For a unimodal distribution, the HDI is the narrowest interval containing the specified mass, and the \code{hdi} function actually returns the narrowest interval. This does not always work properly for multimodel densities, where the HDI may be discontinuous (the horizontal black line in the  Figure below). The single interval returned by \code{hdi} (the blue line) may incorrectly include values between the modes with low probability density. The \code{density} method with \code{combine = FALSE} gives separate limits for discontinuous HDIs.
+For a unimodal distribution, the HDI is the narrowest interval containing the specified mass, and the \code{hdi} function actually returns the narrowest interval. This does not always work properly for multimodel densities, where the HDI may be discontinuous (the horizontal black line in the  Figure below). The single interval returned by \code{hdi} (the blue line) may incorrectly include values between the modes with low probability density. The \code{density} method with \code{allowSplit = TRUE} gives separate limits for discontinuous HDIs.
 
 \figure{HDIbimodal.jpg}
 
 
 The default method expects a vector representing draws from the target distribution, such as is produced by an MCMC process. Missing values are silently ignored; if the vector has no non-missing values, NAs are returned.
 
-The matrix and data frame methods expect an object with vectors of the above type for each parameter in columns. The result is a matrix with parameters in columns and rows with the upper and lower limits of the HDI.
+The matrix and data frame methods expect an object with vectors of the above type for each parameter in columns. The result is a matrix with parameters in columns, and rows with the upper and lower limits of the HDI.
 
-The mcmc.list method expects an object of type mcmc.list as defined in package coda.
+The mcmc.list method expects an object of type \code{mcmc.list} as defined in package \pkg{coda}.
 
 None of the above use interpolation: the values returned correspond to specific values in the data object. Results thus depend on the random draws, and will be unstable if few values are provided. For a 95\% HDI, 10,000 independent draws are recommended; a smaller number will be adequate for a 80\% HDI, many more for a 99\% HDI.
 

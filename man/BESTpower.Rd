@@ -121,5 +121,5 @@ powerPro <- BESTpower(proMCMC, N1=N1plan, N2=N2plan,
                ROPEm=c(-1.5,1.5), ROPEsd=c(-2,2), ROPEeff=c(-0.5,0.5), 
                maxHDIWm=15.0, maxHDIWsd=10.0, maxHDIWeff=1.0, nRep=5)
 powerPro
-} ## End donttest
+}
 }

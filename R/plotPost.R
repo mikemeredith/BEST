@@ -50,7 +50,7 @@ function( paramSampleVec, credMass=0.95, compVal=NULL, ROPE=NULL,
     abline(h=0, col='grey', xpd=FALSE)
     # Display the HDI.
     if(!is.null(credMass)) {
-      HDI <- hdi(densCurve, credMass, combine=FALSE)
+      HDI <- hdi(densCurve, credMass, allowSplit=TRUE)
       ht <- attr(HDI, "height")
       segments(HDI[, 1], ht, HDI[, 2], ht, lwd=4, lend='butt')
       segments(HDI, 0, HDI, ht, lty=2)

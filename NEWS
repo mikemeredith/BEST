@@ -1,6 +1,4 @@
-CHANGES in v.0.2.1
-
-  * tweaks to NAMESPACE to meet R 3.1 requirements.
+CHANGES in v.0.2.2
 
   * hdi gains a density method, which can handle discontinuous HDIs. This is
   used for the posterior density plots when showCurve = TRUE.
