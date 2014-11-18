@@ -154,7 +154,7 @@ plot(BESTout, compVal=1, ROPE=c(-0.1,0.1))
 \begin{figure}
   \centering
   \includegraphics{BEST-meanDiff2grpsMore}
-  \caption{\it Posterior probability of the difference in means with compVal=1.5 and ROPE $\pm$~0.1.}
+  \caption{\it Posterior probability of the difference in means with compVal=1.0 and ROPE $\pm$~0.1.}
   \label{fig:means2gMore}
 \end{figure}
 
