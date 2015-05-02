@@ -11,6 +11,17 @@ function( y1, y2=NULL,
   #   with attributes Rhat, n.eff, and a list with the original data.
   #------------------------------------------------------------------------------
 
+  # Data checks
+  if(!all(is.finite(c(y1, y2))))
+    stop("The input data include NA or Inf.")
+  if(is.null(y2)) {
+    if(length(y1) < 3)
+      stop("Minimum sample size is 3.")
+  } else {
+    if(length(y1) < 3 || length(y2) < 3)
+      stop("Minimum size for both samples is 3.")
+  }
+  
   modelFile <- file.path(tempdir(), "BESTmodel.txt")
   # THE MODEL.
   if(is.null(y2)) {

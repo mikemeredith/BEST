@@ -1,16 +1,26 @@
+TO DO
+
+  * Fix bug in makeData!!!
+
+  * Function BESTmcmc2 allows user to specify priors.
+
+CHANGES in v.0.2.3
+
+  * Added sanity checks to BESTmcmc.
+
 CHANGES in v.0.2.2
 
   * hdi gains a density method, which can handle discontinuous HDIs. This is
   used for the posterior density plots when showCurve = TRUE.
-  
+
   * Enhancements to plots:
-    o credMass = NULL suppresses plotting of the credible interval. 
+    o credMass = NULL suppresses plotting of the credible interval.
     o plotPost, the plot.BEST method, and plotAreaInROPE now make full
-    use of the ... argument for additional graphical parameters. 
-    o default xlim for posterior density plots is now based on 99% HDI (not range). 
-    o plotPost and plot.BEST return an object of class 'histogram' invisibly. 
+    use of the ... argument for additional graphical parameters.
+    o default xlim for posterior density plots is now based on 99% HDI (not range).
+    o plotPost and plot.BEST return an object of class 'histogram' invisibly.
     o plotPost deals properly with a vector of integers.
-  
+
 CHANGES in v.0.2.0
 
   * Added function plotAreaInROPE.
@@ -20,14 +30,14 @@ CHANGES in v.0.2.0
 
   * BESTmcmc and BESTpower gain 'rnd.seed' arguments for reproducible output;
 	testthat test files for BESTmcmc and BESTpower added.
-	
+
   * makeData gains a showPlot argument.
 
   * Fixed bug in plot.BEST: the ... argument was not being passed to plotPost.
-	
+
   * BESTmcmc has 'verbose' argument; setting verbose = FALSE (or 0) suppresses
 	output to the Console (wish of Ben Marwick).
 
-  * BESTpower also has 'verbose' argument; here verbose = 0 (or FALSE) 
+  * BESTpower also has 'verbose' argument; here verbose = 0 (or FALSE)
 	suppresses all output, verbose = 1 (or TRUE) provides just a progress bar;
-	verbose = 2 (the default) displays full details. 
+	verbose = 2 (the default) displays full details.

@@ -12,10 +12,10 @@ BESTmcmc(y1, y2 = NULL, numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000
 }
 \arguments{
   \item{y1}{
-a (non-empty) numeric vector of data values.
+a (non-empty) numeric vector of at least 3 data values.
 }
   \item{y2}{
-a vector of values for a second group, or NULL if there is only one group of observations.
+a vector of at least 3 values for a second group, or NULL if there is only one group of observations.
 }
   \item{numSavedSteps}{
 the number of MCMC observations to be returned.
