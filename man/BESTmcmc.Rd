@@ -1,5 +1,6 @@
 \name{BESTmcmc}
 \alias{BESTmcmc}
+\alias{BESTmcmc2}
 \title{
 Generate MCMC samples for posterior distributions
 }
@@ -9,6 +10,10 @@ This function is the core of the BEST package. It calls JAGS and passes a descri
 \usage{
 BESTmcmc(y1, y2 = NULL, numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
 	verbose=TRUE, rnd.seed=NULL)
+  
+BESTmcmc2(y1, y2 = NULL, priors = list(), 
+  numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
+	verbose=TRUE, rnd.seed=NULL)
 }
 \arguments{
   \item{y1}{
@@ -16,6 +21,9 @@ a (non-empty) numeric vector of at least 3 data values.
 }
   \item{y2}{
 a vector of at least 3 values for a second group, or NULL if there is only one group of observations.
+}
+ \item{priors}{
+an optional list of values controlling the priors, see Details.
 }
   \item{numSavedSteps}{
 the number of MCMC observations to be returned.
@@ -26,7 +34,7 @@ thinning rate. If set to n > 1, one value in n steps of the MCMC chain is return
   \item{burnInSteps}{
 number of steps to discard as burn-in at the beginning of the chain.
 }
-  \item{verbose}{
+   \item{verbose}{
 if FALSE, output to the R Console is suppressed.
 }
   \item{rnd.seed}{
@@ -34,7 +42,21 @@ a positive integer (or NULL): the seed for the random number generator, used to 
 }
 }
 \details{
-The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003) with vague priors for all parameters, as described by Kruschke (2013). The model is shown in the diagram below.
+The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003).
+
+BESTmcmc uses vague priors for all parameters, as described by Kruschke (2013).
+
+BESTmcmc2 allows the user to specify priors for all parameters by including elements in the \code{priors} list:
+
+population means (mu) have separate normal priors, with mean \code{muM} and standard deviation \code{muSD};
+
+population standard deviations (sigma) have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD};
+
+the normality parameter (nu) has a gamma prior, with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}.
+
+If there are 2 groups of observations, \code{muM, muSD, sigmaMode, sigmaSD} may be vectors of length 2 or scalar, in which case the same value is used for each population. The default priors correspond to \code{list(muM = mean(y), muSD = sd(y)*5, sigmaMode = sd(y), sigmaSD = sd(y)*5, nuMean = 29, nuSD = 29)}, where \code{y = c(y1, y2)}.
+
+The model is shown in the diagram below.
 
 \figure{BESTmodel.jpg}
 
@@ -66,12 +88,12 @@ Kruschke, J K. 2013. Bayesian estimation supersedes the \emph{t} test. \emph{Jou
 Plummer, Martyn (2003). JAGS: A Program for Analysis of Bayesian Graphical Models Using Gibbs Sampling, \emph{Proceedings of the 3rd International Workshop on Distributed Statistical Computing (DSC 2003)}, March 20-22, Vienna, Austria. ISSN 1609-395X
 }
 \author{
-Original code by John K. Kruschke, modified by Mike Meredith
+Original code by John K. Kruschke, modified by Mike Meredith.
 }
 \note{
 This differs from the original \code{BESTmcmc} function in Kruschke's code:\cr
 1. Both 1-group and 2-group comparisons are dealt with by the same function.\cr
-2. In the present version, the output inherits from \code{data.frame} rather then being a matrix. This may change in future versions.
+2. The output inherits from \code{data.frame} rather then being a matrix. 
 }
 
 \seealso{

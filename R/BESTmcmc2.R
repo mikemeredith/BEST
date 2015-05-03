@@ -1,0 +1,172 @@
+BESTmcmc2 <-
+function( y1, y2=NULL, priors = list(),
+    numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000,
+    verbose=TRUE, rnd.seed=NULL) { 
+  # This function generates an MCMC sample from the posterior distribution.
+  # y1, y2 the data vectors; y2=NULL if only one group.
+  # verbose=FALSE suppresses output to the R Console.
+  # rnd.seed is passed to each of the chains, with a different pseudorandom
+  #   number generator for each.
+  # Returns a data frame, not a matrix, with class 'BEST',
+  #   with attributes Rhat, n.eff, and a list with the original data.
+  # BESTmcmc2 allows user specification of priors.
+  #------------------------------------------------------------------------------
+
+  # Data checks
+  if(!all(is.finite(c(y1, y2))))
+    stop("The input data include NA or Inf.")
+  if(is.null(y2)) {
+    if(length(y1) < 3)
+      stop("Minimum sample size is 3.")
+  } else {
+    if(length(y1) < 3 || length(y2) < 3)
+      stop("Minimum size for both samples is 3.")
+  }
+  
+  # Deal with priors
+  y <- c( y1 , y2 ) # combine data into one vector
+  priors0 <- list(  # default priors
+    muM = mean(y) ,
+    muSD = sd(y)*5 ,
+    sigmaMode = sd(y),
+    sigmaSD = sd(y)*5,
+    nuMean = 29,
+    nuSD = 29 )
+  priors0 <- modifyList(priors0, priors)  # user's priors take priority (duh!!)
+  # Convert to Shape/Rate
+  sigmaShRa <- gammaShRaFromModeSD(mode=priors0$sigmaMode, sd=priors0$sigmaSD)
+  nuShRa <- gammaShRaFromMeanSD(mean=priors0$nuMean, sd=priors0$nuSD)
+  dataForJAGS <- list(
+    muM = priors0$muM,
+    muP = 1/priors0$muSD^2,  # convert SD to precision
+    Sh = sigmaShRa$shape,
+    Ra = sigmaShRa$rate)
+  if(!is.null(y2))  {   # all the above must be vectors of length 2
+    fixPrior <- function(x) {
+      if(length(x) < 2)
+        x <- rep(x, 2)
+      return(x)
+    }
+    dataForJAGS <- lapply(dataForJAGS, fixPrior)
+  }
+  dataForJAGS$ShNu <- nuShRa$shape
+  dataForJAGS$RaNu <- nuShRa$rate
+  
+  modelFile <- file.path(tempdir(), "BESTmodel.txt")
+  # THE MODEL.
+  if(is.null(y2)) {
+    modelString = "
+    model {
+      for ( i in 1:Ntotal ) {
+        y[i] ~ dt( mu , tau , nu )
+      }
+      mu ~ dnorm( muM[1] , muP[1] )
+      tau <- 1/pow( sigma , 2 )
+      # sigma ~ dunif( sigmaLow , sigmaHigh )
+      sigma ~ dgamma( Sh[1] , Ra[1] )
+      nu <- nuMinusOne+1
+      # nuMinusOne ~ dexp(1/29)
+      nuMinusOne ~ dgamma( ShNu , RaNu ) # prior for nu
+    }
+    " # close quote for modelString
+  } else {
+    modelString <- "
+    model {
+      for ( i in 1:Ntotal ) {
+        y[i] ~ dt( mu[x[i]] , tau[x[i]] , nu )
+      }
+      for ( j in 1:2 ) {
+        mu[j] ~ dnorm( muM[j] , muP[j] ) ##
+        tau[j] <- 1/pow( sigma[j] , 2 )
+        # sigma[j] ~ dunif( sigmaLow , sigmaHigh )
+        sigma[j] ~ dgamma( Sh[j] , Ra[j] )
+      }
+      nu <- nuMinusOne+1
+      # nuMinusOne ~ dexp(1/29)
+      nuMinusOne ~ dgamma( ShNu , RaNu ) # prior for nu
+    }
+    " # close quote for modelString
+  }   
+  # Write out modelString to a text file
+  writeLines( modelString , con=modelFile )
+  
+  #------------------------------------------------------------------------------
+  # THE DATA.
+  # dataForJAGS already has the priors, add the data:
+  dataForJAGS$y <- y
+  dataForJAGS$Ntotal <- length(y)
+  if(!is.null(y2)) # create group membership code
+    dataForJAGS$x <- c( rep(1,length(y1)) , rep(2,length(y2)) )
+
+  #------------------------------------------------------------------------------
+  # INTIALIZE THE CHAINS.
+  # Initial values of MCMC chains based on data:
+  if(is.null(y2)) {
+    mu = mean(y1)
+    sigma = sd(y1)
+  } else {
+    mu = c( mean(y1) , mean(y2) )
+    sigma = c( sd(y1) , sd(y2) )
+  }
+  # Regarding initial values in next line: (1) sigma will tend to be too big if 
+  # the data have outliers, and (2) nu starts at 5 as a moderate value. These
+  # initial values keep the burn-in period moderate.
+  if(is.null(rnd.seed)) {
+    initsList = list( mu = mu , sigma = sigma , nuMinusOne = 4 )
+  } else {
+    initsList0 <- list(mu=mu, sigma=sigma, nuMinusOne=4, .RNG.seed=rnd.seed)
+    initsList <- list(
+                  c(initsList0, .RNG.name="base::Wichmann-Hill"),
+                  c(initsList0, .RNG.name="base::Marsaglia-Multicarry"),
+                  c(initsList0, .RNG.name="base::Super-Duper") )
+  }
+  
+  #------------------------------------------------------------------------------
+  # RUN THE CHAINS
+
+  parameters = c( "mu" , "sigma" , "nu" )     # The parameters to be monitored
+  adaptSteps = 500               # Number of steps to "tune" the samplers
+  nChains = 3   # Do not change this without also changing inits.
+  
+  nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
+  # Create, initialize, and adapt the model:
+  if(verbose) {
+    cat( "Setting up the JAGS model...\n" )
+    flush.console()
+    jagsModel <- jags.model(modelFile, data=dataForJAGS, inits=initsList, 
+                  n.chains=nChains , n.adapt=adaptSteps, quiet=!verbose)
+  } else {
+    # This is a work-around to suppress the progress bar:
+    capture.output(
+      jagsModel <- jags.model(modelFile, data=dataForJAGS, inits=initsList, 
+                    n.chains=nChains, n.adapt=adaptSteps, quiet=!verbose),
+      file = file.path(tempdir(), "delete.me"))
+  }
+  # Burn-in:
+  if(verbose) {
+    cat( "Burning in the MCMC chain...\n" )
+    flush.console()
+  }
+  update( jagsModel , n.iter=burnInSteps,
+          progress.bar=ifelse(verbose, "text", "none"))
+  # The saved MCMC chain:
+  if(verbose) {
+    cat( "Sampling final MCMC chain...\n" )
+    flush.console()
+  }
+  codaSamples <- coda.samples( jagsModel , variable.names=parameters , 
+                        n.iter=nIter , thin=thinSteps,
+                        progress.bar=ifelse(verbose, "text", "none"))
+  #------------------------------------------------------------------------------
+  mcmcChain = as.matrix( codaSamples )
+  if(dim(mcmcChain)[2] == 5 && 
+        all(colnames(mcmcChain) == c("mu[1]", "mu[2]", "nu", "sigma[1]", "sigma[2]")))
+    colnames(mcmcChain) <- c("mu1", "mu2", "nu", "sigma1", "sigma2")
+  mcmcDF <- as.data.frame(mcmcChain)
+  class(mcmcDF) <- c("BEST", class(mcmcDF))
+  attr(mcmcDF, "Rhat") <- gelman.diag(codaSamples)$psrf[, 1]
+  attr(mcmcDF, "n.eff") <- effectiveSize(codaSamples)
+  attr(mcmcDF, "data") <- list(y1 = y1, y2 = y2)
+  
+  return( mcmcDF )
+}
