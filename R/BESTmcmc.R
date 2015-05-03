@@ -4,11 +4,12 @@ function( y1, y2=NULL, priors=NULL,
     verbose=TRUE, rnd.seed=NULL) { 
   # This function generates an MCMC sample from the posterior distribution.
   # y1, y2 the data vectors; y2=NULL if only one group.
+  # priors is a list specifying priors to use.
   # verbose=FALSE suppresses output to the R Console.
   # rnd.seed is passed to each of the chains, with a different pseudorandom
   #   number generator for each.
   # Returns a data frame, not a matrix, with class 'BEST',
-  #   with attributes Rhat, n.eff, and a list with the original data.
+  #   with attributes Rhat, n.eff, a list with the original data, and the priors.
   #------------------------------------------------------------------------------
 
   # Data checks
@@ -22,10 +23,22 @@ function( y1, y2=NULL, priors=NULL,
       stop("Minimum size for both samples is 3.")
   }
   if(!is.null(priors))  {
-    if(is.numeric(priors))
-      cat("Note that the 3rd argument is now 'priors'\n")
-    if(!is.list(priors))
-      stop("'priors' must be a list (or NULL).")
+    if(!is.list(priors)) {
+      if(is.numeric(priors)) {
+        stop("'priors' is now the 3rd argument; it must be a list (or NULL).")
+      } else {
+        stop("'priors' must be a list (or NULL).")
+      }
+    }
+    nameOK <- names(priors) %in%   
+          c("muM", "muSD", "sigmaMode", "sigmaSD", "nuMean", "nuSD")
+    if(!all(nameOK))
+      stop("Invalid items in prior specification: ",
+          paste(sQuote(names(priors)[!nameOK]), collapse=", "))
+    if(!all(sapply(priors, is.numeric)))
+      stop("All items in 'priors' must be numeric.")
+    if(!is.null(priors$muSD) && priors$muSD <= 0)
+      stop("muSD must be > 0")
   }
   
   # THE PRIORS
@@ -46,7 +59,7 @@ function( y1, y2=NULL, priors=NULL,
       sigmaSD = sd(y)*5,
       nuMean = 29,
       nuSD = 29 )
-    priors0 <- modifyList(priors0, priors)  # user's priors take priority (duh!!)
+    priors0 <- modifyList(priors0, priors)  # user's priors take prior-ity (duh!!)
     # Convert to Shape/Rate
     sigmaShRa <- gammaShRaFromModeSD(mode=priors0$sigmaMode, sd=priors0$sigmaSD)
     nuShRa <- gammaShRaFromMeanSD(mean=priors0$nuMean, sd=priors0$nuSD)
@@ -120,7 +133,7 @@ function( y1, y2=NULL, priors=NULL,
           y[i] ~ dt( mu[x[i]] , tau[x[i]] , nu )
         }
         for ( j in 1:2 ) {
-          mu[j] ~ dnorm( muM[j] , muP[j] ) ##
+          mu[j] ~ dnorm( muM[j] , muP[j] )
           tau[j] <- 1/pow( sigma[j] , 2 )
           sigma[j] ~ dgamma( Sh[j] , Ra[j] )
         }
