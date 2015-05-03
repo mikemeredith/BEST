@@ -1,11 +1,7 @@
 
-# Tests for BESTmcmc
+# Tests for BESTmcmc and retro power
+#  (both work with the same BESTmcmc output object).
 
-# library(BEST)
-# library(testthat)
-# test_file("test-BESTmcmc.R")
-
-require(rjags)
 
 context("BESTmcmc&retroPower")
 

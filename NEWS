@@ -1,11 +1,12 @@
 TO DO
 
   * Fix bug in makeData!!!
+  
+  * Run chains in parallel; maybe use jagsUI instead of rjags to facilitate this.
 
 CHANGES in v.0.2.4
 
-  * Function BESTmcmc2 allows user to specify priors. In future this will be
-  incorporated in BESTmcmc.
+  * Function BESTmcmc now allows user to specify priors.
 
 CHANGES in v.0.2.3
 

@@ -1,5 +1,5 @@
 BESTmcmc <-
-function( y1, y2=NULL,
+function( y1, y2=NULL, priors=NULL,
     numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000,
     verbose=TRUE, rnd.seed=NULL) { 
   # This function generates an MCMC sample from the posterior distribution.
@@ -21,57 +21,125 @@ function( y1, y2=NULL,
     if(length(y1) < 3 || length(y2) < 3)
       stop("Minimum size for both samples is 3.")
   }
+  if(!is.null(priors))  {
+    if(is.numeric(priors))
+      cat("Note that the 3rd argument is now 'priors'\n")
+    if(!is.list(priors))
+      stop("'priors' must be a list (or NULL).")
+  }
   
-  modelFile <- file.path(tempdir(), "BESTmodel.txt")
+  # THE PRIORS
+  y <- c( y1 , y2 ) # combine data into one vector
+  
+  if(is.null(priors)) {   # use the old prior specification
+    dataForJAGS <- list(
+      muM = mean(y) ,
+      muP = 0.000001 * 1/sd(y)^2 ,
+      sigmaLow = sd(y) / 1000 ,
+      sigmaHigh = sd(y) * 1000 
+    )
+  } else {    # use gamma priors
+    priors0 <- list(  # default priors
+      muM = mean(y) ,
+      muSD = sd(y)*5 ,
+      sigmaMode = sd(y),
+      sigmaSD = sd(y)*5,
+      nuMean = 29,
+      nuSD = 29 )
+    priors0 <- modifyList(priors0, priors)  # user's priors take priority (duh!!)
+    # Convert to Shape/Rate
+    sigmaShRa <- gammaShRaFromModeSD(mode=priors0$sigmaMode, sd=priors0$sigmaSD)
+    nuShRa <- gammaShRaFromMeanSD(mean=priors0$nuMean, sd=priors0$nuSD)
+    dataForJAGS <- list(
+      muM = priors0$muM,
+      muP = 1/priors0$muSD^2,  # convert SD to precision
+      Sh = sigmaShRa$shape,
+      Ra = sigmaShRa$rate)
+    if(!is.null(y2))  {   # all the above must be vectors of length 2
+      fixPrior <- function(x) {
+        if(length(x) < 2)
+          x <- rep(x, 2)
+        return(x)
+      }
+      dataForJAGS <- lapply(dataForJAGS, fixPrior)
+    }
+    dataForJAGS$ShNu <- nuShRa$shape
+    dataForJAGS$RaNu <- nuShRa$rate
+  }
+  
   # THE MODEL.
-  if(is.null(y2)) {
-    modelString = "
-    model {
-      for ( i in 1:Ntotal ) {
-        y[i] ~ dt( mu , tau , nu )
+  modelFile <- file.path(tempdir(), "BESTmodel.txt")
+  if(is.null(priors)) {  # use old broad priors
+    if(is.null(y2)) {
+      modelString = "
+      model {
+        for ( i in 1:Ntotal ) {
+          y[i] ~ dt( mu , tau , nu )
+        }
+        mu ~ dnorm( muM , muP )
+        tau <- 1/pow( sigma , 2 )
+        sigma ~ dunif( sigmaLow , sigmaHigh )
+        nu <- nuMinusOne+1
+        nuMinusOne ~ dexp(1/29)
       }
-      mu ~ dnorm( muM , muP )
-      tau <- 1/pow( sigma , 2 )
-      sigma ~ dunif( sigmaLow , sigmaHigh )
-      nu <- nuMinusOne+1
-      nuMinusOne ~ dexp(1/29)
-    }
-    " # close quote for modelString
-  } else {
-    modelString <- "
-    model {
-      for ( i in 1:Ntotal ) {
-        y[i] ~ dt( mu[x[i]] , tau[x[i]] , nu )
+      " # close quote for modelString
+    } else {
+      modelString <- "
+      model {
+        for ( i in 1:Ntotal ) {
+          y[i] ~ dt( mu[x[i]] , tau[x[i]] , nu )
+        }
+        for ( j in 1:2 ) {
+          mu[j] ~ dnorm( muM , muP )
+          tau[j] <- 1/pow( sigma[j] , 2 )
+          sigma[j] ~ dunif( sigmaLow , sigmaHigh )
+        }
+        nu <- nuMinusOne+1
+        nuMinusOne ~ dexp(1/29)
       }
-      for ( j in 1:2 ) {
-        mu[j] ~ dnorm( muM , muP )
-        tau[j] <- 1/pow( sigma[j] , 2 )
-        sigma[j] ~ dunif( sigmaLow , sigmaHigh )
+      " # close quote for modelString
+    }   
+  } else {    # use gamma priors
+    if(is.null(y2)) {
+      modelString = "
+      model {
+        for ( i in 1:Ntotal ) {
+          y[i] ~ dt( mu , tau , nu )
+        }
+        mu ~ dnorm( muM[1] , muP[1] )
+        tau <- 1/pow( sigma , 2 )
+         sigma ~ dgamma( Sh[1] , Ra[1] )
+        nu <- nuMinusOne+1
+        nuMinusOne ~ dgamma( ShNu , RaNu ) # prior for nu
       }
-      nu <- nuMinusOne+1
-      nuMinusOne ~ dexp(1/29)
-    }
-    " # close quote for modelString
-  }   
+      " # close quote for modelString
+    } else {
+      modelString <- "
+      model {
+        for ( i in 1:Ntotal ) {
+          y[i] ~ dt( mu[x[i]] , tau[x[i]] , nu )
+        }
+        for ( j in 1:2 ) {
+          mu[j] ~ dnorm( muM[j] , muP[j] ) ##
+          tau[j] <- 1/pow( sigma[j] , 2 )
+          sigma[j] ~ dgamma( Sh[j] , Ra[j] )
+        }
+        nu <- nuMinusOne+1
+        nuMinusOne ~ dgamma( ShNu , RaNu ) # prior for nu
+      }
+      " # close quote for modelString
+    }   
+  }
   # Write out modelString to a text file
   writeLines( modelString , con=modelFile )
   
   #------------------------------------------------------------------------------
   # THE DATA.
-  # Load the data:
-  y = c( y1 , y2 ) # combine data into one vector
-  Ntotal = length(y)
-  # Specify the data in a list, for later shipment to JAGS:
-  dataList = list(
-    y = y ,
-    Ntotal = Ntotal ,
-    muM = mean(y) ,
-    muP = 0.000001 * 1/sd(y)^2 ,
-    sigmaLow = sd(y) / 1000 ,
-    sigmaHigh = sd(y) * 1000 
-  )
+  # dataForJAGS already has the priors, add the data:
+  dataForJAGS$y <- y
+  dataForJAGS$Ntotal <- length(y)
   if(!is.null(y2)) # create group membership code
-    dataList$x <- c( rep(1,length(y1)) , rep(2,length(y2)) )
+    dataForJAGS$x <- c( rep(1,length(y1)) , rep(2,length(y2)) )
 
   #------------------------------------------------------------------------------
   # INTIALIZE THE CHAINS.
@@ -108,12 +176,12 @@ function( y1, y2=NULL,
   if(verbose) {
     cat( "Setting up the JAGS model...\n" )
     flush.console()
-    jagsModel <- jags.model(modelFile, data=dataList, inits=initsList, 
+    jagsModel <- jags.model(modelFile, data=dataForJAGS, inits=initsList, 
                   n.chains=nChains , n.adapt=adaptSteps, quiet=!verbose)
   } else {
     # This is a work-around to suppress the progress bar:
     capture.output(
-      jagsModel <- jags.model(modelFile, data=dataList, inits=initsList, 
+      jagsModel <- jags.model(modelFile, data=dataForJAGS, inits=initsList, 
                     n.chains=nChains, n.adapt=adaptSteps, quiet=!verbose),
       file = file.path(tempdir(), "delete.me"))
   }
@@ -142,6 +210,8 @@ function( y1, y2=NULL,
   attr(mcmcDF, "Rhat") <- gelman.diag(codaSamples)$psrf[, 1]
   attr(mcmcDF, "n.eff") <- effectiveSize(codaSamples)
   attr(mcmcDF, "data") <- list(y1 = y1, y2 = y2)
+  if(!is.null(priors))
+    attr(mcmcDF, "priors") <- priors0
   
   return( mcmcDF )
 }

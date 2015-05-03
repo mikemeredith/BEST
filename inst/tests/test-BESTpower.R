@@ -1,11 +1,7 @@
 
-# Tests for BESTmcmc
+# Tests for BESTpower
 
-# library(BEST)
-# library(testthat)
-# test_file("test-BESTmcmc.R")
 
-require(rjags)
 
 context("BESTpower_Pro")
 

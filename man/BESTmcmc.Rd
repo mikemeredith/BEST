@@ -1,23 +1,20 @@
 \name{BESTmcmc}
 \alias{BESTmcmc}
-\alias{BESTmcmc2}
 \title{
 Generate MCMC samples for posterior distributions
 }
 \description{
-This function is the core of the BEST package. It calls JAGS and passes a description of the model and the data, then retrieves and returns the MCMC samples for the parameters.
+This function is the core of the BEST package. It calls JAGS and passes a description of the model, priors, and data, then retrieves and returns the MCMC samples for the parameters.
 }
 \usage{
-BESTmcmc(y1, y2 = NULL, numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
-	verbose=TRUE, rnd.seed=NULL)
   
-BESTmcmc2(y1, y2 = NULL, priors = list(), 
+BESTmcmc(y1, y2 = NULL, priors = NULL, 
   numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
 	verbose=TRUE, rnd.seed=NULL)
 }
 \arguments{
   \item{y1}{
-a (non-empty) numeric vector of at least 3 data values.
+a numeric vector of at least 3 data values.
 }
   \item{y2}{
 a vector of at least 3 values for a second group, or NULL if there is only one group of observations.
@@ -44,17 +41,15 @@ a positive integer (or NULL): the seed for the random number generator, used to 
 \details{
 The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003).
 
-BESTmcmc uses vague priors for all parameters, as described by Kruschke (2013).
-
-BESTmcmc2 allows the user to specify priors for all parameters by including elements in the \code{priors} list:
-
-population means (mu) have separate normal priors, with mean \code{muM} and standard deviation \code{muSD};
-
-population standard deviations (sigma) have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD};
-
-the normality parameter (nu) has a gamma prior, with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}.
+BESTmcmc allows the user to specify priors for all parameters by including elements in the \code{priors} list:\cr
+\eqn{\mu} : population means have separate normal priors, with mean \code{muM} and standard deviation \code{muSD};\cr
+\eqn{\sigma} : population standard deviations have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD};\cr
+\eqn{\nu} : the normality parameter must be >= 1, so a gamma prior is used for \code{nu - 1}, with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}.
 
 If there are 2 groups of observations, \code{muM, muSD, sigmaMode, sigmaSD} may be vectors of length 2 or scalar, in which case the same value is used for each population. The default priors correspond to \code{list(muM = mean(y), muSD = sd(y)*5, sigmaMode = sd(y), sigmaSD = sd(y)*5, nuMean = 29, nuSD = 29)}, where \code{y = c(y1, y2)}.
+
+If \code{priors = NULL}, vague priors as described by Kruschke (2013) are used for all parameters.
+
 
 The model is shown in the diagram below.
 
@@ -79,6 +74,7 @@ The output has the following attributes:
   \item{Rhat}{the 'potential scale reduction factor'}
   \item{n.eff}{sample size adjusted for autocorrelation}
   \item{data}{a list with elements y1 and y2 containing the original data; y2 may be NULL}
+  \item{priors}{a list with the priors used, if the \code{priors} argument is not NULL}
 
 The package provides \code{print}, \code{plot} and \code{summary} methods for \code{BEST} objects.
 }
