@@ -1,7 +1,10 @@
+
+### Parallel processing version
+
 BESTmcmc <-
 function( y1, y2=NULL, priors=NULL,
     numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000,
-    verbose=TRUE, rnd.seed=NULL) { 
+    verbose=TRUE, rnd.seed=NULL, parallel=TRUE) {
   # This function generates an MCMC sample from the posterior distribution.
   # y1, y2 the data vectors; y2=NULL if only one group.
   # priors is a list specifying priors to use.
@@ -12,6 +15,15 @@ function( y1, y2=NULL, priors=NULL,
   #   with attributes Rhat, n.eff, a list with the original data, and the priors.
   #------------------------------------------------------------------------------
 
+  # Parallel processing check
+  if(parallel)  {
+    nCores <- detectCores()
+    if(nCores < 4)  {
+      if(verbose)
+        warning("Not enough cores for parallel processing, running chains sequentially.")
+      parallel <- FALSE
+    }
+  }
   # Data checks
   if(!all(is.finite(c(y1, y2))))
     stop("The input data include NA or Inf.")
@@ -30,7 +42,7 @@ function( y1, y2=NULL, priors=NULL,
         stop("'priors' must be a list (or NULL).")
       }
     }
-    nameOK <- names(priors) %in%   
+    nameOK <- names(priors) %in%
           c("muM", "muSD", "sigmaMode", "sigmaSD", "nuMean", "nuSD")
     if(!all(nameOK))
       stop("Invalid items in prior specification: ",
@@ -40,16 +52,18 @@ function( y1, y2=NULL, priors=NULL,
     if(!is.null(priors$muSD) && priors$muSD <= 0)
       stop("muSD must be > 0")
   }
-  
+  if(is.null(rnd.seed))
+    rnd.seed <- floor(runif(1,1,10000))
+
   # THE PRIORS
   y <- c( y1 , y2 ) # combine data into one vector
-  
+
   if(is.null(priors)) {   # use the old prior specification
     dataForJAGS <- list(
       muM = mean(y) ,
       muP = 0.000001 * 1/sd(y)^2 ,
       sigmaLow = sd(y) / 1000 ,
-      sigmaHigh = sd(y) * 1000 
+      sigmaHigh = sd(y) * 1000
     )
   } else {    # use gamma priors
     priors0 <- list(  # default priors
@@ -79,7 +93,7 @@ function( y1, y2=NULL, priors=NULL,
     dataForJAGS$ShNu <- nuShRa$shape
     dataForJAGS$RaNu <- nuShRa$rate
   }
-  
+
   # THE MODEL.
   modelFile <- file.path(tempdir(), "BESTmodel.txt")
   if(is.null(priors)) {  # use old broad priors
@@ -111,7 +125,7 @@ function( y1, y2=NULL, priors=NULL,
         nuMinusOne ~ dexp(1/29)
       }
       " # close quote for modelString
-    }   
+    }
   } else {    # use gamma priors
     if(is.null(y2)) {
       modelString = "
@@ -141,11 +155,11 @@ function( y1, y2=NULL, priors=NULL,
         nuMinusOne ~ dgamma( ShNu , RaNu ) # prior for nu
       }
       " # close quote for modelString
-    }   
+    }
   }
   # Write out modelString to a text file
   writeLines( modelString , con=modelFile )
-  
+
   #------------------------------------------------------------------------------
   # THE DATA.
   # dataForJAGS already has the priors, add the data:
@@ -164,58 +178,34 @@ function( y1, y2=NULL, priors=NULL,
     mu = c( mean(y1) , mean(y2) )
     sigma = c( sd(y1) , sd(y2) )
   }
-  # Regarding initial values in next line: (1) sigma will tend to be too big if 
+  # Regarding initial values in next line: (1) sigma will tend to be too big if
   # the data have outliers, and (2) nu starts at 5 as a moderate value. These
   # initial values keep the burn-in period moderate.
-  if(is.null(rnd.seed)) {
-    initsList = list( mu = mu , sigma = sigma , nuMinusOne = 4 )
-  } else {
-    initsList0 <- list(mu=mu, sigma=sigma, nuMinusOne=4, .RNG.seed=rnd.seed)
-    initsList <- list(
-                  c(initsList0, .RNG.name="base::Wichmann-Hill"),
-                  c(initsList0, .RNG.name="base::Marsaglia-Multicarry"),
-                  c(initsList0, .RNG.name="base::Super-Duper") )
-  }
-  
+  initsList0 <- list(mu=mu, sigma=sigma, nuMinusOne=4, .RNG.seed=rnd.seed)
+  initsList <- list(
+                c(initsList0, .RNG.name="base::Wichmann-Hill"),
+                c(initsList0, .RNG.name="base::Marsaglia-Multicarry"),
+                c(initsList0, .RNG.name="base::Super-Duper") )
   #------------------------------------------------------------------------------
   # RUN THE CHAINS
-
-  parameters = c( "mu" , "sigma" , "nu" )     # The parameters to be monitored
-  adaptSteps = 500               # Number of steps to "tune" the samplers
-  nChains = 3   # Do not change this without also changing inits.
-  
-  nIter = ceiling( ( numSavedSteps * thinSteps ) / nChains )
-  # Create, initialize, and adapt the model:
-  if(verbose) {
-    cat( "Setting up the JAGS model...\n" )
-    flush.console()
-    jagsModel <- jags.model(modelFile, data=dataForJAGS, inits=initsList, 
-                  n.chains=nChains , n.adapt=adaptSteps, quiet=!verbose)
-  } else {
-    # This is a work-around to suppress the progress bar:
-    capture.output(
-      jagsModel <- jags.model(modelFile, data=dataForJAGS, inits=initsList, 
-                    n.chains=nChains, n.adapt=adaptSteps, quiet=!verbose),
-      file = file.path(tempdir(), "delete.me"))
-  }
-  # Burn-in:
-  if(verbose) {
-    cat( "Burning in the MCMC chain...\n" )
-    flush.console()
-  }
-  update( jagsModel , n.iter=burnInSteps,
-          progress.bar=ifelse(verbose, "text", "none"))
-  # The saved MCMC chain:
-  if(verbose) {
-    cat( "Sampling final MCMC chain...\n" )
-    flush.console()
-  }
-  codaSamples <- coda.samples( jagsModel , variable.names=parameters , 
-                        n.iter=nIter , thin=thinSteps,
-                        progress.bar=ifelse(verbose, "text", "none"))
+  codaSamples <- jags.basic(
+    data = dataForJAGS,
+    inits = initsList,
+    parameters.to.save = c( "mu" , "sigma" , "nu" ),     # The parameters to be monitored
+    model.file = modelFile,
+    n.chains = 3,    # Do not change this without also changing inits.
+    n.adapt = 500,
+    n.iter = ceiling( ( numSavedSteps * thinSteps) / 3  + burnInSteps ),
+    n.burnin = burnInSteps,
+    n.thin = thinSteps,
+    modules = NULL,
+    parallel = parallel,
+    DIC = FALSE,
+    seed = rnd.seed,
+    verbose = verbose)
   #------------------------------------------------------------------------------
   mcmcChain = as.matrix( codaSamples )
-  if(dim(mcmcChain)[2] == 5 && 
+  if(dim(mcmcChain)[2] == 5 &&
         all(colnames(mcmcChain) == c("mu[1]", "mu[2]", "nu", "sigma[1]", "sigma[2]")))
     colnames(mcmcChain) <- c("mu1", "mu2", "nu", "sigma1", "sigma2")
   mcmcDF <- as.data.frame(mcmcChain)
@@ -225,6 +215,6 @@ function( y1, y2=NULL, priors=NULL,
   attr(mcmcDF, "data") <- list(y1 = y1, y2 = y2)
   if(!is.null(priors))
     attr(mcmcDF, "priors") <- priors0
-  
+
   return( mcmcDF )
 }

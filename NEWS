@@ -2,7 +2,9 @@ TO DO
 
   * Fix bug in makeData!!!
   
-  * Run chains in parallel; maybe use jagsUI instead of rjags to facilitate this.
+CHANGES in v.0.2.5
+
+  * Run chains in parallel using jagsUI (>= 1.3.6) instead of rjags.
 
 CHANGES in v.0.2.4
 

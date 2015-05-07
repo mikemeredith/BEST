@@ -10,7 +10,7 @@ This function is the core of the BEST package. It calls JAGS and passes a descri
   
 BESTmcmc(y1, y2 = NULL, priors = NULL, 
   numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
-	verbose=TRUE, rnd.seed=NULL)
+	verbose=TRUE, rnd.seed=NULL, parallel=TRUE)
 }
 \arguments{
   \item{y1}{
@@ -35,7 +35,10 @@ number of steps to discard as burn-in at the beginning of the chain.
 if FALSE, output to the R Console is suppressed.
 }
   \item{rnd.seed}{
-a positive integer (or NULL): the seed for the random number generator, used to obtain reproducible samples if required.
+a positive integer (or NULL): the seed for the random number generator, used to obtain reproducible samples if required. Values generated in different versions of BEST may differ.
+}
+  \item{parallel}{
+if TRUE and > 3 cores are available, the MCMC chains are run in parallel.
 }
 }
 \details{
