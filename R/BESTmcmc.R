@@ -4,7 +4,7 @@
 BESTmcmc <-
 function( y1, y2=NULL, priors=NULL,
     numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000,
-    verbose=TRUE, rnd.seed=NULL, parallel=TRUE) {
+    verbose=TRUE, rnd.seed=NULL, parallel=NULL) {
   # This function generates an MCMC sample from the posterior distribution.
   # y1, y2 the data vectors; y2=NULL if only one group.
   # priors is a list specifying priors to use.
@@ -16,14 +16,15 @@ function( y1, y2=NULL, priors=NULL,
   #------------------------------------------------------------------------------
 
   # Parallel processing check
-  if(parallel)  {
-    nCores <- detectCores()
-    if(nCores < 4)  {
-      if(verbose)
-        warning("Not enough cores for parallel processing, running chains sequentially.")
-      parallel <- FALSE
-    }
+  nCores <- detectCores()
+  if(!is.null(parallel) && parallel && nCores < 4)  {
+    if(verbose)
+      warning("Not enough cores for parallel processing, running chains sequentially.")
+    parallel <- FALSE
   }
+  if(is.null(parallel))
+    parallel <- nCores > 3
+
   # Data checks
   if(!all(is.finite(c(y1, y2))))
     stop("The input data include NA or Inf.")

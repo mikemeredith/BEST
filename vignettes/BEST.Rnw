@@ -1,7 +1,7 @@
 
 \documentclass[a4paper]{article}
 
-%\VignetteIndexEntry{BEST User Manual}
+%\VignetteIndexEntry{Introduction to BEST}
 
 \title{Bayesian Estimation Supersedes the t-Test}
 \author{Mike Meredith and John Kruschke}
@@ -59,21 +59,12 @@ For a general discussion see chapters 11 and 12 of \citet{Kruschke2011book}.
 
 BEST uses the JAGS package \citep{Plummer2003} to produce samples from the posterior distribution of each parameter of interest. You will need to download JAGS from \url{http://sourceforge.net/projects/mcmc-jags/} and install it before running BEST.
 
-BEST also requires the packages \verb@rjags@ and \verb@coda@, which should normally be installed at the same time as package BEST if you use the \verb@install.packages@ function in \R{}.
+BEST also requires the packages \verb@jagsUI@ and \verb@coda@, which should normally be installed at the same time as package BEST if you use the \verb@install.packages@ function in \R{}.
 
-Once installed, we need to load the BEST package at the start of each \R{} session, which will also load rjags and coda and link to JAGS:
+Once installed, we need to load the BEST package at the start of each \R{} session, which will also load jagsUI and coda and link to JAGS:
 <<loadBEST>>=
 library(BEST)
 @
-\begin{verbatim}
-Loading required package: rjags
-Loading required package: coda
-Loading required package: lattice
-Linked to JAGS 3.3.0
-Loaded modules: basemod,bugs
-\end{verbatim}
-
-
 
 \section{An example with two groups}
 \label{sec:grps2}
@@ -91,28 +82,41 @@ y2 <- c(3.88, 3.55, 3.29, 2.59, 2.33, 3.59)
 \subsection{Running the model}
 \label{subsec:run2g}
 
-We run BESTmcmc and save the result in BESTout. This will take several minutes:
+We run BESTmcmc and save the result in BESTout. We do not use parallel processing here, but if your machine has at least 4 cores, parallel processing cuts the time by 50%.
 
 % reduce numSavedSteps = 1e+03 for trial runs.
 % hide results as rjags output does not format properly
 <<run2grps, results=hide>>= 
-BESTout <- BESTmcmc(y1, y2)
+BESTout <- BESTmcmc(y1, y2, parallel=FALSE)
 @
 
 \begin{verbatim}
-Setting up the JAGS model...
+Processing function input....... 
+
+Done. 
+ 
 Compiling model graph
    Resolving undeclared variables
    Allocating nodes
    Graph Size: 43
-Initializing model
-  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
-Burning in the MCMC chain...
-  |**************************************************| 100%
-Sampling final MCMC chain...
-  |**************************************************| 100%
-\end{verbatim}
 
+Initializing model
+
+Adaptive phase, 500 iterations x 3 chains 
+If no progress bar appears JAGS has decided not to adapt 
+ 
+  |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
+
+ Burn-in phase, 1000 iterations x 3 chains 
+ 
+  |**************************************************| 100%
+
+Sampling from joint posterior, 33334 iterations x 3 chains 
+ 
+  |**************************************************| 100%
+
+MCMC took 0.155 minutes.
+\end{verbatim}
 
 
 
@@ -274,10 +278,13 @@ Applying BEST to a single sample, or for differences in paired observations, wor
 % hide results as rjags output does not format properly
 <<run1grp, results=hide>>= 
 y0 <- c(1.89, 1.78, 1.30, 1.74, 1.33, 0.89)
-BESTout1g <- BESTmcmc(y0)
+BESTout1g <- BESTmcmc(y0, parallel=FALSE)
 @
 \begin{verbatim}
-Setting up the JAGS model...
+Processing function input....... 
+
+Done.
+
 Compiling model graph
    Resolving undeclared variables
    Allocating nodes
@@ -285,11 +292,20 @@ Compiling model graph
 
 Initializing model
 
+Adaptive phase, 500 iterations x 3 chains 
+If no progress bar appears JAGS has decided not to adapt 
+ 
   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
-Burning in the MCMC chain...
-  |**************************************************| 100%
-Sampling final MCMC chain...
-  |**************************************************| 100%
+  
+ Burn-in phase, 1000 iterations x 3 chains 
+ 
+   |**************************************************| 100%
+   
+ Sampling from joint posterior, 33334 iterations x 3 chains 
+ 
+   |**************************************************| 100%
+   
+MCMC took 0.081 minutes.
 \end{verbatim}
 
 This time we have a single mean and standard deviation. The default plot (Figure~\ref{fig:mean1g}) shows the posterior distribution of the mean. 
@@ -334,6 +350,8 @@ plotPost(variance, xlim=c(0, 3))
 
 \section{What next?}
 \label{sec:whatNext}
+
+The default is to use uninformative priors as described in Kruschke (2013), but \code{BESTmcmc} allows you to specify your own informative priors. See the help page.
 
 The package includes functions to estimate the power of experimental designs: see the help pages for \code{BESTpower} and \code{makeData} for details on implementation and \citet{Kruschke2013BEST} for background.
 
