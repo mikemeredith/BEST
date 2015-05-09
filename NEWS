@@ -1,7 +1,11 @@
-TO DO
+CHANGES in v.0.2.6
 
-  * Fix bug in makeData!!!
-  
+  * BESTmcmc gains a 'showPriors' argument.
+
+  * Removed constraints on small samples in BESTmcmc (n=1 is ok if priors are specified).
+
+  * makeData throws an error if the number of outliers is 1.
+
 CHANGES in v.0.2.5
 
   * Run chains in parallel using jagsUI (>= 1.3.6) instead of rjags.

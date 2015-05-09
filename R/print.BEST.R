@@ -14,6 +14,7 @@ print.BEST <- function(x, digits=4, ...) {
 
   Rhat <- attr(x, "Rhat")
   n.eff <- attr(x, "n.eff")
+  showPrior <- attr(x, "showPrior")
 
   toPrint <- cbind(
     mean = colMeans(x),
@@ -26,7 +27,11 @@ print.BEST <- function(x, digits=4, ...) {
   if(!is.null(n.eff))
     toPrint <- cbind(toPrint, n.eff = round(n.eff))
 
-  cat("MCMC fit results for BEST analysis:\n")
+  if(!is.null(showPrior) && showPrior) {
+    cat("MCMC fit results for BEST: PRIORS ONLY!\n")
+  } else {
+    cat("MCMC fit results for BEST analysis:\n")
+  }
   cat(nrow(x), "simulations saved.\n")
   print(toPrint, digits = digits)
   cat("\n'HDIlo' and 'HDIup' are the limits of a 95% HDI credible interval.\n")

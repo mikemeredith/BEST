@@ -14,16 +14,20 @@ function(y, mu, sigma, nu, xVec, maxY) {
     lines(xVec, dt( (xVec-mu[i])/sigma[i], df=nu[i] )/sigma[i], col="skyblue")
   }
 
-  histBinWd <- median(sigma)/2
-  histCenter <- mean(mu)
-  histBreaks <- sort( c( seq( histCenter-histBinWd/2 , min(xVec)-histBinWd,#/2 ,
+  if(!is.null(y)) {
+    histBinWd <- median(sigma)/2
+    histCenter <- mean(mu)
+    histBreaks <- try(sort( c( seq( histCenter-histBinWd/2 , min(xVec)-histBinWd,#/2 ,
                              -histBinWd ),
                         seq( histCenter+histBinWd/2 , max(xVec)+histBinWd,#/2 ,
-                             histBinWd ) ) )
-  if(!is.null(y)) {
-    histInfo <- hist( y, plot=FALSE , breaks=histBreaks )
-    PlotMat <- cbind(histInfo$mids, histInfo$density)
-    PlotMat[histInfo$density == 0] <- NA
-    points( PlotMat, type="h" , lwd=3 , col="red" )
+                             histBinWd ) ) ), silent=TRUE)
+    if(inherits(histBreaks, "try-error")) {
+      text(min(xVec), maxY, "Cannot plot data.", pos=4, col='red')
+    } else {
+      histInfo <- hist( y, plot=FALSE , breaks=histBreaks )
+      PlotMat <- cbind(histInfo$mids, histInfo$density)
+      PlotMat[histInfo$density == 0] <- NA
+      points( PlotMat, type="h" , lwd=3 , col="red" )
+    }
   }
 }

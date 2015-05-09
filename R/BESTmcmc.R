@@ -2,7 +2,7 @@
 ### Parallel processing version
 
 BESTmcmc <-
-function( y1, y2=NULL, priors=NULL,
+function( y1, y2=NULL, priors=NULL, showPriors=FALSE,
     numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000,
     verbose=TRUE, rnd.seed=NULL, parallel=NULL) {
   # This function generates an MCMC sample from the posterior distribution.
@@ -15,6 +15,9 @@ function( y1, y2=NULL, priors=NULL,
   #   with attributes Rhat, n.eff, a list with the original data, and the priors.
   #------------------------------------------------------------------------------
 
+  if(showPriors && verbose)
+    cat("Warning: The output shows the prior distributions,
+      NOT the posterior distributions for your data.\n")
   # Parallel processing check
   nCores <- detectCores()
   if(!is.null(parallel) && parallel && nCores < 4)  {
@@ -26,15 +29,17 @@ function( y1, y2=NULL, priors=NULL,
     parallel <- nCores > 3
 
   # Data checks
-  if(!all(is.finite(c(y1, y2))))
+  y <- c( y1 , y2 ) # combine data into one vector
+  if(!all(is.finite(y)))
     stop("The input data include NA or Inf.")
-  if(is.null(y2)) {
-    if(length(y1) < 3)
-      stop("Minimum sample size is 3.")
-  } else {
-    if(length(y1) < 3 || length(y2) < 3)
-      stop("Minimum size for both samples is 3.")
-  }
+  if(length(unique(y)) < 2 &&      # sd(y) will be 0 or NA; ok if priors specified.
+        (is.null(priors) ||
+          is.null(priors$muSD) || 
+          is.null(priors$sigmaMode) || 
+          is.null(priors$sigmaSD)))
+  stop("If priors are not specified, data must include at least 2 (non-equal) values.")
+  
+  # Prior checks:
   if(!is.null(priors))  {
     if(!is.list(priors)) {
       if(is.numeric(priors)) {
@@ -57,8 +62,6 @@ function( y1, y2=NULL, priors=NULL,
     rnd.seed <- floor(runif(1,1,10000))
 
   # THE PRIORS
-  y <- c( y1 , y2 ) # combine data into one vector
-
   if(is.null(priors)) {   # use the old prior specification
     dataForJAGS <- list(
       muM = mean(y) ,
@@ -164,7 +167,8 @@ function( y1, y2=NULL, priors=NULL,
   #------------------------------------------------------------------------------
   # THE DATA.
   # dataForJAGS already has the priors, add the data:
-  dataForJAGS$y <- y
+  if(!showPriors)
+    dataForJAGS$y <- y
   dataForJAGS$Ntotal <- length(y)
   if(!is.null(y2)) # create group membership code
     dataForJAGS$x <- c( rep(1,length(y1)) , rep(2,length(y2)) )
@@ -211,9 +215,11 @@ function( y1, y2=NULL, priors=NULL,
     colnames(mcmcChain) <- c("mu1", "mu2", "nu", "sigma1", "sigma2")
   mcmcDF <- as.data.frame(mcmcChain)
   class(mcmcDF) <- c("BEST", class(mcmcDF))
+  attr(mcmcDF, "call") <- match.call()
   attr(mcmcDF, "Rhat") <- gelman.diag(codaSamples)$psrf[, 1]
   attr(mcmcDF, "n.eff") <- effectiveSize(codaSamples)
   attr(mcmcDF, "data") <- list(y1 = y1, y2 = y2)
+  attr(mcmcDF, "showPriors") <- showPriors
   if(!is.null(priors))
     attr(mcmcDF, "priors") <- priors0
 

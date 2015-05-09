@@ -53,7 +53,9 @@ function(BESTobj, nCurvesToPlot = 30) {
   maxY <- max( dt(0, df=max(nu)) / min(sigma1, sigma2) )
 
   # Plot data and smattering of posterior predictive curves:
-  plotDataPPC(y=y1, mu=mu1, sigma=sigma1, nu=nu, xVec=xVec, maxY=maxY)
+  isErr <- try(plotDataPPC(y=y1, mu=mu1, sigma=sigma1, nu=nu, xVec=xVec, maxY=maxY), silent=TRUE)
+  if(inherits(isErr, "try-error"))
+    text(min(xVec), maxY, "Cannot plot data here.", pos=4, col='red')
   if(oneGrp) {
     title(main="Data w. Post. Pred.")
     if(!is.null(y1))
@@ -64,8 +66,10 @@ function(BESTobj, nCurvesToPlot = 30) {
       text( max(xVec) , maxY , bquote(N[1]==.(length(y1))) , adj=c(1.1,1.1) )
   }
   if(!oneGrp) {
-    plotDataPPC(y=y2, mu=mu2, sigma=sigma2, nu=nu, xVec=xVec, maxY=maxY)
-    title(main="Data Group 2 w. Post. Pred.")
+    isErr <- try(plotDataPPC(y=y2, mu=mu2, sigma=sigma2, nu=nu, xVec=xVec, maxY=maxY), silent=TRUE)
+    if(inherits(isErr, "try-error"))
+      text(min(xVec), maxY, "Cannot plot data here.", pos=4, col='red')
+   title(main="Data Group 2 w. Post. Pred.")
     if(!is.null(y2))
       text( max(xVec) , maxY , bquote(N[2]==.(length(y2))) , adj=c(1.1,1.1) )
   }

@@ -8,25 +8,28 @@ This function is the core of the BEST package. It calls JAGS and passes a descri
 }
 \usage{
   
-BESTmcmc(y1, y2 = NULL, priors = NULL, 
+BESTmcmc(y1, y2 = NULL, priors = NULL, showPriors = FALSE,
   numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
 	verbose=TRUE, rnd.seed=NULL, parallel=NULL)
 }
 \arguments{
   \item{y1}{
-a numeric vector of at least 3 data values.
+a numeric vector of data values.
 }
   \item{y2}{
-a vector of at least 3 values for a second group, or NULL if there is only one group of observations.
+a vector of values for a second group, or NULL if there is only one group of observations.
 }
  \item{priors}{
 an optional list of values controlling the priors, see Details.
+}
+ \item{showPriors}{
+if TRUE, \code{BESTmcmc} returns MCMC chains representing the prior distributions, \emph{not} the posterior distributions for your data set.
 }
   \item{numSavedSteps}{
 the number of MCMC observations to be returned.
 }
   \item{thinSteps}{
-thinning rate. If set to n > 1, one value in n steps of the MCMC chain is returned. This is useful if autocorrelation is high.
+thinning rate. If set to n > 1, n steps of the MCMC chain are calculated for each one returned. This is useful if autocorrelation is high.
 }
   \item{burnInSteps}{
 number of steps to discard as burn-in at the beginning of the chain.
@@ -38,7 +41,7 @@ if FALSE, output to the R Console is suppressed.
 a positive integer (or NULL): the seed for the random number generator, used to obtain reproducible samples if required. Values generated in different versions of BEST may differ.
 }
   \item{parallel}{
-if NULL or TRUE and > 3 cores are available, the MCMC chains are run in parallel (if TRUE and < 4 cores are available, a warning is given).
+if NULL or TRUE and > 3 cores are available, the MCMC chains are run in parallel. (If TRUE and < 4 cores are available, a warning is given.)
 }
 }
 \details{
@@ -74,10 +77,12 @@ while for a single sample, the columns are \code{mu, sigma, nu}.
 
 The output has the following attributes:
 
-  \item{Rhat}{the 'potential scale reduction factor'}
-  \item{n.eff}{sample size adjusted for autocorrelation}
-  \item{data}{a list with elements y1 and y2 containing the original data; y2 may be NULL}
-  \item{priors}{a list with the priors used, if the \code{priors} argument is not NULL}
+  \item{call}{the call to the function.}
+  \item{Rhat}{the 'potential scale reduction factor'.}
+  \item{n.eff}{sample size adjusted for autocorrelation.}
+  \item{data}{a list with elements y1 and y2 containing the original data; y2 may be NULL.}
+  \item{priors}{a list with the priors used, if the \code{priors} argument is not NULL.}
+  \item{showPriors}{logical, the value of the \code{showPriors} argument.}
 
 The package provides \code{print}, \code{plot} and \code{summary} methods for \code{BEST} objects.
 }
@@ -88,11 +93,6 @@ Plummer, Martyn (2003). JAGS: A Program for Analysis of Bayesian Graphical Model
 }
 \author{
 Original code by John K. Kruschke, modified by Mike Meredith.
-}
-\note{
-This differs from the original \code{BESTmcmc} function in Kruschke's code:\cr
-1. Both 1-group and 2-group comparisons are dealt with by the same function.\cr
-2. The output inherits from \code{data.frame} rather then being a matrix. 
 }
 
 \seealso{
