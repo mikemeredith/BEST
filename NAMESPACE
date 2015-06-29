@@ -2,12 +2,14 @@
 
 # importFrom(rjags, jags.model, coda.samples)
 importFrom(jagsUI, jags.basic)
-importFrom(stats, update)
+#importFrom(stats, update)
 importFrom(parallel, detectCores)
 importFrom(coda, effectiveSize, gelman.diag)
 
-export(BESTmcmc, # BESTmcmcP,
-  plotPost, plotAll, plotPostPred, plotAreaInROPE,
+import(stats, graphics, utils, grDevices)
+
+export(BESTmcmc,
+  plotPost, plotAll, plotPostPred, plotAreaInROPE, postPriorOverlap,
   BESTpower, makeData,
   hdi)
 

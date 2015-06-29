@@ -1,8 +1,8 @@
 
-### Parallel processing version
+### Parallel processing version using jagsUI::jags.basic
 
 BESTmcmc <-
-function( y1, y2=NULL, priors=NULL, showPriors=FALSE,
+function( y1, y2=NULL, priors=NULL, doPriorsOnly=FALSE,
     numSavedSteps=1e5, thinSteps=1, burnInSteps = 1000,
     verbose=TRUE, rnd.seed=NULL, parallel=NULL) {
   # This function generates an MCMC sample from the posterior distribution.
@@ -15,7 +15,7 @@ function( y1, y2=NULL, priors=NULL, showPriors=FALSE,
   #   with attributes Rhat, n.eff, a list with the original data, and the priors.
   #------------------------------------------------------------------------------
 
-  if(showPriors && verbose)
+  if(doPriorsOnly && verbose)
     cat("Warning: The output shows the prior distributions,
       NOT the posterior distributions for your data.\n")
   # Parallel processing check
@@ -167,7 +167,7 @@ function( y1, y2=NULL, priors=NULL, showPriors=FALSE,
   #------------------------------------------------------------------------------
   # THE DATA.
   # dataForJAGS already has the priors, add the data:
-  if(!showPriors)
+  if(!doPriorsOnly)
     dataForJAGS$y <- y
   dataForJAGS$Ntotal <- length(y)
   if(!is.null(y2)) # create group membership code
@@ -219,7 +219,7 @@ function( y1, y2=NULL, priors=NULL, showPriors=FALSE,
   attr(mcmcDF, "Rhat") <- gelman.diag(codaSamples)$psrf[, 1]
   attr(mcmcDF, "n.eff") <- effectiveSize(codaSamples)
   attr(mcmcDF, "data") <- list(y1 = y1, y2 = y2)
-  attr(mcmcDF, "showPriors") <- showPriors
+  attr(mcmcDF, "doPriorsOnly") <- doPriorsOnly
   if(!is.null(priors))
     attr(mcmcDF, "priors") <- priors0
 

@@ -14,7 +14,7 @@ print.BEST <- function(x, digits=4, ...) {
 
   Rhat <- attr(x, "Rhat")
   n.eff <- attr(x, "n.eff")
-  showPrior <- attr(x, "showPrior")
+  doPriorsOnly <- attr(x, "doPriorsOnly")
 
   toPrint <- cbind(
     mean = colMeans(x),
@@ -27,7 +27,7 @@ print.BEST <- function(x, digits=4, ...) {
   if(!is.null(n.eff))
     toPrint <- cbind(toPrint, n.eff = round(n.eff))
 
-  if(!is.null(showPrior) && showPrior) {
+  if(!is.null(doPriorsOnly) && doPriorsOnly) {
     cat("MCMC fit results for BEST: PRIORS ONLY!\n")
   } else {
     cat("MCMC fit results for BEST analysis:\n")

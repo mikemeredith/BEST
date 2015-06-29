@@ -8,7 +8,7 @@ This function is the core of the BEST package. It calls JAGS and passes a descri
 }
 \usage{
   
-BESTmcmc(y1, y2 = NULL, priors = NULL, showPriors = FALSE,
+BESTmcmc(y1, y2 = NULL, priors = NULL, doPriorsOnly = FALSE,
   numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
 	verbose=TRUE, rnd.seed=NULL, parallel=NULL)
 }
@@ -22,7 +22,7 @@ a vector of values for a second group, or NULL if there is only one group of obs
  \item{priors}{
 an optional list of values controlling the priors, see Details.
 }
- \item{showPriors}{
+ \item{doPriorsOnly}{
 if TRUE, \code{BESTmcmc} returns MCMC chains representing the prior distributions, \emph{not} the posterior distributions for your data set.
 }
   \item{numSavedSteps}{
@@ -82,7 +82,7 @@ The output has the following attributes:
   \item{n.eff}{sample size adjusted for autocorrelation.}
   \item{data}{a list with elements y1 and y2 containing the original data; y2 may be NULL.}
   \item{priors}{a list with the priors used, if the \code{priors} argument is not NULL.}
-  \item{showPriors}{logical, the value of the \code{showPriors} argument.}
+  \item{doPriorsOnly}{logical, the value of the \code{doPriorsOnly} argument.}
 
 The package provides \code{print}, \code{plot} and \code{summary} methods for \code{BEST} objects.
 }
