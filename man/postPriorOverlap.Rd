@@ -4,7 +4,7 @@
 Overlap between posterior and prior probability distributions.
 }
 \description{
-Calculates and displays the overlap between a posterior distribution (as a vector of samples, typically from an MCMC process) and a prior distribution (as a vector of samples or as a function). Unidentifiable parameters will have high overlap: Gimenez et al (2009) suggest that overlap greater than 35% indicates weak identifiability.
+Calculates and displays the overlap between a posterior distribution (as a vector of samples, typically from an MCMC process) and a prior distribution (as a vector of samples or as a function). Unidentifiable parameters will have high overlap: Gimenez et al (2009) suggest that overlap greater than 35\% indicates weak identifiability.
 }
 \usage{
 postPriorOverlap(paramSampleVec, prior, ..., yaxt="n", ylab="",

@@ -75,8 +75,8 @@ function( y1, y2=NULL, priors=NULL, doPriorsOnly=FALSE,
       muSD = sd(y)*5 ,
       sigmaMode = sd(y),
       sigmaSD = sd(y)*5,
-      nuMean = 29,
-      nuSD = 29 )
+      nuMean = 30,
+      nuSD = 30 )
     priors0 <- modifyList(priors0, priors)  # user's priors take prior-ity (duh!!)
     # Convert to Shape/Rate
     sigmaShRa <- gammaShRaFromModeSD(mode=priors0$sigmaMode, sd=priors0$sigmaSD)
@@ -140,8 +140,7 @@ function( y1, y2=NULL, priors=NULL, doPriorsOnly=FALSE,
         mu ~ dnorm( muM[1] , muP[1] )
         tau <- 1/pow( sigma , 2 )
          sigma ~ dgamma( Sh[1] , Ra[1] )
-        nu <- nuMinusOne+1
-        nuMinusOne ~ dgamma( ShNu , RaNu ) # prior for nu
+        nu ~ dgamma( ShNu , RaNu ) # prior for nu
       }
       " # close quote for modelString
     } else {
@@ -155,8 +154,7 @@ function( y1, y2=NULL, priors=NULL, doPriorsOnly=FALSE,
           tau[j] <- 1/pow( sigma[j] , 2 )
           sigma[j] ~ dgamma( Sh[j] , Ra[j] )
         }
-        nu <- nuMinusOne+1
-        nuMinusOne ~ dgamma( ShNu , RaNu ) # prior for nu
+        nu ~ dgamma( ShNu , RaNu ) # prior for nu
       }
       " # close quote for modelString
     }

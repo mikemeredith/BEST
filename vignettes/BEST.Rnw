@@ -50,7 +50,7 @@ To accommodate outliers we describe the data with a distribution that has fatter
 
 The data (\emph{y}) are assumed to be independent and identically distributed (i.i.d.) draws from a \emph{t} distribution with different mean ($\mu$) and standard deviation ($\sigma$) for each population, and with a common normality parameter ($\nu$), as indicated in the lower portion of Figure~\ref{fig:model}.
 
-The priors used are minimally informative: normal priors with large standard deviation for ($\mu$), broad uniform priors for ($\sigma$), and a shifted-exponential prior for ($\nu$), as shown in the upper part of Figure~\ref{fig:model}. Full details of the priors are given in \citet{Kruschke2013BEST}.
+The default priors are minimally informative: normal priors with large standard deviation for ($\mu$), broad uniform priors for ($\sigma$), and a shifted-exponential prior for ($\nu$), as shown in the upper part of Figure~\ref{fig:model}. Full details of the default priors are given in \citet{Kruschke2013BEST}. See the help page for \verb@BESTmcmc@ for instructions on setting informative priors.
 
 For a general discussion see chapters 11 and 12 of \citet{Kruschke2011book}.
 

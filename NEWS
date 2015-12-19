@@ -1,3 +1,7 @@
+CHANGES in v.0.4.0
+
+  * BESTmcmc0 now allows normality parameter, nu < 1 (See Kruschke's blog post 2 Dec 2015).
+  
 CHANGES in v.0.3.0
 
   * BESTmcmc 'showPriors' argument changed to 'doPriorsOnly'.

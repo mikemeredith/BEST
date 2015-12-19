@@ -16,8 +16,9 @@ test_that("BESTpower with 2 groups gives same output",  {
     is_equivalent_to(c(118.12939, 115.72711, 103.30548, 67.0728, 112.8777, 101.01111, 99.26143, 76.17697, 93.6024, 109.33356, 125.8485, 100.192, 108.80216, 101.05191, 77.82177, 94.71111, 95.07459, 59.30063, 130.72614, 109.97323)))
   proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=9,
       burnInSteps = 1, verbose=FALSE, rnd.seed=2)  
-  expect_that(round(colMeans(proMCMC), 5), 
-    is_equivalent_to(c(109.0943, 97.19042, 32.13277, 19.77221, 16.81882)))
+  if(packageVersion("rjags") >= "4.0.0")
+    expect_that(round(colMeans(proMCMC), 5), 
+      is_equivalent_to(c(106.39054,  99.44194,  59.25097,  21.89881,  17.49193)))
   pow2 <- BESTpower(proMCMC, N1=10, N2=10,
                ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
                maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
@@ -32,14 +33,16 @@ test_that("BESTpower with 2 groups gives same output",  {
       "    sd:  HDI in ROPE", "    sd: HDI width ok",
       "effect:   HDI > ROPE", "effect:   HDI < ROPE",
       "effect:  HDI in ROPE", "effect: HDI width ok")))
-  expect_that(round(pow2[, 1], 5), 
-    is_equivalent_to(c(0.18182, 0.09091, 0.09091, 0.09091, 0.09091,
-      0.09091, 0.09091, 0.09091, 0.09091, 0.09091, 0.09091, 0.09091)))
-  expect_that(round(pow2[, 2], 5), 
-    is_equivalent_to(c(0.00729, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)))
-  expect_that(round(pow2[, 3], 5), 
-    is_equivalent_to(c(0.39781, 0.25887, 0.25887, 0.25887, 0.25887,
-      0.25887, 0.25887, 0.25887, 0.25887, 0.25887, 0.25887, 0.25887)))
+  if(packageVersion("rjags") >= "4.0.0") {
+    expect_that(round(pow2[, 1], 5), 
+      is_equivalent_to(c(0.09091, 0.09091, 0.09091, 0.09091, 0.09091,
+        0.09091, 0.09091, 0.09091, 0.09091, 0.09091, 0.09091, 0.09091)))
+    expect_that(round(pow2[, 2], 5), 
+      is_equivalent_to(c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)))
+    expect_that(round(pow2[, 3], 5), 
+      is_equivalent_to(c(0.25887, 0.25887, 0.25887, 0.25887, 0.25887,
+        0.25887, 0.25887, 0.25887, 0.25887, 0.25887, 0.25887, 0.25887)))
+  }
 })
 
 test_that("BESTpower with 1 group gives same output",  {
@@ -53,8 +56,9 @@ test_that("BESTpower with 1 group gives same output",  {
   expect_null(proData$y2)
   proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=9,
       burnInSteps = 1, verbose=FALSE, rnd.seed=2)  
-  expect_that(round(colMeans(proMCMC), 5), 
-    is_equivalent_to(c(107.86030,  32.26903,  18.71281)))
+  if(packageVersion("rjags") >= "4.0.0")
+    expect_that(round(colMeans(proMCMC), 5), 
+      is_equivalent_to(c(109.53919,  27.79089,  21.23356)))
   pow1 <- BESTpower(proMCMC, N1=10, N2=10,
                ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
                maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,

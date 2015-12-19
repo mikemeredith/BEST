@@ -50,11 +50,11 @@ The function generates vectors of random draws from the posterior distributions 
 BESTmcmc allows the user to specify priors for all parameters by including elements in the \code{priors} list:\cr
 \eqn{\mu} : population means have separate normal priors, with mean \code{muM} and standard deviation \code{muSD};\cr
 \eqn{\sigma} : population standard deviations have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD};\cr
-\eqn{\nu} : the normality parameter must be >= 1, so a gamma prior is used for \code{nu - 1}, with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}.
+\eqn{\nu} : the normality parameter has a gamma prior with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}. (Versions before 0.4.0 constrained nu to be >1.)
 
-If there are 2 groups of observations, \code{muM, muSD, sigmaMode, sigmaSD} may be vectors of length 2 or scalar, in which case the same value is used for each population. The default priors correspond to \code{list(muM = mean(y), muSD = sd(y)*5, sigmaMode = sd(y), sigmaSD = sd(y)*5, nuMean = 29, nuSD = 29)}, where \code{y = c(y1, y2)}.
+If there are 2 groups of observations, \code{muM, muSD, sigmaMode, sigmaSD} may be vectors of length 2 or scalar, in which case the same value is used for each population. The default priors correspond to \code{list(muM = mean(y), muSD = sd(y)*5, sigmaMode = sd(y), sigmaSD = sd(y)*5, nuMean = 30, nuSD = 30)}, where \code{y = c(y1, y2)}.
 
-If \code{priors = NULL}, vague priors as described by Kruschke (2013) are used for all parameters.
+If \code{priors = NULL}, broad priors as described by Kruschke (2013) are used for all parameters.
 
 
 The model is shown in the diagram below.
@@ -71,7 +71,7 @@ An object of class \code{BEST} inheriting from \code{data.frame}. If two samples
 
   \item{mu1, mu2}{simulated observations of means for each population}
   \item{sigma1, sigma2}{simulated observations of standard deviations for each population}
-  \item{nu}{simulated observations of normality}
+  \item{nu}{simulated observations of normality parameter}
 
 while for a single sample, the columns are \code{mu, sigma, nu}.
 
