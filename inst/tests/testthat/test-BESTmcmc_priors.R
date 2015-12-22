@@ -17,17 +17,17 @@ test_that("BESTmcmc with 2 groups and default gamma priors gives same output",  
     equals(c("mu1", "mu2", "nu", "sigma1", "sigma2")))
   if(packageVersion("rjags") >= "4.0.0")  {
     expect_that(round(Bout2$mu1, 5),
-      is_equivalent_to(c(4.11127, 4.97377, 4.53678, 4.64412, 4.16459, 4.66606, 5.11464, 4.74769, 5.06653)))
+      is_equivalent_to(c(4.19866, 4.10257, 4.02362, 4.61437, 4.44746, 4.35208, 5.19768, 5.24549, 4.85071)))
     expect_that(round(Bout2$mu2, 5),
-      is_equivalent_to(c(3.34576, 3.55201, 3.44810, 2.70567, 3.23232, 3.91453, 3.04237, 3.09932, 3.22794)))
+      is_equivalent_to(c(2.87582, 3.26095, 3.27019, 3.38234, 3.31267, 3.25178, 3.44527, 3.42282, 3.29180)))
     expect_that(round(Bout2$nu, 5),
-      is_equivalent_to(c(6.46625, 13.79986, 49.79937, 16.43455,  5.51257, 10.91864, 50.00604, 50.03469, 58.98661)))
+      is_equivalent_to(c(4.87683,  6.37871,  4.40384, 21.94421, 13.35078,  7.70271, 31.38644,  5.16176, 26.68149)))
     expect_that(round(Bout2$sigma1, 5),
-      is_equivalent_to(c(0.58609, 0.74189, 0.72347, 1.12884, 0.57072, 1.41760, 1.72324, 1.66759, 1.68814)))
+      is_equivalent_to(c(0.57318, 0.90556, 0.96520, 1.03873, 1.01859, 1.12183, 0.81686, 0.85206, 0.86874)))
     expect_that(round(Bout2$sigma2, 5),
-      is_equivalent_to(c(0.58300, 0.69593, 1.31109, 1.05780, 0.87981, 0.51744, 0.82084, 0.76877, 0.84062)))
+      is_equivalent_to(c(0.74529, 0.80340, 0.87125, 1.02920, 0.97957, 1.07980, 0.53805, 0.54332, 0.63603)))
     expect_that(round(attr(Bout2, "Rhat"), 5),
-      is_equivalent_to(c(1.42482,  1.11576,  2.37290,  3.06462,  0.93168)))
+      is_equivalent_to(c(4.88533,  1.58644,  1.52104,  1.73854,  6.08784)))
     expect_that(attr(Bout2, "n.eff"),
       is_equivalent_to(c(9,  9,  9,  9,  9)))
   }
@@ -50,14 +50,14 @@ test_that("BESTpower retro with 2 groups gives same output",  {
       "effect:  HDI in ROPE", "effect: HDI width ok")))
   if(packageVersion("rjags") >= "4.0.0")  {
     expect_that(round(pow2[, 1], 5),
-      is_equivalent_to(c(0.18182, 0.09091, 0.09091, 0.18182, 0.09091,
-        0.09091, 0.36364, 0.18182, 0.09091, 0.09091, 0.09091, 0.09091)))
+      is_equivalent_to(c(0.27273, 0.09091, 0.09091, 0.18182, 0.09091,
+        0.09091, 0.36364, 0.09091, 0.09091, 0.09091, 0.09091, 0.09091)))
     expect_that(round(pow2[, 2], 5),
-      is_equivalent_to(c(0.00729, 0, 0, 0.00729, 0, 0, 0.10678, 0.00729,
+      is_equivalent_to(c(0.04645, 0, 0, 0.00729, 0, 0, 0.10678, 0,
         0, 0, 0, 0)))
     expect_that(round(pow2[, 3], 5),
-      is_equivalent_to(c(0.39781, 0.25887, 0.25887, 0.39781, 0.25887,
-        0.25887, 0.63320, 0.39781, 0.25887, 0.25887, 0.25887, 0.25887)))
+      is_equivalent_to(c(0.52243, 0.25887, 0.25887, 0.39781, 0.25887,
+        0.25887, 0.63320, 0.25887, 0.25887, 0.25887, 0.25887, 0.25887)))
   }
 })
 
@@ -107,13 +107,13 @@ test_that("BESTmcmc with 1 group and default gamma priors gives same output",  {
     equals(c("mu", "nu", "sigma")))
 if(packageVersion("rjags") >= "4.0.0")  {
     expect_that(round(Bout1$mu, 5),
-      is_equivalent_to(c(1.12589, 1.20533, 1.53570, 1.67914, 1.08888, 1.40770, 1.61692, 1.50730, 1.39810)))
+      is_equivalent_to(c(1.49340, 1.26033, 1.12962, 1.60341, 1.56842, 1.55486, 1.52775, 1.44587, 1.53902)))
     expect_that(round(Bout1$nu, 5),
-      is_equivalent_to(c(29.38918, 101.16472, 104.84091,  16.35676,  11.45539,  23.19196,  16.01026, 10.84993,   3.19009)))
+      is_equivalent_to(c(89.67753, 58.25130, 31.26162,  9.33254, 21.96076, 17.65331, 12.09874,  9.62349, 12.08013)))
     expect_that(round(Bout1$sigma, 5),
-      is_equivalent_to(c(0.89924, 0.84420, 0.34188, 0.42913, 0.49840, 0.48632, 0.31955, 0.38184, 0.34171)))
+      is_equivalent_to(c(0.82672, 0.75241, 0.55118, 0.37248, 0.49932, 0.51823, 0.43307, 0.57858, 0.50673)))
     expect_that(round(attr(Bout1, "Rhat"), 5),
-      is_equivalent_to(c(1.05862, 2.39954, 1.70463)))
+      is_equivalent_to(c(2.13151, 2.45076, 2.06028)))
     expect_that(attr(Bout1, "n.eff"),
       is_equivalent_to(c(9,  9,  9)))
   }
@@ -137,13 +137,13 @@ test_that("BESTpower retro with 1 group and default gamma priors gives same outp
 if(packageVersion("rjags") >= "4.0.0")  {
     expect_that(round(pow1[, 1], 5),
       is_equivalent_to(c(0.72727, 0.09091, 0.09091, 0.81818, 0.09091,
-        0.09091, 0.54545, 0.81818, 0.45455, 0.09091, 0.09091, 0.09091)))
+        0.09091, 0.45455, 0.81818, 0.36364, 0.09091, 0.09091, 0.09091)))
     expect_that(round(pow1[, 2], 5),
-      is_equivalent_to(c(0.47757, 0, 0, 0.60219, 0, 0, 0.26839, 0.60219,
-        0.18155, 0, 0, 0)))
+      is_equivalent_to(c(0.47757, 0, 0, 0.60219, 0, 0, 0.18155, 0.60219,
+        0.10678, 0, 0, 0)))
     expect_that(round(pow1[, 3], 5),
       is_equivalent_to(c(0.95355, 0.25887, 0.25887, 0.99271, 0.25887,
-        0.25887, 0.81845, 0.99271, 0.73161, 0.25887, 0.25887, 0.25887)))
+        0.25887, 0.73161, 0.99271, 0.63320, 0.25887, 0.25887, 0.25887)))
   }
 })
 

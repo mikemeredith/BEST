@@ -184,7 +184,13 @@ function( y1, y2=NULL, priors=NULL, doPriorsOnly=FALSE,
   # Regarding initial values in next line: (1) sigma will tend to be too big if
   # the data have outliers, and (2) nu starts at 5 as a moderate value. These
   # initial values keep the burn-in period moderate.
-  initsList0 <- list(mu=mu, sigma=sigma, nuMinusOne=4, .RNG.seed=rnd.seed)
+  
+  initsList0 <- list(mu=mu, sigma=sigma, .RNG.seed=rnd.seed)
+  if(is.null(priors)) {
+    initsList0$nuMinusOne <- 4
+  } else {
+    initsList0$nu <- 5
+  }
   initsList <- list(
                 c(initsList0, .RNG.name="base::Wichmann-Hill"),
                 c(initsList0, .RNG.name="base::Marsaglia-Multicarry"),

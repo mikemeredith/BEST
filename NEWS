@@ -1,6 +1,8 @@
 CHANGES in v.0.4.0
 
-  * BESTmcmc0 now allows normality parameter, nu < 1 (See Kruschke's blog post 2 Dec 2015).
+  * BESTmcmc0 now allows normality parameter, nu < 1 (See John Kruschke's blog post 2 Dec 2015).
+  
+  * Vignette updated to use new prior specification.
   
 CHANGES in v.0.3.0
 

@@ -47,15 +47,12 @@ if NULL or TRUE and > 3 cores are available, the MCMC chains are run in parallel
 \details{
 The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003).
 
-BESTmcmc allows the user to specify priors for all parameters by including elements in the \code{priors} list:\cr
+If \code{priors = NULL}, broad priors as described by Kruschke (2013) are used. The user can specify priors for all parameters by including elements in the \code{priors} list:\cr
 \eqn{\mu} : population means have separate normal priors, with mean \code{muM} and standard deviation \code{muSD};\cr
 \eqn{\sigma} : population standard deviations have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD};\cr
 \eqn{\nu} : the normality parameter has a gamma prior with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}. (Versions before 0.4.0 constrained nu to be >1.)
 
 If there are 2 groups of observations, \code{muM, muSD, sigmaMode, sigmaSD} may be vectors of length 2 or scalar, in which case the same value is used for each population. The default priors correspond to \code{list(muM = mean(y), muSD = sd(y)*5, sigmaMode = sd(y), sigmaSD = sd(y)*5, nuMean = 30, nuSD = 30)}, where \code{y = c(y1, y2)}.
-
-If \code{priors = NULL}, broad priors as described by Kruschke (2013) are used for all parameters.
-
 
 The model is shown in the diagram below.
 
