@@ -1,6 +1,14 @@
+CHANGES in v.0.4.0.9000
+
+  * Better description of the 'priors' options in 'BESTmcmc' help.
+  
+  * Function 'hdi' removed; imports HDInterval::hdi instead.
+  
+  * Constraints added for both sigma and nu, > 0.0001.
+
 CHANGES in v.0.4.0
 
-  * BESTmcmc0 now allows normality parameter, nu < 1 (See John Kruschke's blog post 2 Dec 2015).
+  * BESTmcmc now allows normality parameter, nu < 1 (See John Kruschke's blog post 2 Dec 2015).
   
   * Vignette updated to use new prior specification.
   

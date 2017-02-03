@@ -35,10 +35,10 @@ thinning rate. If set to n > 1, n steps of the MCMC chain are calculated for eac
 number of steps to discard as burn-in at the beginning of the chain.
 }
    \item{verbose}{
-if FALSE, output to the R Console is suppressed.
+if FALSE, output to the R Console is suppressed. If chains are run in parallel, the output from JAGS is not displayed in the Console, even if \code{verbose = TRUE}.
 }
   \item{rnd.seed}{
-a positive integer (or NULL): the seed for the random number generator, used to obtain reproducible samples if required. Values generated in different versions of BEST may differ.
+a positive integer (or NULL): the seed for the random number generator, used to obtain reproducible samples if required. Values generated in different versions of BEST or different versions of JAGS may differ, even with the same seed.
 }
   \item{parallel}{
 if NULL or TRUE and > 3 cores are available, the MCMC chains are run in parallel. (If TRUE and < 4 cores are available, a warning is given.)
@@ -47,12 +47,14 @@ if NULL or TRUE and > 3 cores are available, the MCMC chains are run in parallel
 \details{
 The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003).
 
-If \code{priors = NULL}, broad priors as described by Kruschke (2013) are used. The user can specify priors for all parameters by including elements in the \code{priors} list:\cr
-\eqn{\mu} : population means have separate normal priors, with mean \code{muM} and standard deviation \code{muSD};\cr
-\eqn{\sigma} : population standard deviations have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD};\cr
-\eqn{\nu} : the normality parameter has a gamma prior with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}. (Versions before 0.4.0 constrained nu to be >1.)
+If \code{priors = NULL}, broad priors as described by Kruschke (2013) are used. For \eqn{\mu}, \code{Normal(mean(y), 1000 * sd(y))}; for \eqn{\sigma}, \code{Uniform(sd(y)/1000, sd(y) * 1000)}; for \eqn{\nu}, \code{Exponential(1/29) + 1}, with the constraint that \code{nu >= 1}. Here \code{y = c(y1, y2)}. Note that \code{priors = NULL} is not equivalent to \code{priors = list()}.
 
-If there are 2 groups of observations, \code{muM, muSD, sigmaMode, sigmaSD} may be vectors of length 2 or scalar, in which case the same value is used for each population. The default priors correspond to \code{list(muM = mean(y), muSD = sd(y)*5, sigmaMode = sd(y), sigmaSD = sd(y)*5, nuMean = 30, nuSD = 30)}, where \code{y = c(y1, y2)}.
+Alternatively, \code{priors} can be a list with elements specifying the priors for one or more parameters:\cr
+\eqn{\mu} : population means have separate normal priors, with mean \code{muM} and standard deviation \code{muSD}; if not included in the list, default values of \code{muM = mean(y), muSD = sd(y)*5} are used;\cr
+\eqn{\sigma} : population standard deviations have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD}; defaults are \code{sigmaMode = sd(y), sigmaSD = sd(y)*5};\cr
+\eqn{\nu} : the normality parameter has a gamma prior with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}; defaults are \code{nuMean = 30, nuSD = 30}; versions before 0.4.0 constrained \eqn{\nu} to be >1.
+
+If there are 2 groups of observations, \code{muM, muSD, sigmaMode, sigmaSD} may be vectors of length 2 or scalar; if scalar, the same value is used for each population.
 
 The model is shown in the diagram below.
 

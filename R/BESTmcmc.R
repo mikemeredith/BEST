@@ -139,8 +139,8 @@ function( y1, y2=NULL, priors=NULL, doPriorsOnly=FALSE,
         }
         mu ~ dnorm( muM[1] , muP[1] )
         tau <- 1/pow( sigma , 2 )
-         sigma ~ dgamma( Sh[1] , Ra[1] )
-        nu ~ dgamma( ShNu , RaNu ) # prior for nu
+         sigma ~ dgamma( Sh[1] , Ra[1] )T(0.0001, )
+        nu ~ dgamma( ShNu , RaNu )T(0.001, ) # prior for nu
       }
       " # close quote for modelString
     } else {
@@ -152,9 +152,9 @@ function( y1, y2=NULL, priors=NULL, doPriorsOnly=FALSE,
         for ( j in 1:2 ) {
           mu[j] ~ dnorm( muM[j] , muP[j] )
           tau[j] <- 1/pow( sigma[j] , 2 )
-          sigma[j] ~ dgamma( Sh[j] , Ra[j] )
+          sigma[j] ~ dgamma( Sh[j] , Ra[j] )T(0.0001, )
         }
-        nu ~ dgamma( ShNu , RaNu ) # prior for nu
+        nu ~ dgamma( ShNu , RaNu )T(0.001, ) # prior for nu
       }
       " # close quote for modelString
     }

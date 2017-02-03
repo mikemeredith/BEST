@@ -5,13 +5,13 @@ importFrom(jagsUI, jags.basic)
 #importFrom(stats, update)
 importFrom(parallel, detectCores)
 importFrom(coda, effectiveSize, gelman.diag)
+importFrom(HDInterval, hdi)
 
 import(stats, graphics, utils, grDevices)
 
 export(BESTmcmc,
   plotPost, plotAll, plotPostPred, plotAreaInROPE, postPriorOverlap,
-  BESTpower, makeData,
-  hdi)
+  BESTpower, makeData)
 
 
 S3method("pairs", "BEST")
@@ -19,9 +19,3 @@ S3method("plot", "BEST")
 S3method("print", "BEST")
 S3method("print", "summary.BEST")
 S3method("summary", "BEST")
-S3method("hdi", "default")
-S3method("hdi", "matrix")
-S3method("hdi", "density")
-S3method("hdi", "data.frame")
-S3method("hdi", "mcmc.list")
-S3method("hdi", "function")
