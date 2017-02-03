@@ -18,7 +18,7 @@ test_that("BESTpower with 2 groups gives same output",  {
       burnInSteps = 1, verbose=FALSE, rnd.seed=2)  
   if(packageVersion("rjags") >= "4.0.0")
     expect_that(round(colMeans(proMCMC), 5), 
-      is_equivalent_to(c(106.39054,  99.44194,  59.25097,  21.89881,  17.49193)))
+      is_equivalent_to(c(105.63578,  98.89758,  62.34814,  21.92148,  17.81661)))
   pow2 <- BESTpower(proMCMC, N1=10, N2=10,
                ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
                maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
@@ -58,7 +58,7 @@ test_that("BESTpower with 1 group gives same output",  {
       burnInSteps = 1, verbose=FALSE, rnd.seed=2)  
   if(packageVersion("rjags") >= "4.0.0")
     expect_that(round(colMeans(proMCMC), 5), 
-      is_equivalent_to(c(109.53919,  27.79089,  21.23356)))
+      is_equivalent_to(c(108.84307,  27.47996,  20.75332)))
   pow1 <- BESTpower(proMCMC, N1=10, N2=10,
                ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
                maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
@@ -74,10 +74,10 @@ test_that("BESTpower with 1 group gives same output",  {
       "effect:   HDI > ROPE", "effect:   HDI < ROPE",
       "effect:  HDI in ROPE", "effect: HDI width ok")))
   expect_that(round(pow1[, 1], 5), 
-    is_equivalent_to(c(0.90909, 0.09091, 0.09091, 0.45455, 0.90909, 0.09091, 0.09091, 0.09091, 0.90909, 0.09091, 0.09091, 0.09091)))
+    is_equivalent_to(c(0.90909, 0.09091, 0.09091, 0.36364, 0.90909, 0.09091, 0.09091, 0.09091, 0.90909, 0.09091, 0.09091, 0.09091)))
   expect_that(round(pow1[, 2], 5), 
-    is_equivalent_to(c(0.74113, 0, 0, 0.18155, 0.74113, 0, 0, 0, 0.74113, 0, 0, 0)))
+    is_equivalent_to(c(0.74113, 0, 0, 0.10678, 0.74113, 0, 0, 0, 0.74113, 0, 0, 0)))
   expect_that(round(pow1[, 3], 5), 
-    is_equivalent_to(c(1, 0.25887, 0.25887, 0.73161, 1, 0.25887, 0.25887, 0.25887, 1, 0.25887, 0.25887, 0.25887)))
+    is_equivalent_to(c(1, 0.25887, 0.25887, 0.63320, 1, 0.25887, 0.25887, 0.25887, 1, 0.25887, 0.25887, 0.25887)))
 })
 
