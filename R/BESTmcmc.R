@@ -58,6 +58,11 @@ function( y1, y2=NULL, priors=NULL, doPriorsOnly=FALSE,
     if(!is.null(priors$muSD) && priors$muSD <= 0)
       stop("muSD must be > 0")
   }
+  
+  # following code addresses Issue #7, but maybe not acceptable on CRAN
+  oldseed <- try(.Random.seed, silent=TRUE)
+  if(!inherits(oldseed, "try-error"))
+    on.exit(assign(".Random.seed", oldseed, pos=1) )
   if(is.null(rnd.seed))
     rnd.seed <- floor(runif(1,1,10000))
 
