@@ -1,9 +1,10 @@
 # Namespace for package BEST
 
-# importFrom(rjags, jags.model, coda.samples)
-importFrom(jagsUI, jags.basic)
-#importFrom(stats, update)
-importFrom(parallel, detectCores)
+importFrom(rjags, jags.model, coda.samples)
+# importFrom(jagsUI, jags.basic)
+importFrom(stats, update)
+importFrom(parallel, detectCores, makeCluster, stopCluster,
+  clusterEvalQ, parLapply)
 importFrom(coda, effectiveSize, gelman.diag)
 importFrom(HDInterval, hdi)
 

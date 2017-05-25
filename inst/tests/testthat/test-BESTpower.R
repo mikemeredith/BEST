@@ -14,19 +14,26 @@ test_that("BESTpower with 2 groups gives same output",  {
     is_equivalent_to(c(94.91088, 109.80678, 91.06461, 135.7637, 112.48891, 91.34337, 115.39274, 120.00616, 117.01734, 100.81456, 134.22832, 113.59835, 95.00674, 65.70652, 127.115, 105.60376, 106.13228, 144.94097, 116.18516, 62.87387)))
   expect_that(round(proData$y2, 5), 
     is_equivalent_to(c(118.12939, 115.72711, 103.30548, 67.0728, 112.8777, 101.01111, 99.26143, 76.17697, 93.6024, 109.33356, 125.8485, 100.192, 108.80216, 101.05191, 77.82177, 94.71111, 95.07459, 59.30063, 130.72614, 109.97323)))
-  proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=9,
-      burnInSteps = 1, verbose=FALSE, rnd.seed=2)  
+  proMCMCs <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=9,
+      burnInSteps = 1, verbose=FALSE, rnd.seed=2, parallel=FALSE)  
+  proMCMCp <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=9,
+      burnInSteps = 1, verbose=FALSE, rnd.seed=2, parallel=TRUE)  
+  expect_equivalent(proMCMCs, proMCMCp)
   if(packageVersion("rjags") >= "4.0.0")
-    expect_that(round(colMeans(proMCMC), 5), 
-      is_equivalent_to(c(105.63578,  98.89758,  62.34814,  21.92148,  17.81661)))
-  pow2 <- BESTpower(proMCMC, N1=10, N2=10,
+    expect_that(round(colMeans(proMCMCs), 5), 
+      is_equivalent_to(c(105.88920, 101.17133,  39.46793,  23.61237,  17.94958)))
+  pow2s <- BESTpower(proMCMCs, N1=10, N2=10,
                ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
                maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
-               nRep=9, mcmcLength=1000, verbose=0, rnd.seed=3) 
-  expect_that(class(pow2), equals("matrix"))
-  expect_that(colnames(pow2),
-    equals(c("mean", "CrIlo", "CrIhi")))
-  expect_that(rownames(pow2),
+               nRep=9, mcmcLength=1000, verbose=0, rnd.seed=3, parallel=FALSE) 
+  pow2p <- BESTpower(proMCMCs, N1=10, N2=10,
+               ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
+               maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
+               nRep=9, mcmcLength=1000, verbose=0, rnd.seed=3, parallel=TRUE) 
+  expect_equivalent(pow2s, pow2p)
+  expect_equal(class(pow2s), "matrix")
+  expect_equal(colnames(pow2s), c("mean", "CrIlo", "CrIhi"))
+  expect_that(rownames(pow2s),
     equals(c("  mean:   HDI > ROPE", "  mean:   HDI < ROPE",
       "  mean:  HDI in ROPE", "  mean: HDI width ok",
       "    sd:   HDI > ROPE", "    sd:   HDI < ROPE",
@@ -34,14 +41,7 @@ test_that("BESTpower with 2 groups gives same output",  {
       "effect:   HDI > ROPE", "effect:   HDI < ROPE",
       "effect:  HDI in ROPE", "effect: HDI width ok")))
   if(packageVersion("rjags") >= "4.0.0") {
-    expect_that(round(pow2[, 1], 5), 
-      is_equivalent_to(c(0.09091, 0.09091, 0.09091, 0.09091, 0.09091,
-        0.09091, 0.09091, 0.09091, 0.09091, 0.09091, 0.09091, 0.09091)))
-    expect_that(round(pow2[, 2], 5), 
-      is_equivalent_to(c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)))
-    expect_that(round(pow2[, 3], 5), 
-      is_equivalent_to(c(0.25887, 0.25887, 0.25887, 0.25887, 0.25887,
-        0.25887, 0.25887, 0.25887, 0.25887, 0.25887, 0.25887, 0.25887)))
+    expect_equivalent(round(colMeans(pow2s), 5), c(0.09848, 0.00061, 0.27044))
   }
 })
 
@@ -57,8 +57,7 @@ test_that("BESTpower with 1 group gives same output",  {
   proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=9,
       burnInSteps = 1, verbose=FALSE, rnd.seed=2)  
   if(packageVersion("rjags") >= "4.0.0")
-    expect_that(round(colMeans(proMCMC), 5), 
-      is_equivalent_to(c(108.84307,  27.47996,  20.75332)))
+    expect_equivalent(round(colMeans(proMCMC), 5), c(111.74948,  29.43007,  22.10254))
   pow1 <- BESTpower(proMCMC, N1=10, N2=10,
                ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
                maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
@@ -73,11 +72,6 @@ test_that("BESTpower with 1 group gives same output",  {
       "    sd:  HDI in ROPE", "    sd: HDI width ok",
       "effect:   HDI > ROPE", "effect:   HDI < ROPE",
       "effect:  HDI in ROPE", "effect: HDI width ok")))
-  expect_that(round(pow1[, 1], 5), 
-    is_equivalent_to(c(0.90909, 0.09091, 0.09091, 0.36364, 0.90909, 0.09091, 0.09091, 0.09091, 0.90909, 0.09091, 0.09091, 0.09091)))
-  expect_that(round(pow1[, 2], 5), 
-    is_equivalent_to(c(0.74113, 0, 0, 0.10678, 0.74113, 0, 0, 0, 0.74113, 0, 0, 0)))
-  expect_that(round(pow1[, 3], 5), 
-    is_equivalent_to(c(1, 0.25887, 0.25887, 0.63320, 1, 0.25887, 0.25887, 0.25887, 1, 0.25887, 0.25887, 0.25887)))
+  expect_equivalent(round(colMeans(pow1), 5), c(0.31818, 0.19418, 0.47534))
 })
 
