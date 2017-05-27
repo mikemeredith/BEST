@@ -2,7 +2,7 @@ BESTpower <-
 function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
                      maxHDIWm, maxHDIWsd, maxHDIWeff, compValm=0, nRep=200,
                      mcmcLength=10000, saveName=NULL,
-                     showFirstNrep=0, verbose=2, rnd.seed=NULL) {
+                     showFirstNrep=0, verbose=2, rnd.seed=NULL, parallel=NULL) {
   # This function estimates power.
  
   # Sanity checks:
@@ -115,7 +115,7 @@ function( BESTobj, N1, N2, credMass=0.95, ROPEm, ROPEsd, ROPEeff,
     y2 <- if(oneGrp) NULL else rt(N2[i], df=nuVal) * sigma2Val + mu2Val    
     # Get posterior for simulated data:
     simChain <- BESTmcmc( y1, y2, numSavedSteps=mcmcLength, thinSteps=1,
-                          verbose=verbose > 1, rnd.seed=rnd.seed[i])
+                          verbose=verbose > 1, rnd.seed=rnd.seed[i], parallel=parallel)
     if (i <= showFirstNrep ) { 
       # x11()   # Deprecated as "platform specific" in R 3.1
       dev.new() # Doesn't work properly in Rstudio: gives warning and plots to old device.

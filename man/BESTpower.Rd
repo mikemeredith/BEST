@@ -11,7 +11,7 @@ BESTpower(BESTobj, N1, N2, credMass=0.95,
  ROPEm, ROPEsd, ROPEeff, 
  maxHDIWm, maxHDIWsd, maxHDIWeff,
  compValm = 0, nRep = 200, mcmcLength = 10000,
- saveName = NULL, showFirstNrep = 0, verbose = 2, rnd.seed=NULL)
+ saveName = NULL, showFirstNrep = 0, verbose = 2, rnd.seed=NULL, parallel=NULL)
 }
 \arguments{
   \item{BESTobj}{
@@ -64,6 +64,9 @@ controls output to the R Console: 0 suppresses all output; 1 gives just a progre
 }
   \item{rnd.seed}{
 a positive integer (or NULL): the seed for the random number generator, used to obtain reproducible samples if required.
+}
+  \item{parallel}{
+if NULL or TRUE and > 3 cores are available, the MCMC chains are run in parallel. (If TRUE and < 4 cores are available, a warning is given.)
 }
 }
 \details{

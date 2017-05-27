@@ -1,6 +1,10 @@
+CHANGES in v.0.4.0.9003
+
+  * Interface directly with 'rjags' package, instead of using 'jagUI'.
+
 CHANGES in v.0.4.0.9002
 
-  * set.seed issue
+  * Fixed: set.seed issue
 
 CHANGES in v.0.4.0.9001
 
@@ -9,23 +13,23 @@ CHANGES in v.0.4.0.9001
 CHANGES in v.0.4.0.9000
 
   * Better description of the 'priors' options in 'BESTmcmc' help.
-  
+
   * Function 'hdi' removed; imports HDInterval::hdi instead.
-  
+
   * Constraints added for both sigma and nu, > 0.0001.
 
 CHANGES in v.0.4.0
 
   * BESTmcmc now allows normality parameter, nu < 1 (See John Kruschke's blog post 2 Dec 2015).
-  
+
   * Vignette updated to use new prior specification.
-  
+
 CHANGES in v.0.3.0
 
   * BESTmcmc 'showPriors' argument changed to 'doPriorsOnly'.
-  
+
   * Function postPriorOverlap added.
-  
+
 CHANGES in v.0.2.6
 
   * BESTmcmc gains a 'showPriors' argument.
