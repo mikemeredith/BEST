@@ -1,3 +1,7 @@
+CHANGES in v.0.5.0.9000 (2017-08-11)
+
+  * plotPostPred modified to show the data with an 'ordinary' histogram; plotAll not yet changed.
+
 CHANGES in v.0.5.0 (2017-05-28)
 
   * 'BESTmcmc' uses 'rjags' directly, instead of 'jagsUI' wrappers. This resolves 'set.seed' issues, but values returned will not be the same as with previous versions.
