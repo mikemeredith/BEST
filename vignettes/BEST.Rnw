@@ -48,7 +48,7 @@ To accommodate outliers we describe the data with a distribution that has fatter
 The data (\emph{y}) are assumed to be independent and identically distributed (i.i.d.) draws from a \emph{t} distribution with different mean ($\mu$) and standard deviation ($\sigma$) for each population, and with a common normality parameter ($\nu$), as indicated in the lower portion of Figure~\ref{fig:model}.
 
 The default priors, with \verb@priors = NULL@, are minimally informative: normal priors with large standard deviation for ($\mu$), broad uniform priors for ($\sigma$), and a shifted-exponential prior for ($\nu$), as described by \citet{Kruschke2013BEST}.
-You can specify your own priors by providing a list: population means ($\mu$) have separate normal priors, with mean \verb@muM@ and standard deviation \verb@muSD@; population standard deviations ($\sigma$) have separate gamma priors, with \emph{mode} \verb@sigmaMode@ and standard deviation \verb@sigmaSD@; the normality parameter ($\nu$) has a gamma prior with \emph{mean} \verb@nuMean@ and standard deviation \verb@nuSD@. 
+You can specify your own priors by providing a list: population means ($\mu$) have separate normal priors, with mean \verb@muM@ and standard deviation \verb@muSD@; population standard deviations ($\sigma$) have separate gamma priors, with \emph{mode} \verb@sigmaMode@ and standard deviation \verb@sigmaSD@; the normality parameter ($\nu$) has a gamma prior with \emph{mean} \verb@nuMean@ and standard deviation \verb@nuSD@.
 These priors are indicated in the upper portion of Figure~\ref{fig:model}.
 
 For a general discussion see chapters 11 and 12 of \citet{Kruschke2015book}.
@@ -58,9 +58,9 @@ For a general discussion see chapters 11 and 12 of \citet{Kruschke2015book}.
 
 BEST uses the JAGS package \citep{Plummer2003} to produce samples from the posterior distribution of each parameter of interest. You will need to download JAGS from \url{http://sourceforge.net/projects/mcmc-jags/} and install it before running BEST.
 
-BEST also requires the packages \verb@jagsUI@ and \verb@coda@, which should normally be installed at the same time as package BEST if you use the \verb@install.packages@ function in \R{}.
+BEST also requires the packages \verb@rjags@ and \verb@coda@, which should normally be installed at the same time as package BEST if you use the \verb@install.packages@ function in \R{}.
 
-Once installed, we need to load the BEST package at the start of each \R{} session, which will also load jagsUI and coda and link to JAGS:
+Once installed, we need to load the BEST package at the start of each \R{} session, which will also load rjags and coda and link to JAGS:
 <<loadBEST>>=
 library(BEST)
 @
@@ -93,45 +93,31 @@ We run BESTmcmc and save the result in BESTout. We do not use parallel processin
 
 % reduce numSavedSteps = 1e+03 for trial runs.
 % hide results as rjags output does not format properly
-<<run2grps, results=hide>>= 
+<<run2grps, results=hide>>=
 BESTout <- BESTmcmc(y1, y2, priors=priors, parallel=FALSE)
 @
 
 \begin{verbatim}
-Processing function input....... 
-
-Done. 
- 
 Compiling model graph
    Resolving undeclared variables
    Allocating nodes
 Graph information:
    Observed stochastic nodes: 12
    Unobserved stochastic nodes: 5
-   Total graph size: 48
-   
+   Total graph size: 51
+
 Initializing model
 
-Adaptive phase, 500 iterations x 3 chains 
-If no progress bar appears JAGS has decided not to adapt 
- 
   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
 
- Burn-in phase, 1000 iterations x 3 chains 
- 
+Sampling from the posterior distributions:
   |**************************************************| 100%
-
-Sampling from joint posterior, 33334 iterations x 3 chains 
- 
-  |**************************************************| 100%
-
-MCMC took 0.162 minutes.
 \end{verbatim}
 
 \subsection{Basic inferences}
 \label{subsec:infer2g}
 
-The default plot (Figure~\ref{fig:means2g}) is a histogram of the posterior distribution of the difference in means. 
+The default plot (Figure~\ref{fig:means2g}) is a histogram of the posterior distribution of the difference in means.
 <<meanDiff2grps, fig=TRUE, width=6, height=4, include=FALSE>>=
 plot(BESTout)
 @
@@ -190,14 +176,14 @@ The \texttt{summary} method gives us more information on the parameters of inter
 
 <<summary2g>>=
 summary(BESTout)
-@ 
+@
 
 Here we have summaries of posterior distributions for the derived parameters: difference in means (\texttt{muDiff}), difference in standard deviations (\texttt{sigmaDiff}) and effect size (\texttt{effSz}). As with the plot command, we can set values for \texttt{compVal} and \texttt{ROPE} for each of the parameters of interest:
 
 <<summary2gMore>>=
 summary(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), ROPEsd=c(-0.15,0.15),
-          compValeff=1) 
-@ 
+          compValeff=1)
+@
 
 
 
@@ -209,7 +195,7 @@ The output from \texttt{BESTmcmc} has class BEST, which has a \texttt{print} met
 <<class2g>>=
 class(BESTout)
 print(BESTout)
-@ 
+@
 
 The print function displays the mean, standard deviation and median of the posterior distributions of the parameters in the model, together with a 95\% Highest Density Interval: see the help page for the \texttt{hdi} function for details.
 Two convergence diagnostic measures are also displayed:
@@ -284,42 +270,28 @@ Applying BEST to a single sample, or for differences in paired observations, wor
 
 % reduce numSavedSteps = 1e+03 for trial runs.
 % hide results as rjags output does not format properly
-<<run1grp, results=hide>>= 
+<<run1grp, results=hide>>=
 y0 <- c(1.89, 1.78, 1.30, 1.74, 1.33, 0.89)
 BESTout1g <- BESTmcmc(y0, priors=NULL, parallel=FALSE)
 @
 \begin{verbatim}
-Processing function input....... 
-
-Done.
-
 Compiling model graph
    Resolving undeclared variables
    Allocating nodes
 Graph information:
    Observed stochastic nodes: 6
    Unobserved stochastic nodes: 3
-   Total graph size: 20
-   
+   Total graph size: 23
+
 Initializing model
 
-Adaptive phase, 500 iterations x 3 chains 
-If no progress bar appears JAGS has decided not to adapt 
- 
   |++++++++++++++++++++++++++++++++++++++++++++++++++| 100%
-  
- Burn-in phase, 1000 iterations x 3 chains 
- 
-   |**************************************************| 100%
-   
- Sampling from joint posterior, 33334 iterations x 3 chains 
- 
-   |**************************************************| 100%
-   
-MCMC took 0.086 minutes.
+
+  Sampling from the posterior distributions:
+  |**************************************************| 100%
 \end{verbatim}
 
-This time we have a single mean and standard deviation. The default plot (Figure~\ref{fig:mean1g}) shows the posterior distribution of the mean. 
+This time we have a single mean and standard deviation. The default plot (Figure~\ref{fig:mean1g}) shows the posterior distribution of the mean.
 <<mean1grp, fig=TRUE,  width=6, height=4, include=FALSE>>=
 BESTout1g
 plot(BESTout1g)
@@ -367,7 +339,7 @@ The package includes functions to estimate the power of experimental designs: se
 
 If you want to know how the functions in the \code{BEST} package work, you can download the \R{} source code from CRAN or from GitHub \url{https://github.com/mikemeredith/BEST} or find almost the same code at \url{http://www.indiana.edu/~kruschke/BEST/} together with links to articles, videos, and the blog.
 
-Bayesian analysis with computations performed by JAGS is a powerful approach to analysis. For a practical introduction see \citet{Kruschke2011book}.
+Bayesian analysis with computations performed by JAGS is a powerful approach to analysis. For a practical introduction see \citet{Kruschke2015book}.
 
 
 

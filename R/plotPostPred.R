@@ -11,6 +11,7 @@ function(BESTobj, nCurvesToPlot = 30) {
     stop("BESTobj is not a valid BEST object")
   if(ncol(BESTobj) == 3 && all(colnames(BESTobj) == c("mu","nu","sigma"))) {
     oneGrp <- TRUE
+    colnames(BESTobj) <- c("mu1","nu","sigma1")
   } else if (ncol(BESTobj) == 5 && all(colnames(BESTobj) == c("mu1", "mu2","nu","sigma1","sigma2"))) {
     oneGrp <- FALSE
   } else {
@@ -31,6 +32,6 @@ function(BESTobj, nCurvesToPlot = 30) {
   stepIdxVec <- seq(1, NROW( BESTobj ), length= nCurvesToPlot)
   toPlot <- BESTobj[stepIdxVec, ]
 
-  plotDataPPC2(toPlot=toPlot, oneGrp=oneGrp, data=data)
+  plotDataPPC(toPlot=toPlot, oneGrp=oneGrp, data=data)
 
 }
