@@ -39,6 +39,7 @@ function( paramSampleVec, credMass=0.95, compVal=NULL, ROPE=NULL,
 
   if (showCurve) {
     densCurve <- density( paramSampleVec, adjust=2 )
+    cenTendHt <- 0.9 * max(densCurve$y)
     selPlot <- names(useArgs) %in%
       c(names(as.list(args(plot.default))), names(par(no.readonly=TRUE)))
     plotArgs <- useArgs[selPlot]
@@ -60,6 +61,7 @@ function( paramSampleVec, credMass=0.95, compVal=NULL, ROPE=NULL,
             pos=3, cex=useArgs$cex )
     }
   } else {
+    cenTendHt <- 0.9 * max(histinfo$density)
     plot.histogram.args.names <- c("freq", "density", "angle", "border",
       "main", "sub", "xlab", "ylab", "xlim", "ylim", "axes", "labels", 
       "add") # plot.histogram not exported, so need to cheat!
@@ -84,7 +86,6 @@ function( paramSampleVec, credMass=0.95, compVal=NULL, ROPE=NULL,
 
 
   # Display mean or mode:
-  cenTendHt <- 0.9 * max(histinfo$density)
   if ( showMode==FALSE ) {
       meanParam <- mean( paramSampleVec )
       text( meanParam, cenTendHt,

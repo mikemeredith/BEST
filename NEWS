@@ -1,3 +1,7 @@
+CHANGES in v.0.5.0.9002 (2017-11-01)
+
+  * Fixed issue with position of text on density plots.
+
 CHANGES in v.0.5.0.9001 (2017-08-14)
 
   * plotAll modified to show the data with an 'ordinary' histogram.
