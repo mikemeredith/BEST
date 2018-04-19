@@ -1,16 +1,10 @@
-CHANGES in v.0.5.0.9002 (2017-11-01)
+CHANGES in v.0.5.1 (2018-04-19)
 
   * Fixed issue with position of text on density plots.
 
-CHANGES in v.0.5.0.9001 (2017-08-14)
-
-  * plotAll modified to show the data with an 'ordinary' histogram.
+  * plotAll and plotPostPred modified to show the data with an 'ordinary' histogram.
 
   * Warning if adaptation is not adequate (instead of "NOTE: Stopping adaptation").
-
-CHANGES in v.0.5.0.9000 (2017-08-11)
-
-  * plotPostPred modified to show the data with an 'ordinary' histogram; plotAll not yet changed.
 
 CHANGES in v.0.5.0 (2017-05-28)
 
