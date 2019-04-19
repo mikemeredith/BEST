@@ -1,10 +1,10 @@
 Package: BEST
 Type: Package
 Title: Bayesian Estimation Supersedes the t-Test
-Version: 0.5.1
+Version: 0.5.1.9001
 Depends: HDInterval
 Imports: coda, rjags
-Date: 2018-04-19
+Date: 2019-04-19
 Author: John K. Kruschke and Mike Meredith
 Maintainer: Mike Meredith <mmeredith@wcs.org>
 Description: An alternative to t-tests, producing posterior estimates

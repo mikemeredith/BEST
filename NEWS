@@ -1,3 +1,8 @@
+CHANGES in v.0.5.1.9001 (2019-04-19) - yes, exactly 1 year later.
+
+  * Increased resolution of fitted density from n=512 to n=2048 to give better estimates
+    of HDI.
+
 CHANGES in v.0.5.1 (2018-04-19)
 
   * Fixed issue with position of text on density plots.
