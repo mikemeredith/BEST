@@ -22,7 +22,7 @@ class(fake) <- c("BEST", "data.frame")
 
 test_that("summary.BEST with 2 groups and default values gives correct output",  {
   tst <- summary(fake)
-  expect_that(class(tst), equals(c("summary.BEST", "matrix")))
+  expect_that(class(tst), equals(c("summary.BEST", "matrix", "array")))
   expect_that(colnames(tst),
     equals(c("mean", "median", "mode", "HDI%", "HDIlo", "HDIup","compVal",
              "%>compVal", "ROPElow", "ROPEhigh", "%InROPE")))
@@ -52,7 +52,7 @@ test_that("summary.BEST with 2 groups and non-default values gives correct outpu
   tst <- summary(fake, credMass = 0.8,
     ROPEm = c(-0.1, 0.1), ROPEsd = c(-0.1, 0.1), ROPEeff = c(-0.1, 0.1),
     compValm = 1.5, compValsd = 0, compValeff = 0)
-  expect_that(class(tst), equals(c("summary.BEST", "matrix")))
+  expect_that(class(tst), equals(c("summary.BEST", "matrix", "array")))
   expect_that(colnames(tst),
     equals(c("mean", "median", "mode", "HDI%", "HDIlo", "HDIup","compVal",
              "%>compVal", "ROPElow", "ROPEhigh", "%InROPE")))
@@ -109,7 +109,7 @@ class(fake) <- c("BEST", "data.frame")
 
 test_that("summary.BEST with 1 group and default values gives correct output",  {
   tst <- summary(fake)
-  expect_that(class(tst), equals(c("summary.BEST", "matrix")))
+  expect_that(class(tst), equals(c("summary.BEST", "matrix", "array")))
   expect_that(colnames(tst),
     equals(c("mean", "median", "mode", "HDI%", "HDIlo", "HDIup","compVal",
              "%>compVal", "ROPElow", "ROPEhigh", "%InROPE")))
@@ -133,7 +133,7 @@ test_that("summary.BEST with 1 group and non-default values gives correct output
   tst <- summary(fake, credMass = 0.8,
     ROPEm = c(-0.1, 0.1), ROPEsd = c(0, 1), ROPEeff = c(-0.1, 0.1),
     compValm = 0, compValsd = 2, compValeff = 0)
-  expect_that(class(tst), equals(c("summary.BEST", "matrix")))
+  expect_that(class(tst), equals(c("summary.BEST", "matrix", "array")))
   expect_that(colnames(tst),
     equals(c("mean", "median", "mode", "HDI%", "HDIlo", "HDIup","compVal",
              "%>compVal", "ROPElow", "ROPEhigh", "%InROPE")))

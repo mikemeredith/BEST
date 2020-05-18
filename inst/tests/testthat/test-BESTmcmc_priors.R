@@ -35,7 +35,7 @@ test_that("BESTpower retro with 2 groups gives same output",  {
     maxHDIWm=2.0, maxHDIWsd=2.0, maxHDIWeff=2.0,
     nRep=9, mcmcLength=1000, verbose=FALSE, rnd.seed=456, parallel=TRUE)
   expect_equivalent(pow2s, pow2p)
-  expect_that(class(pow2s), equals("matrix"))
+  expect_that(class(pow2s), equals(c("matrix", "array")))
   expect_that(colnames(pow2s),
     equals(c("mean", "CrIlo", "CrIhi")))
   expect_that(rownames(pow2s),
@@ -45,9 +45,7 @@ test_that("BESTpower retro with 2 groups gives same output",  {
       "    sd:  HDI in ROPE", "    sd: HDI width ok",
       "effect:   HDI > ROPE", "effect:   HDI < ROPE",
       "effect:  HDI in ROPE", "effect: HDI width ok")))
-  if(packageVersion("rjags") >= "4.0.0")  {
-    expect_equivalent(round(colMeans(pow2s), 5), c(0.18182, 0.03635, 0.38181))
-  }
+  expect_equivalent(round(colMeans(pow2s), 5), c(0.21212, 0.05634, 0.41802))
 })
 
 Bout2a <- BESTmcmc(y1, y2,
@@ -96,7 +94,7 @@ test_that("BESTpower retro with 1 group and default gamma priors gives same outp
     ROPEm=c(-0.5,0.5), ROPEsd=c(-1,1), ROPEeff=c(-1,1),
     maxHDIWm=2.0, maxHDIWsd=2.0, maxHDIWeff=2.0,
     nRep=9, mcmcLength=1000, verbose=FALSE, rnd.seed=456)
-  expect_that(class(pow1), equals("matrix"))
+  expect_that(class(pow1), equals(c("matrix", "array")))
   expect_that(colnames(pow1),
     equals(c("mean", "CrIlo", "CrIhi")))
   expect_that(rownames(pow1),

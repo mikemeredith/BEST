@@ -19,8 +19,7 @@ test_that("BESTpower with 2 groups gives same output",  {
   proMCMCp <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=9,
       burnInSteps = 1, verbose=FALSE, rnd.seed=2, parallel=TRUE)  
   expect_equivalent(proMCMCs, proMCMCp)
-  if(packageVersion("rjags") >= "4.0.0")
-    expect_that(round(colMeans(proMCMCs), 5), 
+  expect_that(round(colMeans(proMCMCs), 5), 
       is_equivalent_to(c(105.88920, 101.17133,  39.46793,  23.61237,  17.94958)))
   pow2s <- BESTpower(proMCMCs, N1=10, N2=10,
                ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
@@ -31,7 +30,7 @@ test_that("BESTpower with 2 groups gives same output",  {
                maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
                nRep=9, mcmcLength=1000, verbose=0, rnd.seed=3, parallel=TRUE) 
   expect_equivalent(pow2s, pow2p)
-  expect_equal(class(pow2s), "matrix")
+  expect_equal(class(pow2s), c("matrix", "array"))
   expect_equal(colnames(pow2s), c("mean", "CrIlo", "CrIhi"))
   expect_that(rownames(pow2s),
     equals(c("  mean:   HDI > ROPE", "  mean:   HDI < ROPE",
@@ -40,9 +39,7 @@ test_that("BESTpower with 2 groups gives same output",  {
       "    sd:  HDI in ROPE", "    sd: HDI width ok",
       "effect:   HDI > ROPE", "effect:   HDI < ROPE",
       "effect:  HDI in ROPE", "effect: HDI width ok")))
-  if(packageVersion("rjags") >= "4.0.0") {
-    expect_equivalent(round(colMeans(pow2s), 5), c(0.09848, 0.00061, 0.27044))
-  }
+  expect_equivalent(round(colMeans(pow2s), 5), c(0.09091, 0.00000, 0.25887))
 })
 
 test_that("BESTpower with 1 group gives same output",  {
@@ -56,13 +53,12 @@ test_that("BESTpower with 1 group gives same output",  {
   expect_null(proData$y2)
   proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=9,
       burnInSteps = 1, verbose=FALSE, rnd.seed=2)  
-  if(packageVersion("rjags") >= "4.0.0")
-    expect_equivalent(round(colMeans(proMCMC), 5), c(111.74948,  29.43007,  22.10254))
+  expect_equivalent(round(colMeans(proMCMC), 5), c(111.74948,  29.43007,  22.10254))
   pow1 <- BESTpower(proMCMC, N1=10, N2=10,
                ROPEm=c(-2,2) , ROPEsd=c(-2,2) , ROPEeff=c(-0.5,0.5) , 
                maxHDIWm=25.0 , maxHDIWsd=10.0 , maxHDIWeff=1.0 ,
                nRep=9, mcmcLength=1000, verbose=0, rnd.seed=3) 
-  expect_that(class(pow1), equals("matrix"))
+  expect_that(class(pow1), equals(c("matrix", "array")))
   expect_that(colnames(pow1),
     equals(c("mean", "CrIlo", "CrIhi")))
   expect_that(rownames(pow1),

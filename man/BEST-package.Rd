@@ -20,9 +20,7 @@ The function \code{\link{BESTpower}} allows simulation-based estimates of power,
 
 }
 \author{
-Original code by John K. Kruschke, \url{http://www.indiana.edu/~kruschke/BEST/}
-
-Maintainer: Mike Meredith <mmeredith at wcs.org>
+Original code by John K. Kruschke, packaged by Mike Meredith.
 }
 
 \references{
@@ -51,12 +49,12 @@ summary(BESTout)
 plot(BESTout)
 plot(BESTout, "sd")
 plotPostPred(BESTout)
-plotAll(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), 
-          ROPEeff=c(-0.2,0.2), compValm=0.5) 
-plotAll(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), 
-          ROPEeff=c(-0.2,0.2), compValm=0.5, showCurve=TRUE) 
+plotAll(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1),
+          ROPEeff=c(-0.2,0.2), compValm=0.5)
+plotAll(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1),
+          ROPEeff=c(-0.2,0.2), compValm=0.5, showCurve=TRUE)
 summary(BESTout, credMass=0.8, ROPEm=c(-0.1,0.1), ROPEsd=c(-0.15,0.15),
-          ROPEeff=c(-0.2,0.2)) 
+          ROPEeff=c(-0.2,0.2))
 pairs(BESTout)
 
 head(BESTout$mu1)
@@ -69,8 +67,8 @@ hist(BESTout$nu)
 # ----------------------------
 # This takes time, so we do 2 simulations here; a real analysis needs several hundred
 
-powerRet <- BESTpower(BESTout, N1=length(y1), N2=length(y2), 
-            ROPEm=c(-0.1,0.1), maxHDIWm=2.0, nRep=2) 
+powerRet <- BESTpower(BESTout, N1=length(y1), N2=length(y2),
+            ROPEm=c(-0.1,0.1), maxHDIWm=2.0, nRep=2)
 powerRet
 # We only set criteria for the mean, so results for sd and effect size are all NA.
 
