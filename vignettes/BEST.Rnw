@@ -337,7 +337,7 @@ plotPost(variance, xlim=c(0, 3))
 The package includes functions to estimate the power of experimental designs: see the help pages for \code{BESTpower} and \code{makeData} for details on implementation and \citet{Kruschke2013BEST} for background.
 
 
-If you want to know how the functions in the \code{BEST} package work, you can download the \R{} source code from CRAN or from GitHub \url{https://github.com/mikemeredith/BEST} or find almost the same code at \url{http://www.indiana.edu/~kruschke/BEST/} together with links to articles, videos, and the blog.
+If you want to know how the functions in the \code{BEST} package work, you can download the \R{} source code from CRAN or from GitHub \url{https://github.com/mikemeredith/BEST}.
 
 Bayesian analysis with computations performed by JAGS is a powerful approach to analysis. For a practical introduction see \citet{Kruschke2015book}.
 
