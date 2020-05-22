@@ -3,3 +3,6 @@
 .git
 oldNEWS
 README
+.local_checks
+README.md
+Rplots.pdf
