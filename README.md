@@ -7,7 +7,7 @@ BEST
 
 Code for the BEST (Bayesian Estimation Supersedes t-Test) package based on John Kruschke's program.
 
-It implements the method of Kruschke (2013) Bayesian estimation supersedes the t test. \emph{Journal of Experimental Psychology: General}, 142(2):573-603. doi: 10.1037/a0029146.
+It implements the method of Kruschke (2013) Bayesian estimation supersedes the t test. _Journal_of_Experimental_Psychology:_General_, 142(2):573-603. doi: 10.1037/a0029146.
 
-For more on the approach used, see the book: Kruschke (2011) \emph{Doing Bayesian data analysis: a tutorial with R and BUGS}. Elsevier, Amsterdam etc.
+For more on the approach used, see the book: Kruschke (2011) _Doing_Bayesian_data_analysis:_a_tutorial_with_R_and_BUGS_. Elsevier, Amsterdam etc.
 
