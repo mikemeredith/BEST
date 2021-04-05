@@ -1,3 +1,9 @@
+BEST
+====
+
+[![CRAN status](https://www.r-pkg.org/badges/version/BEST)](https://cran.r-project.org/web/packages/BEST/index.html)
+[![Downloads](https://cranlogs.r-pkg.org/badges/last-month/BEST)](https://www.r-pkg.org/services)
+
 
 Code for the BEST (Bayesian Estimation Supersedes t-Test) package based on John Kruschke's program.
 
