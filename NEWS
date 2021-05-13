@@ -1,3 +1,7 @@
+CHANGES in v.0.5.2.9001 (2021-04-05)
+
+  * Updated help page for 'BESTmcmc' to clarify difference between scale and SD for t-distribution.
+
 CHANGES in v.0.5.2.9000 (2020-05-19)
 
   * Added citation for Krushke (2013) to Description in DESCRIPTION file (suggestion of Uwe Ligges).

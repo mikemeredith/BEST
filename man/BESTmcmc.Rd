@@ -7,7 +7,7 @@ Generate MCMC samples for posterior distributions
 This function is the core of the BEST package. It calls JAGS and passes a description of the model, priors, and data, then retrieves and returns the MCMC samples for the parameters.
 }
 \usage{
-  
+
 BESTmcmc(y1, y2 = NULL, priors = NULL, doPriorsOnly = FALSE,
   numSavedSteps = 1e+05, thinSteps = 1, burnInSteps = 1000,
 	verbose=TRUE, rnd.seed=NULL, parallel=NULL)
@@ -29,7 +29,7 @@ if TRUE, \code{BESTmcmc} returns MCMC chains representing the prior distribution
 the number of MCMC observations to be returned.
 }
   \item{thinSteps}{
-thinning rate. If set to n > 1, n steps of the MCMC chain are calculated for each one returned. This is useful if autocorrelation is high.
+thinning rate. If set to n > 1, n steps of the MCMC chain are calculated for each one returned. This is useful if autocorrelation is high and you need to run long chains.
 }
   \item{burnInSteps}{
 number of steps to discard as burn-in at the beginning of the chain.
@@ -45,13 +45,17 @@ if NULL or TRUE and > 3 cores are available, the MCMC chains are run in parallel
 }
 }
 \details{
-The function generates vectors of random draws from the posterior distributions of the group means (\eqn{\mu}) and standard deviations (\eqn{\sigma}), as well as the measure of normality (\eqn{\nu}). The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003).
+The function uses a t-distribution to model each sample, and generates vectors of random draws from the posterior distribution of the \emph{center} (\eqn{\mu}) and \emph{spread} or \emph{scale} (\eqn{\sigma}) of the distribution, as well as a measure of \emph{normality} (\eqn{\nu}).  The procedure uses a Bayesian MCMC process implemented in JAGS (Plummer 2003).
+
+\eqn{\mu} is the population mean, except when \eqn{\nu} = 1 (which is the Cauchy distribution) or lower, when the mean is undefined.
+
+\eqn{\sigma} is a good approximation to the standard deviation (SD) for values of \eqn{\nu} > 20. More exactly the SD is \eqn{\sigma} * sqrt(\eqn{\nu}/(\eqn{\nu} - 2)). For a normal distribution (with \eqn{\nu = \infty}), SD = \eqn{\sigma} is exact. The SD is undefined when \eqn{\nu} = 2 or less.
 
 If \code{priors = NULL}, broad priors as described by Kruschke (2013) are used. For \eqn{\mu}, \code{Normal(mean(y), 1000 * sd(y))}; for \eqn{\sigma}, \code{Uniform(sd(y)/1000, sd(y) * 1000)}; for \eqn{\nu}, \code{Exponential(1/29) + 1}, with the constraint that \code{nu >= 1}. Here \code{y = c(y1, y2)}. Note that \code{priors = NULL} is not equivalent to \code{priors = list()}.
 
 Alternatively, \code{priors} can be a list with elements specifying the priors for one or more parameters:\cr
-\eqn{\mu} : population means have separate normal priors, with mean \code{muM} and standard deviation \code{muSD}; if not included in the list, default values of \code{muM = mean(y), muSD = sd(y)*5} are used;\cr
-\eqn{\sigma} : population standard deviations have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD}; defaults are \code{sigmaMode = sd(y), sigmaSD = sd(y)*5};\cr
+\eqn{\mu} : population centers have separate normal priors, with mean \code{muM} and standard deviation \code{muSD}; if not included in the list, default values of \code{muM = mean(y), muSD = sd(y)*5} are used;\cr
+\eqn{\sigma} : population scales have separate gamma priors, with \emph{mode} \code{sigmaMode} and standard deviation \code{sigmaSD}; defaults are \code{sigmaMode = sd(y), sigmaSD = sd(y)*5};\cr
 \eqn{\nu} : the normality parameter has a gamma prior with \emph{mean} \code{nuMean} and standard deviation \code{nuSD}; defaults are \code{nuMean = 30, nuSD = 30}; versions before 0.4.0 constrained \eqn{\nu} to be >1.
 
 If there are 2 groups of observations, \code{muM, muSD, sigmaMode, sigmaSD} may be vectors of length 2 or scalar; if scalar, the same value is used for each population.
@@ -68,8 +72,8 @@ The output from \code{BESTmcmc} has class \code{BEST}, which has print, plot and
 \value{
 An object of class \code{BEST} inheriting from \code{data.frame}. If two samples are compared, the output has the following columns:
 
-  \item{mu1, mu2}{simulated observations of means for each population}
-  \item{sigma1, sigma2}{simulated observations of standard deviations for each population}
+  \item{mu1, mu2}{simulated observations of center for each population}
+  \item{sigma1, sigma2}{simulated observations of scale for each population}
   \item{nu}{simulated observations of normality parameter}
 
 while for a single sample, the columns are \code{mu, sigma, nu}.
