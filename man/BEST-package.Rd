@@ -41,7 +41,7 @@ y1 <- c(5.77, 5.33, 4.59, 4.33, 3.66, 4.48)
 y2 <- c(3.88, 3.55, 3.29, 2.59, 2.33, 3.59)
 
 # Run an analysis, takes up to 1 min.
-BESTout <- BESTmcmc(y1, y2)
+BESTout <- BESTmcmc(y1, y2, parallel=FALSE)
 
 # Look at the result:
 BESTout
@@ -68,7 +68,7 @@ hist(BESTout$nu)
 # This takes time, so we do 2 simulations here; a real analysis needs several hundred
 
 powerRet <- BESTpower(BESTout, N1=length(y1), N2=length(y2),
-            ROPEm=c(-0.1,0.1), maxHDIWm=2.0, nRep=2)
+            ROPEm=c(-0.1,0.1), maxHDIWm=2.0, nRep=2, parallel=FALSE)
 powerRet
 # We only set criteria for the mean, so results for sd and effect size are all NA.
 
@@ -77,7 +77,7 @@ powerRet
 y0 <- c(1.89, 1.78, 1.30, 1.74, 1.33, 0.89)
 
 # Run an analysis, takes up to 40 secs.
-BESTout1 <- BESTmcmc(y0)
+BESTout1 <- BESTmcmc(y0, parallel=FALSE)
 BESTout1
 summary(BESTout1)
 plot(BESTout1)

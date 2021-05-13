@@ -1,7 +1,7 @@
-# Individual checks
 
-# setwd("D:/Github/BEST_package")
-setwd("../..")
+setwd("D:/Github/BEST_package") # my desktop
+setwd("C:/Github/BEST_package") # my laptop
+dir()
 
 library(devtools)
 sIg <- scan("spellcheckIgnore.txt", what='character', comment="#")
@@ -10,16 +10,27 @@ length(tmp)  # number of misspellings found
 tmp  # error if length == 0
 
 devtools::load_all("C:/GitHub/BEST_package/BEST")
-
-unlink(list.files(pattern="Rplots.pdf", recursive=TRUE))
-system("R CMD build BEST")  # Produces the .tar.gz file
-system("R CMD check BEST_0.5.2.9000.tar.gz")
-system("R CMD check --run-donttest BEST_0.5.2.9000.tar.gz")
-# system("R CMD check --as-cran BEST_0.5.2.9000.tar.gz --no-manual")
-system("R CMD INSTALL --build BEST_0.5.2.9000.tar.gz") # installs and produces the .zip binary
-# system("R CMD INSTALL BEST_0.5.2.9000.tar.gz") # installs only
-
 system("R CMD INSTALL BEST") # Use this for a "dev" install.
+
+# Create the BEST package
+# ==========================
+unlink(list.files(pattern="Rplots.pdf", recursive=TRUE))
+system("R CMD build BEST")  # Produces the .tar.gz
+pkg <- "BEST_0.5.2.9002.tar.gz"  # <-- fix version number here ################
+
+# Pick one to check:
+## on desktop
+system(paste("R CMD check ", pkg))
+system(paste("R CMD check ", pkg, "--as-cran"))  # as-cran now runs donttest
+## on laptop
+system(paste("R CMD check ", pkg, "--no-manual"))
+system(paste("R CMD check ", pkg, "--as-cran --no-manual"))
+
+# Pick one to install
+system(paste("R CMD INSTALL ", pkg))            # install only
+system(paste("R CMD INSTALL ", pkg, "--build")) # install and produce the .zip binary
+
+
 
 library(testthat)
 test_package("BEST", reporter=ProgressReporter)

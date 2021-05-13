@@ -67,7 +67,7 @@ plotAreaInROPE(mcmcChain, credMass = 0.95, compVal = 0,
 # Generate real MCMC chains, takes up to 1 min:
 y1 <- c(4.77, 4.33, 3.59, 3.33, 2.66, 3.48)
 y2 <- c(3.88, 3.55, 3.29, 2.59, 2.33, 3.59)
-BESTout <- BESTmcmc(y1, y2)
+BESTout <- BESTmcmc(y1, y2, parallel=FALSE)
 plot(BESTout)
 
 meanDiff <- BESTout$mu1 - BESTout$mu2

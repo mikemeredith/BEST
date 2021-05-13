@@ -9,10 +9,10 @@
 \usepackage[section]{placeins}        % Forces figs to be placed in current section
 \usepackage[usenames,dvipsnames,svgnames]{xcolor}
 \usepackage[authoryear,round]{natbib} % Format for in-text citations
+\usepackage[pdfstartview=]{hyperref}                 % hypertext links
 \usepackage{graphicx, Rd}
 \usepackage{float}
 \usepackage{Sweave}
-\usepackage[pdfstartview=]{hyperref}                 % hypertext links
 
 \begin{document}
 
