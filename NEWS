@@ -1,14 +1,10 @@
-CHANGES in v.0.5.2.9002 (2021-05-13)
+CHANGES in v.0.5.3 (2021-05-17)
 
   * Examples no longer use parallel processing.
   
-  * Changed order of '\usepackages' in vignette code header.
-
-CHANGES in v.0.5.2.9001 (2021-04-05)
+  * Fixed: rebuilding of vignette (thanks to Kurt Hornik for the fix).
 
   * Updated help page for 'BESTmcmc' to clarify difference between scale and SD for t-distribution.
-
-CHANGES in v.0.5.2.9000 (2020-05-19)
 
   * Added citation for Krushke (2013) to Description in DESCRIPTION file (suggestion of Uwe Ligges).
 
