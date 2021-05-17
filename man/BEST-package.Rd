@@ -6,7 +6,7 @@
 Bayesian Estimation Supersedes the t Test
 }
 \description{
-An alternative to \emph{t} tests, producing posterior estimates for groups means and standard deviations and their differences and effect sizes. Bayesian estimation provides a much richer picture of the data, and can be summarised as point estimates and credible intervals.
+An alternative to \emph{t} tests, producing posterior estimates for groups means and standard deviations and their differences and effect sizes. Bayesian estimation provides a much richer picture of the data, and can be summarized as point estimates and credible intervals.
 }
 \details{
 
@@ -14,7 +14,7 @@ The core function, \code{\link{BESTmcmc}}, generates posterior distributions to 
 
 In addition, the procedure accounts for departures from normality by using a \emph{t}-distribution to model the variable of interest and estimating a measure of normality.
 
-Functions to summarise and to visualise the output are provided.
+Functions to summarize and to visualize the output are provided.
 
 The function \code{\link{BESTpower}} allows simulation-based estimates of power, either retrospective power directly with \code{BESTmcmc} output or prospective power analysis with \code{\link{makeData}}.
 

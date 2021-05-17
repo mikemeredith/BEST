@@ -3,25 +3,23 @@ setwd("D:/Github/BEST_package") # my desktop
 setwd("C:/Github/BEST_package") # my laptop
 dir()
 
-library(devtools)
-sIg <- scan("spellcheckIgnore.txt", what='character', comment="#")
-tmp <- spell_check("BEST", ignore=c(hunspell::en_stats, sIg), "en_GB")
-length(tmp)  # number of misspellings found
-tmp  # error if length == 0
+library(spelling)
+update_wordlist(pkg = "BEST", confirm = TRUE)
+out <- spell_check_package(pkg = "BEST")
 
 devtools::load_all("C:/GitHub/BEST_package/BEST")
 system("R CMD INSTALL BEST") # Use this for a "dev" install.
 
 # To check the current CRAN version
 # ---------------------------------
-download.packages("BEST", destdir=".", type="source")
-pkg <- "BEST_0.5.2.tar.gz"
+# download.packages("BEST", destdir=".", type="source")
+# pkg <- "BEST_0.5.2.tar.gz"
 
 # Create the BEST package
 # ==========================
 unlink(list.files(pattern="Rplots.pdf", recursive=TRUE))
 system("R CMD build BEST")  # Produces the .tar.gz
-pkg <- "BEST_0.5.3.tar.gz"  # <-- fix version number here ################
+pkg <- "BEST_0.5.3.9000.tar.gz"  # <-- fix version number here ################
 
 # Pick one to check:
 ## on desktop

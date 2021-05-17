@@ -40,7 +40,7 @@ if TRUE, displays the results as a plot (see Details).
 }
 }
 \details{
-The arguments to this function provide a framework to specify the hypothesised values of the parameters of the populations under study, while the sample size is chosen to reflect the confidence in the values specified.
+The arguments to this function provide a framework to specify the hypothesized values of the parameters of the populations under study, while the sample size is chosen to reflect the confidence in the values specified.
 
 The function produces idealized samples, ie. samples which exactly match the specified means and standard deviations. If showPlot = TRUE, the results are displayed as a plot:
 
@@ -48,7 +48,7 @@ The function produces idealized samples, ie. samples which exactly match the spe
 
 \emph{Histograms: actual sample values; red dashed line: distribution of the outliers; blue dashed line: distribution of the non-outliers; black line: combined distribution.}
 
-These idealised samples are passed to \code{\link{BESTmcmc}}, which generates a series of sets of credible values for the parameters, including the normality parameter, taking account of correlations among them.
+These idealized samples are passed to \code{\link{BESTmcmc}}, which generates a series of sets of credible values for the parameters, including the normality parameter, taking account of correlations among them.
 
 The sets of credible parameter values which constitute the \code{BESTmcmc} output are used by \code{\link{BESTpower}} to simulate new data sets which might arise during a subsequent experiment.
 }

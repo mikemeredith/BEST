@@ -1,7 +1,14 @@
+
+CHANGES in v.0.5.3.9000 (2021-05-17)
+
+  * Spellcheck with 'spelling' package: standardized on US spellings.
+
+  * Now using Authors@R in DESCRIPTION file.
+
 CHANGES in v.0.5.3 (2021-05-17)
 
   * Examples no longer use parallel processing.
-  
+
   * Fixed: rebuilding of vignette (thanks to Kurt Hornik for the fix).
 
   * Updated help page for 'BESTmcmc' to clarify difference between scale and SD for t-distribution.
@@ -84,15 +91,15 @@ CHANGES in v.0.2.0 (2013-08-23)
   in Rstudio, the plot is shown on active device.
 
   * BESTmcmc and BESTpower gain 'rnd.seed' arguments for reproducible output;
-	testthat test files for BESTmcmc and BESTpower added.
+  testthat test files for BESTmcmc and BESTpower added.
 
   * makeData gains a showPlot argument.
 
   * Fixed bug in plot.BEST: the ... argument was not being passed to plotPost.
 
   * BESTmcmc has 'verbose' argument; setting verbose = FALSE (or 0) suppresses
-	output to the Console (wish of Ben Marwick).
+  output to the Console (wish of Ben Marwick).
 
   * BESTpower also has 'verbose' argument; here verbose = 0 (or FALSE)
-	suppresses all output, verbose = 1 (or TRUE) provides just a progress bar;
-	verbose = 2 (the default) displays full details.
+  suppresses all output, verbose = 1 (or TRUE) provides just a progress bar;
+  verbose = 2 (the default) displays full details.

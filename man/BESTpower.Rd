@@ -110,11 +110,11 @@ The chains in \code{BESTobj} must have at least nRep values. To allow for some d
 
 ## For retrospective power analysis, see the example in BEST-package.
 
-# 1. Generate idealised data set:
+# 1. Generate idealized data set:
 proData <- makeData(mu1=108, sd1=17, mu2=100, sd2=15, nPerGrp=20, 
                          pcntOut=10, sdOutMult=2.0, rnd.seed=NULL)
 \donttest{
-# 2. Generate credible parameter values from the idealised data:
+# 2. Generate credible parameter values from the idealized data:
 proMCMC <- BESTmcmc(proData$y1, proData$y2, numSavedSteps=2000, parallel=FALSE)  
 
 # 3. Compute the prospective power for planned sample sizes:

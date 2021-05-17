@@ -17,7 +17,7 @@ an object of class \code{BEST}
 number of points to plot
 }
   \item{col}{
-colour to use for the points plotted.
+color to use for the points plotted.
 }
   \item{\dots}{
 other graphical parameters passed to \code{plot.default}.

@@ -1,12 +1,14 @@
 Package: BEST
 Type: Package
 Title: Bayesian Estimation Supersedes the t-Test
-Version: 0.5.3
+Version: 0.5.3.9000
 Depends: HDInterval
 Imports: coda, rjags
 Date: 2021-05-17
-Author: John K. Kruschke and Mike Meredith
-Maintainer: Mike Meredith <mike@mmeredith.net>
+Authors@R: c(
+  person("John", "Kruschke", role="aut"),
+  person("Mike", "Meredith", role=c("aut", "cre"), email="mike@mmeredith.net") )
 BugReports: https://github.com/mikemeredith/BEST/issues
 Description: An alternative to t-tests, producing posterior estimates for group means and standard deviations and their differences and effect sizes. It implements the method of Kruschke (2013) Bayesian estimation supersedes the t test. Journal of Experimental Psychology: General, 142(2):573-603 <doi: 10.1037/a0029146>.
 License: GPL (>= 3)
+Language: en-US
