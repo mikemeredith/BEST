@@ -1,11 +1,15 @@
 
-CHANGES in v.0.5.3.9000 (2021-05-17)
+Changes in version 0.5.3.9001 (2021-06-21)
+
+  * Fix formatting of NEWS file.
+
+Changes in version 0.5.3.9000 (2021-05-17)
 
   * Spellcheck with 'spelling' package: standardized on US spellings.
 
   * Now using Authors@R in DESCRIPTION file.
 
-CHANGES in v.0.5.3 (2021-05-17)
+Changes in version 0.5.3 (2021-05-17)
 
   * Examples no longer use parallel processing.
 
@@ -15,7 +19,7 @@ CHANGES in v.0.5.3 (2021-05-17)
 
   * Added citation for Krushke (2013) to Description in DESCRIPTION file (suggestion of Uwe Ligges).
 
-CHANGES in v.0.5.2 (2020-05-18)
+Changes in version 0.5.2 (2020-05-18)
 
   * Change of maintainer email.
 
@@ -24,7 +28,7 @@ CHANGES in v.0.5.2 (2020-05-18)
   * Increased resolution of fitted density from n=512 to n=2048 to give better estimates
     of HDI.
 
-CHANGES in v.0.5.1 (2018-04-19)
+Changes in version 0.5.1 (2018-04-19)
 
   * Fixed issue with position of text on density plots.
 
@@ -32,25 +36,25 @@ CHANGES in v.0.5.1 (2018-04-19)
 
   * Warning if adaptation is not adequate (instead of "NOTE: Stopping adaptation").
 
-CHANGES in v.0.5.0 (2017-05-28)
+Changes in version 0.5.0 (2017-05-28)
 
   * 'BESTmcmc' uses 'rjags' directly, instead of 'jagsUI' wrappers. This resolves 'set.seed' issues, but values returned will not be the same as with previous versions.
 
   * Function 'hdi' removed; imports HDInterval::hdi instead.
 
-CHANGES in v.0.4.0 (2015-12-28)
+Changes in version 0.4.0 (2015-12-28)
 
   * BESTmcmc now allows normality parameter, nu < 1 (See John Kruschke's blog post 2 Dec 2015).
 
   * Vignette updated to use new prior specification.
 
-CHANGES in v.0.3.0 (2015-06-29)
+Changes in version 0.3.0 (2015-06-29)
 
   * BESTmcmc 'showPriors' argument changed to 'doPriorsOnly'.
 
   * Function postPriorOverlap added.
 
-CHANGES in v.0.2.6 (2015-05-09)
+Changes in version 0.2.6 (2015-05-09)
 
   * BESTmcmc gains a 'showPriors' argument.
 
@@ -58,11 +62,11 @@ CHANGES in v.0.2.6 (2015-05-09)
 
   * makeData throws an error if the number of outliers is 1.
 
-CHANGES in v.0.2.5 (2015-05-07)
+Changes in version 0.2.5 (2015-05-07)
 
   * Run chains in parallel using jagsUI (>= 1.3.6) instead of rjags.
 
-CHANGES in v.0.2.4 (2015-05-03)
+Changes in version 0.2.4 (2015-05-03)
 
   * Function BESTmcmc now allows user to specify priors.
 
@@ -70,7 +74,7 @@ CHANGES in v.0.2.3 (2014-11-17)
 
   * Added sanity checks to BESTmcmc.
 
-CHANGES in v.0.2.2 (2014-06-06)
+Changes in version 0.2.2 (2014-06-06)
 
   * hdi gains a density method, which can handle discontinuous HDIs. This is
   used for the posterior density plots when showCurve = TRUE.
@@ -83,7 +87,7 @@ CHANGES in v.0.2.2 (2014-06-06)
     o plotPost and plot.BEST return an object of class 'histogram' invisibly.
     o plotPost deals properly with a vector of integers.
 
-CHANGES in v.0.2.0 (2013-08-23)
+Changes in version 0.2.0 (2013-08-23)
 
   * Added function plotAreaInROPE.
 
