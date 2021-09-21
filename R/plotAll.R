@@ -4,7 +4,9 @@ plotAll <-
 function(BESTobj, credMass=0.95,
                     ROPEm=NULL, ROPEsd=NULL, ROPEeff=NULL,
                     compValm=0, compValsd=NULL, compValeff=0,
-                    showCurve=FALSE, ...) {
+                    showCurve=FALSE, 
+                    mainColor="skyblue", dataColor="red", comparisonColor="darkgreen", ROPEColor = "darkred", 
+                    ...) {
   # This function plots the posterior distribution (and data). It does not
   #   produce a scatterplot matrix; use pairs(...) for that.
   # Description of arguments:
@@ -51,12 +53,14 @@ function(BESTobj, credMass=0.95,
   stepIdxVec <- seq(1, chainLength, length.out=nCurvesToPlot)
   toPlot <- BESTobj[stepIdxVec, ]
 
-  plotDataPPC(toPlot=toPlot, oneGrp=oneGrp, data=data)
+  plotDataPPC(toPlot=toPlot, oneGrp=oneGrp, data=data, lineColor = mainColor, dataColor=dataColor)
 
   # Plot posterior distributions and their differences
   # --------------------------------------------------
   # Plot posterior distribution of parameter nu:
-  plotPost( log10(BESTobj$nu) , col="skyblue" ,  credMass=credMass,
+  plotPost( log10(BESTobj$nu) , 
+            mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
+            credMass=credMass,
                        showCurve=showCurve ,
                   xlab=bquote("log10("*nu*")") , cex.lab = 1.75 , showMode=TRUE ,
                   main="Normality" ) #  (<0.7 suggests kurtosis)
@@ -67,19 +71,20 @@ function(BESTobj, credMass=0.95,
     plotPost( BESTobj$mu1 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                        showCurve=showCurve , ROPE=ROPEm, compVal=compValm,
                   xlab=bquote(mu) , main="Mean" , 
-                  col="skyblue" )
+                  mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
   } else {
     plotPost( BESTobj$mu1 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                        showCurve=showCurve ,
                   xlab=bquote(mu[1]) , main=paste("Group",1,"Mean") , 
-                  col="skyblue" )
+                  mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
     plotPost( BESTobj$mu2 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                          showCurve=showCurve ,
                     xlab=bquote(mu[2]) , main=paste("Group",2,"Mean") , 
-                    col="skyblue" )
+                    mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
     plotPost( BESTobj$mu1-BESTobj$mu2 , compVal=0 ,  showCurve=showCurve , credMass=credMass,
                     xlab=bquote(mu[1] - mu[2]) , cex.lab = 1.75 , ROPE=ROPEm ,
-                    main="Difference of Means" , col="skyblue" )
+                    main="Difference of Means" , 
+                    mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
   }
 
   # Plot posterior distribution of param's sigma1, sigma2, and their difference:
@@ -88,21 +93,26 @@ function(BESTobj, credMass=0.95,
     plotPost(BESTobj$sigma1, xlim=xlim, cex.lab = 1.75, credMass=credMass,
                        showCurve=showCurve, ROPE=ROPEsd, compVal=compValsd,
                   xlab=bquote(sigma) , main="Std. Dev." , 
-                  col="skyblue" , showMode=TRUE )
+                  mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
+                  showMode=TRUE )
   } else {
     plotPost( BESTobj$sigma1 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                        showCurve=showCurve ,
                   xlab=bquote(sigma[1]) , main=paste("Group",1,"Std. Dev.") , 
-                  col="skyblue" , showMode=TRUE )
+                  mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
+                  showMode=TRUE )
     plotPost( BESTobj$sigma2 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                          showCurve=showCurve ,
                     xlab=bquote(sigma[2]) , main=paste("Group",2,"Std. Dev.") , 
-                    col="skyblue" , showMode=TRUE )
+                    mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor, 
+                    showMode=TRUE )
     plotPost( BESTobj$sigma1-BESTobj$sigma2 ,  credMass=credMass,
                          compVal=compValsd ,  showCurve=showCurve ,
                          xlab=bquote(sigma[1] - sigma[2]) , cex.lab = 1.75 , 
                          ROPE=ROPEsd ,
-                 main="Difference of Std. Dev.s" , col="skyblue" , showMode=TRUE )
+                 main="Difference of Std. Dev.s" , 
+                 mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
+                 showMode=TRUE )
   }
 
   # Plot effect size
@@ -113,7 +123,8 @@ function(BESTobj, credMass=0.95,
   plotPost( effectSize , compVal=compValeff ,  ROPE=ROPEeff , credMass=credMass,
                  showCurve=showCurve ,
                  xlab=bquote( (mu-.(compValm)) / sigma ),
-                 showMode=TRUE , cex.lab=1.75 , main="Effect Size" , col="skyblue" )
+                 showMode=TRUE , cex.lab=1.75 , main="Effect Size" , 
+                 mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
   } else {
     # Plot of estimated effect size. Effect size is d-sub-a from 
     # Macmillan & Creelman, 1991; Simpson & Fitter, 1973; Swets, 1986a, 1986b.
@@ -122,7 +133,8 @@ function(BESTobj, credMass=0.95,
                           showCurve=showCurve ,
                     xlab=bquote( (mu[1]-mu[2])
                       /sqrt((sigma[1]^2 +sigma[2]^2 )/2 ) ),
-                showMode=TRUE , cex.lab=1.0 , main="Effect Size" , col="skyblue" )
+                showMode=TRUE , cex.lab=1.0 , main="Effect Size" ,
+                mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
   }
   # Or use sample-size weighted version:
   # Hedges 1981; Wetzels, Raaijmakers, Jakab & Wagenmakers 2009.
@@ -135,6 +147,6 @@ function(BESTobj, credMass=0.95,
   #          showCurve=showCurve ,
   #          xlab=bquote( (mu[1]-mu[2])
   #          /sqrt((sigma[1]^2 *(N[1]-1)+sigma[2]^2 *(N[2]-1))/(N[1]+N[2]-2)) ),
-  #          showMode=TRUE , cex.lab=1.0 , main="Effect Size" , col="skyblue" )
+  #          showMode=TRUE , cex.lab=1.0 , main="Effect Size" , col=mainColor )
   return(invisible(NULL))
 }

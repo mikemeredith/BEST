@@ -8,7 +8,9 @@ Displays a plot showing the posterior probability distribution of one of the par
 }
 \usage{
 \method{plot}{BEST}(x, which = c("mean", "sd", "effect", "nu"), credMass = 0.95,
-    ROPE = NULL, compVal = 0, showCurve = FALSE, ...)
+    ROPE = NULL, compVal = 0, showCurve = FALSE, 
+    mainColor="skyblue", dataColor="red", comparisonColor="darkgreen", ROPEColor = "darkred",
+    ...)
 }
 \arguments{
   \item{x}{
@@ -29,6 +31,15 @@ logical: if TRUE, the posterior density will be represented by a kernel density 
   \item{compVal}{
 a value for comparison with the (difference of) parameters.
 }
+  \item{mainColor}{
+an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the bar charts and posterior prediction lines.
+}
+  \item{comparisonColor}{
+a optional color name such as \code{"darkgreen"} or a RGB specification such as \code{"#013220"} that controls the color of the text that specifies the relation of the HDI to a comparison value.
+}  
+  \item{ROPEColor}{
+a optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color of the text that specifies the relation of the HDI to the ROPE.
+} 
   \item{...}{
 other graphical parameters.
 }

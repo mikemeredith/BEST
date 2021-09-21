@@ -2,7 +2,8 @@
 #  with same xlim and ylim parameters.
 
 plotDataPPC <-
-function(toPlot, oneGrp, data) {
+function(toPlot, oneGrp, data, 
+         lineColor= 'skyblue', dataColor='red') {
   # Does the plots of posterior predictive curves for one OR TWO samples
   # Called by plotAll and plotPostPred; no sanity checks; not exported.
   # Calling function should arrange for multiple plots with par(mfrow) or layout.
@@ -54,11 +55,11 @@ function(toPlot, oneGrp, data) {
     if(!is.null(data$y1))
       text( max(xVec) , maxY , bquote(N[1]==.(length(data$y1))) , adj=c(1.1,1.1) )
   }
-  matlines(x=xVec, y=PPDmat[, , 1], lty=1, col="skyblue")
+  matlines(x=xVec, y=PPDmat[, , 1], lty=1, col=lineColor)
   if(!is.null(hist1)) {
     op <- par(lwd=2)
-    plot(hist1, freq=FALSE, border='red', add=TRUE)
-    segments(x0=xVec[1], y0=0, x1=xVec[npoints], col='red')
+    plot(hist1, freq=FALSE, border=dataColor, add=TRUE)
+    segments(x0=xVec[1], y0=0, x1=xVec[npoints], col=dataColor)
     par(op)
   }
   # Maybe do second plot
@@ -69,11 +70,11 @@ function(toPlot, oneGrp, data) {
     if(!is.null(data$y2))
       text( max(xVec) , maxY , bquote(N[2]==.(length(data$y2))) , adj=c(1.1,1.1) )
 
-    matlines(x=xVec, y=PPDmat[, , 2], lty=1, col="skyblue")
+    matlines(x=xVec, y=PPDmat[, , 2], lty=1, col=lineColor)
     if(!is.null(hist2)) {
       op <- par(lwd=2)
-      plot(hist2, freq=FALSE, border='red', add=TRUE)
-      segments(x0=xVec[1], y0=0, x1=xVec[npoints], col='red')
+      plot(hist2, freq=FALSE, border=dataColor, add=TRUE)
+      segments(x0=xVec[1], y0=0, x1=xVec[npoints], col=dataColor)
       par(op)
     }
   }

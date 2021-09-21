@@ -1,7 +1,8 @@
 # Changed 11 Aug 2017 to show data as a typical histogram
 
 plotPostPred <-
-function(BESTobj, nCurvesToPlot = 30) {
+function(BESTobj, nCurvesToPlot = 30,
+         mainColor="skyblue", dataColor="red") {
   # This function plots the posterior predictive distribution and the data.
   # Description of arguments:
   # BESTobj is mcmc.list object of the type returned by function BESTmcmc.
@@ -32,6 +33,6 @@ function(BESTobj, nCurvesToPlot = 30) {
   stepIdxVec <- seq(1, NROW( BESTobj ), length= nCurvesToPlot)
   toPlot <- BESTobj[stepIdxVec, ]
 
-  plotDataPPC(toPlot=toPlot, oneGrp=oneGrp, data=data)
+  plotDataPPC(toPlot=toPlot, oneGrp=oneGrp, data=data, lineColor = mainColor , dataColor = dataColor)
 
 }
