@@ -10,7 +10,7 @@ Calculates and (optionally) plots the posterior probability mass included in the
 
 \usage{
 plotAreaInROPE(paramSampleVec, credMass = 0.95, compVal = 0, maxROPEradius,
-  n = 201, plot = TRUE, ...)
+  n = 201, plot = TRUE, ROPEColor = "darkred", ...)
 }
 
 \arguments{
@@ -31,6 +31,9 @@ The number of equally spaced points at which the area in the ROPE is to be estim
 }
   \item{plot}{
 If FALSE, the plot will be suppressed but the values will be returned.
+}
+  \item{ROPEColor}{
+an optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color of the text that specifies the relation of the HDI to the ROPE.
 }
   \item{\dots}{
 Other graphical parameters.

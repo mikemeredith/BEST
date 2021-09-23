@@ -20,7 +20,7 @@ the number of posterior predictive curves to plot.
 an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the posterior prediction lines.
 }
   \item{dataColor}{
-a optional color name such as \code{"red"} or a RGB specification such as \code{"#FF0000"} that controls the color of the data histogram.
+an optional color name such as \code{"red"} or a RGB specification such as \code{"#FF0000"} that controls the color of the data histogram.
 } 
 \value{
 Nothing, used for its side effect.

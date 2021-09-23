@@ -1,6 +1,7 @@
 plotAreaInROPE <- 
 function(paramSampleVec, credMass = 0.95, compVal = 0, maxROPEradius,
-  n = 201, plot = TRUE,...) {
+  n = 201, plot = TRUE,
+  ROPEColor = "darkred", ...) {
   # Plots the probability mass included in the ROPE as a function of
   #   the half-width of the ROPE.
 
@@ -25,7 +26,7 @@ function(paramSampleVec, credMass = 0.95, compVal = 0, maxROPEradius,
     if(length(dots) == 1 && class(dots[[1]]) == "list")
       dots <- dots[[1]]
     defaultArgs <- list(xlab=bquote("Radius of ROPE around "*.(compVal)),
-      ylab="Posterior in ROPE", type="l", lwd=4, col="darkred", cex.lab=1.5) 
+      ylab="Posterior in ROPE", type="l", lwd=4, col=ROPEColor, cex.lab=1.5) 
     useArgs <- modifyList(defaultArgs, dots)
     useArgs$x <- ropeRadVec
     useArgs$y <- areaInRope
@@ -36,12 +37,12 @@ function(paramSampleVec, credMass = 0.95, compVal = 0, maxROPEradius,
     areaInFarHDIlim <- mean( paramSampleVec > (compVal-ropeRadHDI)
                            & paramSampleVec < (compVal+ropeRadHDI) )
     lines( c(ropeRadHDI, ropeRadHDI) , c(-0.5, areaInFarHDIlim) ,
-           lty="dashed" , col="darkred" )
+           lty="dashed" , col=ROPEColor )
     text( ropeRadHDI , 0 ,
           bquote( atop( .(100*credMass)*"% HDI limit" ,
                        "farthest from "*.(compVal) ) ) , adj=c(0.5,0) )
     lines( c(-0.5, ropeRadHDI) ,c(areaInFarHDIlim, areaInFarHDIlim) ,
-           lty="dashed" , col="darkred" )
+           lty="dashed" , col=ROPEColor )
     text( 0 , areaInFarHDIlim , bquote(.(signif(areaInFarHDIlim, 3))) ,
           adj=c(0, 1.1) )
   }
