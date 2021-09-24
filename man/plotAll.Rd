@@ -11,7 +11,8 @@ plotAll(BESTobj, credMass = 0.95,
   ROPEm = NULL, ROPEsd = NULL, ROPEeff = NULL,
   compValm = 0, compValsd = NULL, compValeff = 0,
   showCurve = FALSE, 
-  mainColor="skyblue", dataColor="red", comparisonColor="darkgreen", ROPEColor = "darkred",...)
+  mainColor="skyblue", dataColor="red", comparisonColor="darkgreen",
+  ROPEColor = "darkred",...)
 }
 \arguments{
   \item{BESTobj}{
@@ -42,16 +43,16 @@ a value for comparison with the (difference of) standard deviations.
 a value for comparison with the effect size.
 }
   \item{mainColor}{
-an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the bar charts and posterior prediction lines.
+an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the histograms and posterior prediction lines.
 } 
   \item{dataColor}{
 an optional color name such as \code{"red"} or a RGB specification such as \code{"#FF0000"} that controls the color of the data histogram.
 }  
   \item{comparisonColor}{
-an optional color name such as \code{"darkgreen"} or a RGB specification such as \code{"#013220"} that controls the color of the text that specifies the relation of the HDI to a comparison value.
+an optional color name such as \code{"darkgreen"} or a RGB specification such as \code{"#013220"} that controls the color used to display \code{compVal}.
 }  
   \item{ROPEColor}{
-an optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color of the text that specifies the relation of the HDI to the ROPE.
+an optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color used to display the ROPE.
 }  
   \item{...}{
 other graphical parameters (currently ignored).

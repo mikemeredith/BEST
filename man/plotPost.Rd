@@ -35,13 +35,13 @@ logical: if TRUE, the mode is displayed instead of the mean.
 logical: if TRUE, the posterior density will be represented by a kernel density function instead of a histogram.
 }
   \item{mainColor}{
-an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the bar charts and posterior prediction lines.
+an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the histograms and posterior prediction lines.
 } 
   \item{comparisonColor}{
-an optional color name such as \code{"darkgreen"} or a RGB specification such as \code{"#013220"} that controls the color of the text that specifies the relation of the HDI to a comparison value.
+an optional color name such as \code{"darkgreen"} or a RGB specification such as \code{"#013220"} that controls the color used to display \code{compVal}.
 }  
   \item{ROPEColor}{
-an optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color of the text that specifies the relation of the HDI to the ROPE.
+an optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color used to display the ROPE.
 }
   \item{\dots}{
 graphical parameters and the \code{breaks} parameter for the histogram.
@@ -54,7 +54,7 @@ The data are plotted either as a histogram (above) or, if \code{showCurve = TRUE
 \cr
 \figure{plotPost2.jpg}
 
-If values for a ROPE are supplied, these are shown as dark red vertical dashed lines, together with the percentage of probability mass within the ROPE. If a comparison value (\code{compVal}) is supplied, this is shown as a vertical green dotted line, together with the probability mass below and above this value.
+If values for a ROPE are supplied, these are shown as vertical dashed lines (dark red by default), together with the percentage of probability mass within the ROPE. If a comparison value (\code{compVal}) is supplied, this is shown as a vertical dotted line (green by default), together with the probability mass below and above this value.
 }
 \value{
 Returns an object of class \code{histogram} invisibly. Used for its plotting side-effect.
@@ -70,9 +70,15 @@ For details of the HDI calculation, see \code{\link{hdi}}.
 # Generate some data
 tst <- rnorm(1e5, 3, 1)
 plotPost(tst)
-plotPost(tst, col='wheat', border='magenta')
 plotPost(tst, credMass=0.8, ROPE=c(-1,1), xlab="Response variable")
 plotPost(tst, showMode=TRUE, showCurve=TRUE, compVal=5.5)
+
+# Custom colors
+plotPost(tst, mainColor='wheat', border='magenta')
+plotPost(tst, credMass=0.8, compVal=0, ROPE=c(-1,1), xlab="Response variable",
+  comparisonColor="#880088", ROPEColor = "darkblue")
+plotPost(tst, showMode=TRUE, showCurve=TRUE, compVal=5.5,
+  mainColor=2, comparisonColor=4)
 
 # For integers:
 tst <- rpois(1e5, 12)

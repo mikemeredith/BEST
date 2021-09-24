@@ -47,7 +47,7 @@ text to use as the main title of the plot
 controls the histogram break points or the number of bars; see \code{\link{hist}}.
 }
   \item{mainColor}{
-an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the bar chart representing the posterior.
+an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the histogram representing the posterior.
 }
   \item{priorColor}{
 an optional color name such as \code{"yellow"} or a RGB specification such as \code{"#FFFF00"} that controls the color of prior, both if it is data and when it is a function.

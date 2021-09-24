@@ -1,4 +1,9 @@
 
+Changes in version 0.5.3.9002 (2021-09-24)
+
+  * Added more options for the user to specify colors in the plots (thanks to Jan Vorhagen for the patches).
+
+
 Changes in version 0.5.3.9001 (2021-06-21)
 
   * Fix formatting of NEWS file.

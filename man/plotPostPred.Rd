@@ -4,10 +4,10 @@
 Plots for Posterior Predictive checks.
 }
 \description{
-Plots a number (default 30) of credible t-distributions based on posterior values of the mean, standard deviation, and normality for each group, together with histograms of the data.   
+Plots a number (default 30) of credible t-distributions based on posterior values of the mean, standard deviation, and normality for each group, together with histograms of the data.
 }
 \usage{
-plotPostPred(BESTobj, nCurvesToPlot = 30, mainColor="skyblue", dataColor="red"))
+plotPostPred(BESTobj, nCurvesToPlot = 30, mainColor="skyblue", dataColor="red")
 }
 \arguments{
   \item{BESTobj}{
@@ -21,7 +21,9 @@ an optional color name such as \code{"skyblue"} or a RGB specification such as \
 }
   \item{dataColor}{
 an optional color name such as \code{"red"} or a RGB specification such as \code{"#FF0000"} that controls the color of the data histogram.
-} 
+}
+}
+
 \value{
 Nothing, used for its side effect.
 }

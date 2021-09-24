@@ -33,7 +33,7 @@ The number of equally spaced points at which the area in the ROPE is to be estim
 If FALSE, the plot will be suppressed but the values will be returned.
 }
   \item{ROPEColor}{
-an optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color of the text that specifies the relation of the HDI to the ROPE.
+an optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color used to plot the ROPE.
 }
   \item{\dots}{
 Other graphical parameters.
