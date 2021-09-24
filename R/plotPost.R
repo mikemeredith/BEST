@@ -2,13 +2,15 @@
 
 plotPost <-
 function( paramSampleVec, credMass=0.95, compVal=NULL, ROPE=NULL,
-           HDItextPlace=0.7, showMode=FALSE, showCurve=FALSE, ... ) {
+           HDItextPlace=0.7, showMode=FALSE, showCurve=FALSE, 
+           mainColor="skyblue", comparisonColor="darkgreen", ROPEColor = "darkred", 
+           ... ) {
 
   # Does a plot for a single parameter. Called by plot.BEST but also exported.
   # Returns a histogram object invisibly.
   # This stuff should be in the ... argument:
   #   yaxt="n", ylab="", xlab="Parameter", main="", cex.lab=1.5, cex=1.4,
-  #   xlim=range(compVal, paramSampleVec), col="skyblue", border="white",
+  #   xlim=range(compVal, paramSampleVec), col=mainColor, border="white",
   #   breaks=NULL
 
   # Deal with ... argument:
@@ -17,7 +19,7 @@ function( paramSampleVec, credMass=0.95, compVal=NULL, ROPE=NULL,
     dots <- dots[[1]]
   defaultArgs <- list(xlab=deparse(substitute(paramSampleVec)),
     yaxt="n", ylab="", main="", cex.lab=1.5,
-    cex=1.4, col="skyblue", border="white", bty="n", lwd=5, freq=FALSE,
+    cex=1.4, col=mainColor, border="white", bty="n", lwd=5, freq=FALSE,
     xlim=range(compVal, hdi(paramSampleVec, 0.99)))
   useArgs <- modifyList(defaultArgs, dots)
 
@@ -99,7 +101,7 @@ function( paramSampleVec, credMass=0.95, compVal=NULL, ROPE=NULL,
   # Display the comparison value.
   if ( !is.null( compVal ) ) {
     cvHt <- 0.7 * max(histinfo$density)
-    cvCol <- "darkgreen"
+    cvCol <- comparisonColor
     pcgtCompVal <- round( 100 * sum( paramSampleVec > compVal )
                           / length( paramSampleVec ) , 1 )
      pcltCompVal <- 100 - pcgtCompVal
@@ -113,7 +115,7 @@ function( paramSampleVec, credMass=0.95, compVal=NULL, ROPE=NULL,
   # Display the ROPE.
   if ( !is.null( ROPE ) ) {
     ROPEtextHt <- 0.55 * max(histinfo$density)
-    ropeCol <- "darkred"
+    ropeCol <- ROPEColor
      pcInROPE <- ( sum( paramSampleVec > ROPE[1] & paramSampleVec < ROPE[2] )
                           / length( paramSampleVec ) )
      lines( c(ROPE[1],ROPE[1]), c(0.96*ROPEtextHt,0), lty="dotted", lwd=2,

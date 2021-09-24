@@ -9,7 +9,8 @@ Calculates and displays the overlap between a posterior distribution (as a vecto
 \usage{
 postPriorOverlap(paramSampleVec, prior, ..., yaxt="n", ylab="",
            xlab="Parameter", main="", cex.lab=1.5, cex=1.4,
-           xlim=range(paramSampleVec), breaks=NULL)
+           xlim=range(paramSampleVec), breaks=NULL,
+           mainColor="skyblue", priorColor="yellow", overlapColor="green")
 }
 \arguments{
   \item{paramSampleVec}{
@@ -45,6 +46,15 @@ text to use as the main title of the plot
   \item{breaks}{
 controls the histogram break points or the number of bars; see \code{\link{hist}}.
 }
+  \item{mainColor}{
+an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the bar chart representing the posterior.
+}
+  \item{priorColor}{
+an optional color name such as \code{"yellow"} or a RGB specification such as \code{"#FFFF00"} that controls the color of prior, both if it is data and when it is a function.
+}
+  \item{overlapColor}{
+an optional color name such as \code{"green"} or a RGB specification such as \code{"#00FF00"} that controls the color of the overlap area.
+} 
 }
 \value{
 Returns the overlap, the area lying under the lower of the two density curves.

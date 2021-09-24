@@ -1,6 +1,8 @@
 plot.BEST <-
 function(x, which=c("mean", "sd", "effect", "nu"), credMass=0.95,
-                    ROPE=NULL, compVal=0, showCurve=FALSE, ...) {
+                    ROPE=NULL, compVal=0, showCurve=FALSE,  
+                    mainColor="skyblue", dataColor="red", comparisonColor="darkgreen", ROPEColor = "darkred",
+                    ...) {
   # This function plots the posterior distribution for one selected item. 
   # Description of arguments:
   # x is mcmc.list object of the type returned by function BESTmcmc.
@@ -61,7 +63,8 @@ function(x, which=c("mean", "sd", "effect", "nu"), credMass=0.95,
   # Plot posterior distribution of selected item:
   histinfo <- plotPost(toPlot, credMass=credMass, ROPE=ROPE, showCurve=showCurve,
                   showMode=whichID != "mean",
-                  compVal=compVal, graphPars=dots) 
+                  compVal=compVal, graphPars=dots,
+                  mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor) 
 
   return(invisible(histinfo))
 }

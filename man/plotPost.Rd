@@ -8,7 +8,9 @@ Plot the posterior probability distribution for a single parameter from a vector
 }
 \usage{
 plotPost(paramSampleVec, credMass = 0.95, compVal = NULL, ROPE = NULL,
-  HDItextPlace = 0.7, showMode = FALSE, showCurve = FALSE, ...)
+  HDItextPlace = 0.7, showMode = FALSE, showCurve = FALSE, 
+  mainColor="skyblue", comparisonColor="darkgreen", ROPEColor = "darkred",
+  ...)
 }
 \arguments{
   \item{paramSampleVec}{
@@ -31,6 +33,15 @@ logical: if TRUE, the mode is displayed instead of the mean.
 }
   \item{showCurve}{
 logical: if TRUE, the posterior density will be represented by a kernel density function instead of a histogram.
+}
+  \item{mainColor}{
+an optional color name such as \code{"skyblue"} or a RGB specification such as \code{"#87CEEB"} that controls the color of the bar charts and posterior prediction lines.
+} 
+  \item{comparisonColor}{
+an optional color name such as \code{"darkgreen"} or a RGB specification such as \code{"#013220"} that controls the color of the text that specifies the relation of the HDI to a comparison value.
+}  
+  \item{ROPEColor}{
+an optional color name such as \code{"darkred"} or a RGB specification such as \code{"#8B0000"} that controls the color of the text that specifies the relation of the HDI to the ROPE.
 }
   \item{\dots}{
 graphical parameters and the \code{breaks} parameter for the histogram.
