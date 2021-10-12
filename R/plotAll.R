@@ -4,8 +4,8 @@ plotAll <-
 function(BESTobj, credMass=0.95,
                     ROPEm=NULL, ROPEsd=NULL, ROPEeff=NULL,
                     compValm=0, compValsd=NULL, compValeff=0,
-                    showCurve=FALSE, 
-                    mainColor="skyblue", dataColor="red", comparisonColor="darkgreen", ROPEColor = "darkred", 
+                    showCurve=FALSE,
+                    mainColor="skyblue", dataColor="red", comparisonColor="darkgreen", ROPEColor = "darkred",
                     ...) {
   # This function plots the posterior distribution (and data). It does not
   #   produce a scatterplot matrix; use pairs(...) for that.
@@ -35,7 +35,7 @@ function(BESTobj, credMass=0.95,
   # Set up window and layout
   # ------------------------
   # windows(width=6.0,height=8.0) # Better to use default plot window.
-  oldpar <- par(mar=c(3.5,3.5,2.5,0.5), mgp=c(2.25,0.7,0), "mfrow") 
+  oldpar <- par(mar=c(3.5,3.5,2.5,0.5), mgp=c(2.25,0.7,0), "mfrow")
     on.exit(par(oldpar))
   if(oneGrp) {
     layout( matrix( c(3,3,4,4,5,5, 1,1,1,1,2,2) , nrow=6, ncol=2 , byrow=FALSE ) )
@@ -58,7 +58,7 @@ function(BESTobj, credMass=0.95,
   # Plot posterior distributions and their differences
   # --------------------------------------------------
   # Plot posterior distribution of parameter nu:
-  plotPost( log10(BESTobj$nu) , 
+  plotPost( log10(BESTobj$nu) ,
             mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
             credMass=credMass,
                        showCurve=showCurve ,
@@ -70,20 +70,20 @@ function(BESTobj, credMass=0.95,
   if(oneGrp) {
     plotPost( BESTobj$mu1 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                        showCurve=showCurve , ROPE=ROPEm, compVal=compValm,
-                  xlab=bquote(mu) , main="Mean" , 
+                  xlab=bquote(mu) , main="Mean" ,
                   mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
   } else {
     plotPost( BESTobj$mu1 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                        showCurve=showCurve ,
-                  xlab=bquote(mu[1]) , main=paste("Group",1,"Mean") , 
+                  xlab=bquote(mu[1]) , main=paste("Group",1,"Mean") ,
                   mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
     plotPost( BESTobj$mu2 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                          showCurve=showCurve ,
-                    xlab=bquote(mu[2]) , main=paste("Group",2,"Mean") , 
+                    xlab=bquote(mu[2]) , main=paste("Group",2,"Mean") ,
                     mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
-    plotPost( BESTobj$mu1-BESTobj$mu2 , compVal=0 ,  showCurve=showCurve , credMass=credMass,
+    plotPost( BESTobj$mu1-BESTobj$mu2 , compVal=compValm ,  showCurve=showCurve , credMass=credMass,
                     xlab=bquote(mu[1] - mu[2]) , cex.lab = 1.75 , ROPE=ROPEm ,
-                    main="Difference of Means" , 
+                    main="Difference of Means" ,
                     mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
   }
 
@@ -92,25 +92,25 @@ function(BESTobj, credMass=0.95,
   if(oneGrp) {
     plotPost(BESTobj$sigma1, xlim=xlim, cex.lab = 1.75, credMass=credMass,
                        showCurve=showCurve, ROPE=ROPEsd, compVal=compValsd,
-                  xlab=bquote(sigma) , main="Std. Dev." , 
+                  xlab=bquote(sigma) , main="Std. Dev." ,
                   mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
                   showMode=TRUE )
   } else {
     plotPost( BESTobj$sigma1 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                        showCurve=showCurve ,
-                  xlab=bquote(sigma[1]) , main=paste("Group",1,"Std. Dev.") , 
+                  xlab=bquote(sigma[1]) , main=paste("Group",1,"Std. Dev.") ,
                   mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
                   showMode=TRUE )
     plotPost( BESTobj$sigma2 ,  xlim=xlim , cex.lab = 1.75 , credMass=credMass,
                          showCurve=showCurve ,
-                    xlab=bquote(sigma[2]) , main=paste("Group",2,"Std. Dev.") , 
-                    mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor, 
+                    xlab=bquote(sigma[2]) , main=paste("Group",2,"Std. Dev.") ,
+                    mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
                     showMode=TRUE )
     plotPost( BESTobj$sigma1-BESTobj$sigma2 ,  credMass=credMass,
                          compVal=compValsd ,  showCurve=showCurve ,
-                         xlab=bquote(sigma[1] - sigma[2]) , cex.lab = 1.75 , 
+                         xlab=bquote(sigma[1] - sigma[2]) , cex.lab = 1.75 ,
                          ROPE=ROPEsd ,
-                 main="Difference of Std. Dev.s" , 
+                 main="Difference of Std. Dev.s" ,
                  mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor,
                  showMode=TRUE )
   }
@@ -123,10 +123,10 @@ function(BESTobj, credMass=0.95,
   plotPost( effectSize , compVal=compValeff ,  ROPE=ROPEeff , credMass=credMass,
                  showCurve=showCurve ,
                  xlab=bquote( (mu-.(compValm)) / sigma ),
-                 showMode=TRUE , cex.lab=1.75 , main="Effect Size" , 
+                 showMode=TRUE , cex.lab=1.75 , main="Effect Size" ,
                  mainColor = mainColor, comparisonColor = comparisonColor, ROPEColor = ROPEColor)
   } else {
-    # Plot of estimated effect size. Effect size is d-sub-a from 
+    # Plot of estimated effect size. Effect size is d-sub-a from
     # Macmillan & Creelman, 1991; Simpson & Fitter, 1973; Swets, 1986a, 1986b.
     effectSize <- ( BESTobj$mu1 - BESTobj$mu2 ) / sqrt( ( BESTobj$sigma1^2 + BESTobj$sigma2^2 ) / 2 )
     plotPost( effectSize , compVal=compValeff ,  ROPE=ROPEeff , credMass=credMass,
