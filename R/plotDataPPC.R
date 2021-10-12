@@ -2,7 +2,7 @@
 #  with same xlim and ylim parameters.
 
 plotDataPPC <-
-function(toPlot, oneGrp, data, 
+function(toPlot, oneGrp, data,
          lineColor= 'skyblue', dataColor='red') {
   # Does the plots of posterior predictive curves for one OR TWO samples
   # Called by plotAll and plotPostPred; no sanity checks; not exported.
@@ -58,7 +58,7 @@ function(toPlot, oneGrp, data,
   matlines(x=xVec, y=PPDmat[, , 1], lty=1, col=lineColor)
   if(!is.null(hist1)) {
     op <- par(lwd=2)
-    plot(hist1, freq=FALSE, border=dataColor, add=TRUE)
+    plot(hist1, freq=FALSE, border=dataColor, col=NULL, add=TRUE)
     segments(x0=xVec[1], y0=0, x1=xVec[npoints], col=dataColor)
     par(op)
   }
@@ -73,7 +73,7 @@ function(toPlot, oneGrp, data,
     matlines(x=xVec, y=PPDmat[, , 2], lty=1, col=lineColor)
     if(!is.null(hist2)) {
       op <- par(lwd=2)
-      plot(hist2, freq=FALSE, border=dataColor, add=TRUE)
+      plot(hist2, freq=FALSE, border=dataColor, col=NULL, add=TRUE)
       segments(x0=xVec[1], y0=0, x1=xVec[npoints], col=dataColor)
       par(op)
     }

@@ -19,7 +19,7 @@ system("R CMD INSTALL BEST") # Use this for a "dev" install.
 # ==========================
 unlink(list.files(pattern="Rplots.pdf", recursive=TRUE))
 system("R CMD build BEST")  # Produces the .tar.gz
-pkg <- "BEST_0.5.3.9002.tar.gz"  # <-- fix version number here ################
+pkg <- "BEST_0.5.3.9004.tar.gz"  # <-- fix version number here ################
 
 # Pick one to check:
 ## on desktop

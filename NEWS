@@ -1,4 +1,8 @@
 
+Changes in version 0.5.3.9004 (2021-10-12)
+
+  * Specify 'col = NULL' for the histograms in 'plotPostPred' (default in 4.2.0 will be gray).
+
 Changes in version 0.5.3.9003 (2021-10-12)
 
   * Fix bug in 'plotAll' (reported by jlwoodard).
