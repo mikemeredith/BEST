@@ -1,10 +1,10 @@
 Package: BEST
 Type: Package
 Title: Bayesian Estimation Supersedes the t-Test
-Version: 0.5.3.9004
+Version: 0.5.4
 Depends: HDInterval
 Imports: coda, rjags
-Date: 2021-10-12
+Date: 2021-10-13
 Authors@R: c(
   person("John", "Kruschke", role="aut"),
   person("Mike", "Meredith", role=c("aut", "cre"), email="mike@mmeredith.net") )
